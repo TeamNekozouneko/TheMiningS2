@@ -37,4 +37,7 @@ jobs:
       
       # ランタイムテストの結果処理
       - name: Check result of Runtime test
-        run: grep -q '\[Skript\] Line' ~/logs/latest.log
+        run: |
+            if grep -q '\[Skript\] Line' ~/logs/latest.log; then
+              exit 1
+            fi
