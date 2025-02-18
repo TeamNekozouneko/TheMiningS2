@@ -37,4 +37,4 @@ jobs:
       
       # ランタイムテストの結果処理
       - name: Check result of Runtime test
-        run : grep -q 'errors while reloading' ~/logs/latest.log && && exit 1
+        run : grep -q 'errors while reloading' ~/logs/latest.log && exit 1
