@@ -10,10 +10,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # リポジトリをアップデート
-      - name: Update repository
-        run: "sudo apt update -y"
-
       # GraalVM 21をインストール
       - uses: actions/setup-java@v4
         with:
