@@ -13,4 +13,4 @@ command /test [<number>]:
         broadcast "%{_n}%"
 
 function getHash(d: number = 0) :: number:
-    return mod({_d}, 10)
+#    return mod({_d}, 10)
