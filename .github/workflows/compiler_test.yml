@@ -1,0 +1,21 @@
+name: Compiler test
+on: [push]
+
+jobs:
+  compiler_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # リポジトリをチェックアウト
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: "develop"
+
+      # リポジトリをアップデート
+      - name: Update repository
+        run: "sudo apt update -y"
+
+      # OpenJRE 21をインストール
+      - name: Set up OpenJRE 21
+        run: "sudo apt install openjdk-21-jre"
