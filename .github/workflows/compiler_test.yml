@@ -9,8 +9,6 @@ jobs:
       # リポジトリをチェックアウト
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          repository: "develop"
 
       # リポジトリをアップデート
       - name: Update repository
