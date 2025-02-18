@@ -31,6 +31,10 @@ jobs:
           wget https://github.com/SkriptLang/Skript/releases/download/2.10.1/Skript-2.10.1.jar -P ~/plugins/
           wget https://github.com/ShaneBeee/SkBee/releases/download/3.8.2/SkBee-3.8.2.jar -P ~/plugins/
       
-      # Minecraft Serverのランタイム検証
+      # Minecraft Serverのランタイムテスト
       - name: Run Minecraft Server for Runtime test
         run: echo "stop" | (cd ~ && java -jar server.jar nogui)
+      
+      # ランタイムテストの結果処理
+      - name: Check result of Runtime test
+        run : grep -q '\[Skript\] Line ' ~/logs/latest.log && exit 1
