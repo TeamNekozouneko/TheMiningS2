@@ -20,7 +20,7 @@ jobs:
       - name: Set up Minecraft Server
         run: |
           wget https://api.papermc.io/v2/projects/paper/versions/1.21.3/builds/82/downloads/paper-1.21.3-82.jar -O ~/server.jar
-          java -jar ~/server.jar nogui
+          (cd ~ && java -jar server.jar nogui)
           sed -i 's/false/true/g' ~/eula.txt
 
       #プラグイン環境のセットアップ
@@ -33,4 +33,4 @@ jobs:
       
       # Minecraft Serverのランタイム検証
       - name: Run Minecraft Server for Runtime test
-        run: echo "stop" | java -jar ~/server.jar nogui
+        run: echo "stop" | (cd ~ && java -jar server.jar nogui)
