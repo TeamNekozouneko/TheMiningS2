@@ -17,3 +17,14 @@ jobs:
       # OpenJRE 21をインストール
       - name: Set up OpenJRE 21
         run: "sudo apt install openjdk-21-jre"
+
+      # Minecraft Serverをセットアップ
+      - name: Set up Minecraft Server
+        run: |
+          wget https://api.papermc.io/v2/projects/paper/versions/1.21.3/builds/82/downloads/paper-1.21.3-82.jar -O ~/server.jar
+          java -jar ~/server.jar nogui
+          sed -i 's/false/true/g' eula.txt
+
+      # Minecraft Serverのランタイム検証
+      - name: Run Minecraft Server for Runtime test
+        run: echo "stop" | java -jar ~/server.jar nogui
