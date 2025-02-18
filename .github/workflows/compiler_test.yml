@@ -19,7 +19,7 @@ jobs:
       # Minecraft Serverをセットアップ
       - name: Set up Minecraft Server
         run: |
-          wget https://api.papermc.io/v2/projects/paper/versions/1.21.3/builds/82/downloads/paper-1.21.3-82.jar -O ~/server.jar
+          mv ./.github/workflows/plugins/server.jar ~/server.jar
           (cd ~ && java -jar server.jar nogui)
           sed -i 's/false/true/g' ~/eula.txt
 
@@ -27,9 +27,9 @@ jobs:
       - name: Set up plugin environments
         run: |
           mkdir -p ~/plugins/Skript/scripts/
+          mv ./.github/workflows/plugins/Skript-2.10.1.jar ~/plugins/
+          mv ./.github/workflows/plugins/SkBee-3.8.2.jar ~/plugins/
           cp -r * ~/plugins/Skript/scripts/
-          wget https://github.com/SkriptLang/Skript/releases/download/2.10.1/Skript-2.10.1.jar -P ~/plugins/
-          wget https://github.com/ShaneBeee/SkBee/releases/download/3.8.2/SkBee-3.8.2.jar -P ~/plugins/
       
       # Minecraft Serverのランタイムテスト
       - name: Run Minecraft Server for Runtime test
