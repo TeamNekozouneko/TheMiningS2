@@ -14,9 +14,11 @@ jobs:
       - name: Update repository
         run: "sudo apt update -y"
 
-      # OpenJRE 21をインストール
-      - name: Set up OpenJRE 21
-        run: "sudo apt install openjdk-21-jre"
+      # GraalVM 21をインストール
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'graalvm'
+          java-version: '21'
 
       # Minecraft Serverをセットアップ
       - name: Set up Minecraft Server
