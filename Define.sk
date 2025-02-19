@@ -10,8 +10,6 @@ function handleDefine():
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
 
-    return
-
 function initDefine():
     clear {define::*}
     handleDefine()
