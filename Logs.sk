@@ -5,15 +5,15 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function logInfo(logType: text, parameters: objects = null):
+function logInfo(logType: text, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH")
 
-function logWarn(logType: text, parameters: objects = null):
+function logWarn(logType: text, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH") with a severity of warning
 
-function logError(logType: text, parameters: objects = null):
+function logError(logType: text, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH") with a severity of severe
 
