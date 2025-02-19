@@ -1,0 +1,20 @@
+#==================================================
+#| #Define.sk
+#| 定数の管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+function handleDefine():
+    #定義セクション
+
+    #Logs.sk
+    set {define::LOGS_SAVE_PATH} to "themining.log"
+
+    return
+
+function initDefine():
+    clear {define::*}
+    handleDefine()
+
+function getDefine(defineName: text) :: objects:
+    return {define::%{_defineName}%}
