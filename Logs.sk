@@ -5,19 +5,19 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function logInfo(logType: text, parameters: objects):
+function logInfo(logType: string, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH")
 
-function logWarn(logType: text, parameters: objects):
+function logWarn(logType: string, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH") with a severity of warning
 
-function logError(logType: text, parameters: objects):
+function logError(logType: string, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH") with a severity of severe
 
-function getLogParameterContent(parameters: objects) :: text:
+function getLogParameterContent(parameters: objects) :: string:
     loop {_parameters::*}:
         add "%loop-index%: %loop-value%" to {_texts::*}
-    return {_texts::*} join at ", "
+    return concat({_texts::*})
