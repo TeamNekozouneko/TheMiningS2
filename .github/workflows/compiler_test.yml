@@ -19,7 +19,7 @@ jobs:
       # Minecraft Serverをセットアップ
       - name: Set up Minecraft Server
         run: |
-          mv ./.github/workflows/plugins/server.jar ~/server.jar
+          wget https://api.papermc.io/v2/projects/paper/versions/1.21.3/builds/82/downloads/paper-1.21.3-82.jar -O ~/server.jar
           (cd ~ && java -jar server.jar nogui)
           sed -i 's/false/true/g' ~/eula.txt
 
