@@ -2,7 +2,7 @@ name: テスト
 on: [push]
 
 jobs:
-  compiler_test:
+  ランタイム実行テスト:
     runs-on: ubuntu-latest
 
     steps:
