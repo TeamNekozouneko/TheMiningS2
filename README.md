@@ -21,15 +21,15 @@
 ディレクトリ`/`をビルドコンテキストルートとする。
 ### 実行（ビルド+コンテナ起動）
 ```bash
-$ sh ./runtime_env/run.sh
+$ sh .runtime_env/run.sh
 ```
 ### ビルド
 > [!CAUTION]
 > Dockerfile内に組み込みのGraalVMの関係から`aarch64`でのみ動作します。
 ```bash
-$ sh ./runtime_env/build.sh
+$ sh .runtime_env/build.sh
 ```
 ### コンテナ起動
 ```bash
-$ sh ./runtime_env/run.sh
+$ sh .runtime_env/run.sh
 ```
