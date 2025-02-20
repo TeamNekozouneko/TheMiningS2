@@ -5,7 +5,7 @@
 ![Static Badge](https://img.shields.io/badge/-GraalVM-FF7800?style=for-the-badge)
 ![Static Badge](https://img.shields.io/badge/-Docker-2496ED?style=for-the-badge)
 
-[![コンパイラテスト](https://github.com/TeamNekozouneko/TheMiningS2/actions/workflows/compiler_test.yml/badge.svg)](https://github.com/TeamNekozouneko/TheMiningS2/actions/workflows/compiler_test.yml)
+[![テスト](https://github.com/TeamNekozouneko/TheMiningS2/actions/workflows/test.yml/badge.svg)](https://github.com/TeamNekozouneko/TheMiningS2/actions/workflows/test.yml)
 
 > [!NOTE]
 > The Mining Season-2は、現在開発中です。  
