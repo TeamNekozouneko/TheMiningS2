@@ -9,6 +9,7 @@
 function logTestHandler(amountOfLogs: integer = 5):
     #Test 1-LogQuantityModuloCheck
     loop {_amountOfLogs} times:
+        clear {_testParameters::*}
         add "%random integer between 100000000 and 999999999%" to {_testParameters::*}
         logInfo("RUNTIME_TEST_LOG", {_testParameters::*})
         logWarn("RUNTIME_TEST_LOG", {_testParameters::*})
