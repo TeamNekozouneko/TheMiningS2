@@ -14,7 +14,7 @@ on load:
 
 #結果処理
 function testFail():
-    broadcast "" #Actions用
+    broadcast "[TheMiningS2] THEMININGS2_TEST_FAILED" #Actions用
     stop server
 function testSuccess():
     broadcast "[TheMiningS2] All tests passed successfully."
