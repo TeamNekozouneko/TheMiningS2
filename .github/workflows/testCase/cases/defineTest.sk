@@ -5,25 +5,25 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function defineInitTestHandler(amountOfDefine: integer = 10) :: boolean:
-    testLog("defineInitTestHandler", "Amount of Define = %{_amountOfDefine}%")
+function defineTestHandler(amountOfDefine: integer = 10) :: boolean:
+    testLog("defineTestHandler", "Amount of Define = %{_amountOfDefine}%")
 
     #テストデータの準備
     loop {_amountOfDefine} times:
         set {_testValue} to "%random integer between 1000000000 and 999999999%"
         add {_testValue} to {_values::*}
-        set {define::%{_testValue}%} to -2
+        set {define::%{_testValue}%} to -1
     
     #Test 1-DataMisMatchingCheck
     loop {_values::*}:
         return false if getDefine(loop-value) is not -1
-    testLog("defineInitTestHandler", "[1-DataMisMatchingCheck] Passed.")
+    testLog("defineTestHandler", "[1-DataMisMatchingCheck] Passed.")
 
     #Test 2-DataCorrectlyCheck
     initDefine()
     loop {_values::*}:
         return false if getDefine(loop-value) is set
-    testLog("defineInitTestHandler", "[2-DataCorrectlyCheck] Passed.")
+    testLog("defineTestHandler", "[2-DataCorrectlyCheck] Passed.")
 
     return true
     
