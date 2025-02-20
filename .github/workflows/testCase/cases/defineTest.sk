@@ -19,11 +19,11 @@ function defineTestHandler(amountOfDefine: integer = 10) :: boolean:
         return false if getDefine(loop-value) is not -1
     testLog("defineTestHandler", "[1-DataMisMatchingCheck] Passed.")
 
-    #Test 2-DataCorrectlyCheck
+    #Test 2-InitializeCheck
     initDefine()
     loop {_values::*}:
         return false if getDefine(loop-value) is set
-    testLog("defineTestHandler", "[2-DataCorrectlyCheck] Passed.")
+    testLog("defineTestHandler", "[2-InitializeCheck] Passed.")
 
     return true
     
