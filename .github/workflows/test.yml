@@ -38,4 +38,4 @@ jobs:
       
       # コンパイル・ランタイムテストの結果処理
       - name: Check result of Runtime and Compile
-        run: ./runtimeCheck
+        run: ./check
