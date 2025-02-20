@@ -1,4 +1,4 @@
-name: Compiler test
+name: コンパイラテスト
 on: [push]
 
 jobs:
