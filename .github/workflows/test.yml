@@ -36,16 +36,6 @@ jobs:
       - name: Run Minecraft Server for Runtime test
         run: (cd ~ && java -jar server.jar nogui)
       
-      # コンパイルテストの結果処理
-      - name: Check result of Compile
-        run: |
-            if grep -q '\[Skript\] Line' ~/logs/latest.log; then
-              exit 1
-            fi
-
-      # ランタイムテストの結果処理
-      - name: Check result of Runtime
-        run: |
-            if grep -q 'THEMININGS2_TEST_FAILED' ~/logs/latest.log; then
-              exit 1
-            fi
+      # コンパイル・ランタイムテストの結果処理
+      - name: Check result of Runtime and Compile
+        run: ./runtimeCheck
