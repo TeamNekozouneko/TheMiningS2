@@ -48,5 +48,19 @@ func runtimeCheck(logContent string) bool{
 	const RUNTIME_ERROR_DETECTION_STRING = "THEMININGS2_TEST_FAILED"
 	if strings.Contains(logContent, RUNTIME_ERROR_DETECTION_STRING) { return false }
 
+	//1-LogQuantityModuloCheck
+	const SYSTEM_LOG_FILE_PATH = "plugins/Skript/logs/themining.log"
+	const AMOUNT_OF_LOG_TYPES = 3
+	
+	data, err := ioutil.ReadFile(SYSTEM_LOG_FILE_PATH)
+	if err != nil:
+		fmt.Println(err)
+		os.Exit(1)
+	lines := strings.Split(data, "\n")
+	if Len(lines) % AMOUNT_OF_LOG_TYPES != 0:
+		log("1-LogQuantityModuloCheck", "failed.")
+		os.Exit(1)
+	
+
 	return true
 }
