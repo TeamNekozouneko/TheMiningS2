@@ -5,6 +5,7 @@ import (
 	"os"
 	"io/ioutil"
 	"strings"
+	"bufio"
 )
 
 func main(){
@@ -52,19 +53,25 @@ func runtimeCheck(logContent string) bool{
 	const SYSTEM_LOG_FILE_PATH = "plugins/Skript/logs/themining.log"
 	const AMOUNT_OF_LOG_TYPES = 3
 	
-	data, err := ioutil.ReadFile(SYSTEM_LOG_FILE_PATH)
+	file, err := os.Open(SYSTEM_LOG_FILE_PATH)
 	if err != nil {
-		fmt.Println(err)
 		os.Exit(1)
 	}
-	lines := strings.Split(string(data), "\n")
-	fmt.Println(string(data))
-	fmt.Println("DATA QUANTITY: "+string(strings.Count(string(data), "RUNTIME_TEST_LOG")))
-	if strings.Count(string(data), "RUNTIME_TEST_LOG") % AMOUNT_OF_LOG_TYPES != 0 {
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	logQuantity := 0
+	for scanner.Scan() {
+		logQuantity += strings.Count(scanner.Text(), "RUNTIME_TEST_LOG")
+	}
+	if logQuantity % AMOUNT_OF_LOG_TYPES != 0 {
 		log("1-LogQuantityModuloCheck", "failed.")
 		os.Exit(1)
 	}
-	
+
+	if err := scanner.Err(); err != nil {
+		os.Exit(1)
+	}
 
 	return true
 }
