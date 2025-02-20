@@ -59,7 +59,7 @@ func runtimeCheck(logContent string) bool{
 	}
 	lines := strings.Split(string(data), "\n")
 	fmt.Println(string(data))
-	fmt.Println("DATA QUANTITY: "+string(len(lines)))
+	fmt.Println("DATA QUANTITY: "+string(strings.Count(string(data), "RUNTIME_TEST_LOG")))
 	if strings.Count(string(data), "RUNTIME_TEST_LOG") % AMOUNT_OF_LOG_TYPES != 0 {
 		log("1-LogQuantityModuloCheck", "failed.")
 		os.Exit(1)
