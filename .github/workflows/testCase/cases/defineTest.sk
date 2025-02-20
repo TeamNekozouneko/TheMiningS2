@@ -1,0 +1,19 @@
+#==================================================
+#| #defineTest.sk
+#| Define.skのランタイムテストケース
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function defineInitTestHandler(amountOfDefine: integer = 10) :: boolean:
+    loop {_amountOfDefine} times:
+        set {_testValue} to "%random integer between 1000000000 and 999999999%"
+        add {_testValue} to {_values::*}
+        set {define::%{_testValue}%} to -1
+    loop {_values::*}:
+        return false if getDefine(loop-value) is not -1
+    initDefine()
+    loop {_values::*}:
+        return false if getDefine(loop-value) is set
+    return true
+    

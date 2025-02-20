@@ -1,0 +1,21 @@
+#==================================================
+#| #testCase.sk
+#| ランタイムテスト用のテストケース管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+on load:
+    #テストケース記述欄
+    testFail() if defineInitTestHandler() is false
+    
+    wait 3 second
+    testSuccess()
+
+#結果処理
+function testFail():
+    broadcast "" #Actions用
+    stop server
+function testSuccess():
+    broadcast "[TheMiningS2] All tests passed successfully."
+    stop server
