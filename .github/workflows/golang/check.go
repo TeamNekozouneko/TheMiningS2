@@ -11,7 +11,7 @@ func main(){
 	log("main", "Runtime Results Checking...")
 
 	//実行結果の取得
-	const LOG_FILE_PATH = "~/logs/latest.log"
+	const LOG_FILE_PATH = "logs/latest.log"
 	data, err := ioutil.ReadFile(LOG_FILE_PATH)
 	if err != nil {
 		fmt.Println(err)
