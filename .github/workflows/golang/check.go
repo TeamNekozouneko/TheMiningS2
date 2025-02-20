@@ -53,13 +53,15 @@ func runtimeCheck(logContent string) bool{
 	const AMOUNT_OF_LOG_TYPES = 3
 	
 	data, err := ioutil.ReadFile(SYSTEM_LOG_FILE_PATH)
-	if err != nil:
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
-	lines := strings.Split(data, "\n")
-	if Len(lines) % AMOUNT_OF_LOG_TYPES != 0:
+	}
+	lines := strings.Split(string(data), "\n")
+	if len(lines) % AMOUNT_OF_LOG_TYPES != 0 {
 		log("1-LogQuantityModuloCheck", "failed.")
 		os.Exit(1)
+	}
 	
 
 	return true
