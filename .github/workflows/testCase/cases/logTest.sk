@@ -1,0 +1,14 @@
+#==================================================
+#| #logTest.sk
+#| Logs.skのランタイムテストケース
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+#ランタイム実行後のエラー検査のため戻り値なし
+function logTestHandler(amountOfLogs: integer = 5):
+    loop {_amountOfLogs} times:
+        set {_testValue} to "%random integer between 100000000 and 999999999%"
+        logInfo("RUNTIME_TEST_LOG", {_textValue})
+        logWarn("RUNTIME_TEST_LOG", {_textValue})
+        logError("RUNTIME_TEST_LOG", {_textValue})

@@ -8,6 +8,7 @@
 on load:
     #テストケース記述欄
     testFail() if defineTestHandler() is false
+    logTestHandler()
     
     wait 3 second
     testSuccess()
