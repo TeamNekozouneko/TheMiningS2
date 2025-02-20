@@ -31,6 +31,7 @@ jobs:
           mv .github/workflows/plugins/SkBee-3.8.2.jar ~/plugins/
           cp -r * ~/plugins/Skript/scripts/
           cp -r .github/workflows/testCase/* ~/plugins/Skript/scripts/
+          cp .github/workflows/golang/check ~
       
       # Minecraft Serverのランタイム実行
       - name: Run Minecraft Server for Runtime test
@@ -38,4 +39,4 @@ jobs:
       
       # コンパイル・ランタイムテストの結果処理
       - name: Check result of Runtime and Compile
-        run: ./check
+        run: (cd ~ && ./check)
