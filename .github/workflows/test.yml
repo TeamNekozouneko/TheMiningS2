@@ -1,4 +1,4 @@
-name: コンパイラテスト
+name: テスト
 on: [push]
 
 jobs:
@@ -32,17 +32,18 @@ jobs:
           cp -r * ~/plugins/Skript/scripts/
           cp -r .github/workflows/testCase/* ~/plugins/Skript/scripts/
       
-      # Minecraft Serverのランタイムテスト
+      # Minecraft Serverのランタイム実行
       - name: Run Minecraft Server for Runtime test
         run: (cd ~ && java -jar server.jar nogui)
       
-      # ランタイムテストの結果処理
+      # コンパイルテストの結果処理
       - name: Check result of Compile
         run: |
             if grep -q '\[Skript\] Line' ~/logs/latest.log; then
               exit 1
             fi
 
+      # ランタイムテストの結果処理
       - name: Check result of Runtime
         run: |
             if grep -q 'THEMININGS2_TEST_FAILED' ~/logs/latest.log; then
