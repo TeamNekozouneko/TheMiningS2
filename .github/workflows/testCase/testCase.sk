@@ -12,7 +12,9 @@ on load:
     wait 3 second
     testSuccess()
 
-#結果処理
+#データ処理
+function testLog(testName: string, logContent: string):
+    broadcast "[TheMiningS2] Runtime (%{_testName}%): %{_logContent}%"
 function testFail():
     broadcast "[TheMiningS2] THEMININGS2_TEST_FAILED" #Actions用
     stop server
