@@ -7,3 +7,7 @@
 
 on load:
     main()
+
+every second:
+    loop all players:
+        scoreboardUpdate(loop-player)

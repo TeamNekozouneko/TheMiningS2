@@ -1,0 +1,23 @@
+#==================================================
+#| #ScoreBoard.sk
+#| スコアボードの実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function scoreboardUpdate(player: player):
+    #Define Arguments
+    add "PLAYER_LEVEL" to {_args::*}
+    add "PLAYER_EXP" to {_args::*}
+    add "PLAYER_MINING_QUANTITY" to {_args::*}
+    add "PLAYER_MONEY" to {_args::*}
+
+    #Update Scoreboard
+    set title of {_player}'s scoreboard to {define::SCOREBOARD_TITLE}
+    set {_index} to 1
+    loop {define::SCOREBOARD_CONTENTS::*}:
+        set {_content} to loop-value
+        while {_content} contains "${}":
+            replace first "${}" with {_args::%{_index}%} in {_content}
+            add 1 to {_index}
+        set line (loop-index parsed as integer) of {_player}'s scoreboard to {_content}

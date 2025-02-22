@@ -1,5 +1,6 @@
 # TheMiningS2
 ![Static Badge](https://img.shields.io/badge/-Skript-000000?style=for-the-badge)
+![Static Badge](https://img.shields.io/badge/-Go-00ADD8?style=for-the-badge)
 ![Static Badge](https://img.shields.io/badge/-SQLite3-003B57?style=for-the-badge)
 ![Static Badge](https://img.shields.io/badge/-SkBee-FFC700?style=for-the-badge)
 ![Static Badge](https://img.shields.io/badge/-GraalVM-FF7800?style=for-the-badge)
