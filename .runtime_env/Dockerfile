@@ -1,6 +1,7 @@
 FROM ubuntu:latest
 
 #Make Environment
+RUN apt clean
 RUN apt update -y
 RUN apt install wget -y
 RUN wget https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-aarch64_bin.tar.gz -P /root/
