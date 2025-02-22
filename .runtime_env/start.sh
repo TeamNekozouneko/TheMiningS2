@@ -1,1 +1,1 @@
-docker run -it -p 25565:25565 teamnekozouneko/theminings2
+docker run --rm -it -p 25565:25565 teamnekozouneko/theminings2
