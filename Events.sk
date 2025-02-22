@@ -8,6 +8,9 @@
 on load:
     main()
 
+on first join:
+    profileInit(player)
+
 every second:
     loop all players:
         scoreboardUpdate(loop-player)

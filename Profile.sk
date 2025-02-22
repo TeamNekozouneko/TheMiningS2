@@ -1,0 +1,18 @@
+#==================================================
+#| #Profile.sk
+#| プレイヤーデータの実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function profileInit(p: player, isOverwrite: boolean = false) :: boolean:
+    if {_isOverwrite} is false:
+        return false if {profile.money::%player's uuid%} is set
+        return false if {profile.exp::%player's uuid%} is set
+        return false if {profile.level::%player's uuid%} is set
+    set {profile.money::%player's uuid%} to 0
+    set {profile.exp::%player's uuid%} to 0
+    set {profile.level::%player's uuid%} to 1
+    set {_parameters::UUID} to player's uuid
+    logInfo("PROFILE_INIT", {_parameters::*})
+    return true
