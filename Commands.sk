@@ -1,0 +1,11 @@
+#==================================================
+#| #Commands.sk
+#| コマンドの実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+command /spawn:
+    description: ワールドの初期スポーンに戻ります。
+    trigger:
+        teleport player to spawn location of world "world"
