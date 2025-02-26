@@ -1,0 +1,12 @@
+#==================================================
+#| #Ores.sk
+#| 鉱石の実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function breakHandle(player: player, block: Block) :: boolean:
+    set {_itemId} to getItemId({_player}'s tool)
+    return false if {_itemId} is not set
+    return false if {define::BREAKABLE_ORES::%{_itemId}%::*} doesn't contain type of {_block}
+    return true

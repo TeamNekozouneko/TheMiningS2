@@ -15,3 +15,6 @@ on first join:
 every second:
     loop all players:
         scoreboardUpdate(loop-player)
+    
+on break:
+    cancel event if breakHandle(player, event-block) is false
