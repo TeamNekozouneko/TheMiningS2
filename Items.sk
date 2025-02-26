@@ -15,6 +15,10 @@ function itemInit():
     set {items.data::IRON_INGOT} to iron ingot named "&a鉄インゴット"
     set {items.data::LAPIS_LAZULI} to lapis lazuli named "&aラピスラズリ" with lore "&6エンチャントに使えるよ！"
 
+    #Pickaxe
+    set {items.data::FIRST_PICKAXE} to gold pickaxe named "&d初期ピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f石炭" and "&7・&f鉄"
+    set {items.data::BLUE_PICKAXE} to diamond pickaxe named "&bブルーピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f鉄" and "&7・&fラピスラズリ"
+
 function getItemData(itemId: string) :: itemtype:
     return {items.data::%{_itemId}%}
 
