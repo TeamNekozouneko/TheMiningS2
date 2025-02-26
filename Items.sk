@@ -15,11 +15,11 @@ function itemInit():
     set {items.data::IRON_INGOT} to iron ingot named "&a鉄インゴット"
     set {items.data::LAPIS_LAZULI} to lapis lazuli named "&aラピスラズリ" with lore "&6エンチャントに使えるよ！"
 
-function getItemData(itemId: integer) :: itemtype:
+function getItemData(itemId: string) :: itemtype:
     return {items.data::%{_itemId}%}
 
-function getItemName(itemId: integer) :: string:
+function getItemName(itemId: string) :: string:
     return name of {items.data::%{_itemId}%}
 
-function getItemLore(itemId: integer) :: objects:
+function getItemLore(itemId: string) :: objects:
     return lore of {items.data::%{_itemId}%}
