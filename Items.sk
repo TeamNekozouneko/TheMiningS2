@@ -9,11 +9,11 @@ function itemInit():
     clear {items.data::*}
 
     #Define
-    set {items.data::COBBLESTONE} to "&a丸石"
-    set {items.data::COAL} to "&a石炭"
-    set {items.data::RAW_IRON} to "&a鉄の原石" with lore "&6精錬NPCで焼けるよ！"
-    set {items.data::IRON_INGOT} to "&a鉄インゴット"
-    set {items.data::LAPIS_LAZULI} to "&aラピスラズリ" with lore "&6エンチャントに使えるよ！"
+    set {items.data::COBBLESTONE} to cobblestone named "&a丸石"
+    set {items.data::COAL} to coal named "&a石炭"
+    set {items.data::RAW_IRON} to raw iron named "&a鉄の原石" with lore "&6精錬NPCで焼けるよ！"
+    set {items.data::IRON_INGOT} to iron ingot named "&a鉄インゴット"
+    set {items.data::LAPIS_LAZULI} to lapis lazuli named "&aラピスラズリ" with lore "&6エンチャントに使えるよ！"
 
 function getItemData(itemId: integer) :: itemtype:
     return {items.data::%{_itemId}%}
