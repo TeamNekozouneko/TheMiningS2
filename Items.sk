@@ -14,14 +14,14 @@ function itemInit():
     set {items.data::RAW_IRON} to raw iron named "&a鉄の原石" with lore "&6精錬NPCで焼けるよ！"
     set {items.data::IRON_INGOT} to iron ingot named "&a鉄インゴット"
     set {items.data::LAPIS_LAZULI} to lapis lazuli named "&aラピスラズリ" with lore "&6エンチャントに使えるよ！"
-    set string tag "ITEM_ID" of nbt of {items.data::COBBLESTONE} to "COBBLESTONE"
-    set string tag "ITEM_ID" of nbt of {items.data::COAL} to "COAL"
-    set string tag "ITEM_ID" of nbt of {items.data::RAW_IRON} to "RAW_IRON"
-    set string tag "ITEM_ID" of nbt of {items.data::IRON_INGOT} to "IRON_INGOT"
-    set string tag "ITEM_ID" of nbt of {items.data::LAPIS_LAZULI} to "LAPIS_LAZULI"
+    set string tag "ITEM_ID" of custom nbt of {items.data::COBBLESTONE} to "COBBLESTONE"
+    set string tag "ITEM_ID" of custom nbt of {items.data::COAL} to "COAL"
+    set string tag "ITEM_ID" of custom nbt of {items.data::RAW_IRON} to "RAW_IRON"
+    set string tag "ITEM_ID" of custom nbt of {items.data::IRON_INGOT} to "IRON_INGOT"
+    set string tag "ITEM_ID" of custom nbt of {items.data::LAPIS_LAZULI} to "LAPIS_LAZULI"
 
     #Pickaxe
-    set {items.data::FIRST_PICKAXE} to gold pickaxe named "&d初期ピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f石炭" and "&7・&f鉄"
+    set {items.data::FIRST_PICKAXE} to golden pickaxe named "&d初期ピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f石炭" and "&7・&f鉄"
     set {items.data::BLUE_PICKAXE} to diamond pickaxe named "&bブルーピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f鉄" and "&7・&fラピスラズリ"
 
 function getItemData(itemId: string) :: itemtype:
