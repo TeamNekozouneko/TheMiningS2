@@ -7,6 +7,10 @@
 function handleDefine():
     #定義セクション
 
+    #TheMining.sk
+    set {define::LANG_ERROR_INVALID_PARAMETER} to "&cパラメーターが不正です。"
+    set {define::LANG_SUCCESS_COMMAND_GET_ITME} to "&aアイテムを付与しました。"
+
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
 

@@ -9,3 +9,12 @@ command /spawn:
     description: ワールドの初期スポーンに戻ります。
     trigger:
         teleport player to spawn location of world "world"
+
+command /mine [<text>] [<text>]:
+    permission: admin
+    trigger:
+        if arg-1 is "give":
+            give getItemData(arg-2) to player
+            send getDefine("LANG_SUCCESS_COMMAND_GET_ITME") to player
+        else:
+            send getDefine("LANG_ERROR_INVALID_PARAMETER") to player
