@@ -8,6 +8,10 @@
 on load:
     main()
 
+on first join:
+    #初期ピッケルの配布
+    give getItemData("FIRST_PICKAXE") to player
+
 every second:
     loop all players:
         scoreboardUpdate(loop-player)
