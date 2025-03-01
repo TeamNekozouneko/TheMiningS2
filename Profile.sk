@@ -5,14 +5,14 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function profileInit(p: player, isOverwrite: boolean = false) :: boolean:
+function profileInit(player: player, isOverwrite: boolean = false) :: boolean:
     if {_isOverwrite} is false:
-        return false if {profile.money::%player's uuid%} is set
-        return false if {profile.exp::%player's uuid%} is set
-        return false if {profile.level::%player's uuid%} is set
-    set {profile.money::%player's uuid%} to 0
-    set {profile.exp::%player's uuid%} to 0
-    set {profile.level::%player's uuid%} to 1
-    set {_parameters::UUID} to player's uuid
+        return false if {profile.money::%{_player}'s uuid%} is set
+        return false if {profile.exp::%{_player}'s uuid%} is set
+        return false if {profile.level::%{_player}'s uuid%} is set
+    set {profile.money::%{_player}'s uuid%} to 0
+    set {profile.exp::%{_player}'s uuid%} to 0
+    set {profile.level::%{_player}'s uuid%} to 1
+    set {_parameters::UUID} to {_player}'s uuid
     logInfo("PROFILE_INIT", {_parameters::*})
     return true
