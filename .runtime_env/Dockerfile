@@ -10,6 +10,9 @@ RUN wget https://api.papermc.io/v2/projects/paper/versions/1.21.3/builds/82/down
 RUN (cd /root && graalvm-jdk-21.0.6+8.1/bin/java -jar server.jar nogui)
 RUN sed -i 's/false/true/g' /root/eula.txt
 
+#Cancelled cache
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" /dev/null
+
 #Apply Environment
 RUN mkdir -p /root/plugins/Skript/scripts/
 COPY .github/workflows/plugins/Skript-2.10.1.jar /root/plugins/
