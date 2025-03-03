@@ -21,8 +21,8 @@ function itemInit():
     set string tag "ITEM_ID" of custom nbt of {items.data::LAPIS_LAZULI} to "LAPIS_LAZULI"
 
     #Pickaxe
-    set {items.data::FIRST_PICKAXE} to golden pickaxe named "&d初期ピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f石炭" and "&7・&f鉄"
-    set {items.data::BLUE_PICKAXE} to diamond pickaxe named "&bブルーピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f鉄" and "&7・&fラピスラズリ"
+    set {items.data::FIRST_PICKAXE} to unbreakable golden pickaxe named "&d初期ピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f石炭" and "&7・&f鉄"
+    set {items.data::BLUE_PICKAXE} to unbreakable diamond pickaxe named "&bブルーピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f鉄" and "&7・&fラピスラズリ"
     set string tag "ITEM_ID" of custom nbt of {items.data::FIRST_PICKAXE} to "FIRST_PICKAXE"
     set string tag "ITEM_ID" of custom nbt of {items.data::BLUE_PICKAXE} to "BLUE_PICKAXE"
 
