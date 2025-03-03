@@ -1,0 +1,79 @@
+#==================================================
+#| #Profile.sk
+#| プレイヤーデータの実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function profileInit(player: player, isOverwrite: boolean = false) :: boolean:
+    set {_parameters::UUID} to {_player}'s uuid
+    if {_isOverwrite} is false:
+        set {_false} to true if {profile.money::%{_player}'s uuid%} is set
+        set {_false} to true if {profile.exp::%{_player}'s uuid%} is set
+        set {_false} to true if {profile.level::%{_player}'s uuid%} is set
+    if {_false} is true:
+        logError("ERR_PROFILE_INIT", {_parameters::*})
+        return false
+    set {profile.money::%{_player}'s uuid%} to 0
+    set {profile.exp::%{_player}'s uuid%} to 0
+    set {profile.level::%{_player}'s uuid%} to 1
+    logInfo("PROFILE_INIT", {_parameters::*})
+    return true
+
+#Getter
+function profileMoneyGet(player: offline player) :: integer:
+    return {profile.money::%{_player}'s uuid%}
+function profileExpGet(player: offline player) :: integer:
+    return {profile.exp::%{_player}'s uuid%}
+function profileLevelGet(player: offline player) :: integer:
+    return {profile.level::%{_player}'s uuid%}
+
+#Increase
+function profileMoneyIncrease(player: offline player, value: integer, cause: string):
+    set {_before} to profileMoneyGet({_player})
+    add {_value} to {profile.money::%{_player}'s uuid%}
+    set {_after} to profileMoneyGet({_player})
+    logInfo("PROFILE_MONEY_INCREASE", Profile_Get_LogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+function profileExpIncrease(player: offline player, value: integer, cause: string):
+    add {_value} to {profile.exp::%{_player}'s uuid%}
+function profileLevelIncrease(player: offline player, value: integer, cause: string):
+    set {_before} to profileLevelGet({_player})
+    add {_value} to {profile.level::%{_player}'s uuid%}
+    set {_after} to profileLevelGet({_player})
+    logInfo("PROFILE_LEVEL_INCREASE", Profile_Get_LogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+
+#Decrease
+function profileMoneyDecrease(player: offline player, value: integer, cause: string):
+    set {_before} to profileMoneyGet({_player})
+    remove {_value} from {profile.money::%{_player}'s uuid%}
+    set {_after} to profileMoneyGet({_player})
+    logInfo("PROFILE_MONEY_DECREASE", Profile_Get_LogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+function profileExpDecrease(player: offline player, value: integer, cause: string):
+    remove {_value} from {profile.exp::%{_player}'s uuid%}
+function profileLevelDecrease(player: offline player, value: integer, cause: string):
+    set {_before} to profileLevelGet({_player})
+    remove {_value} from {profile.level::%{_player}'s uuid%}
+    set {_after} to profileLevelGet({_player})
+    logInfo("PROFILE_LEVEL_DECREASE", Profile_Get_LogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+
+#Setter
+function profileMoneySet(player: offline player, value: integer, cause: string):
+    set {_before} to profileMoneyGet({_player})
+    set {profile.money::%{_player}'s uuid%} to {_value}
+    set {_after} to profileMoneyGet({_player})
+    logInfo("PROFILE_MONEY_SET", Profile_Get_LogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+function profileExpSet(player: offline player, value: integer, cause: string):
+    set {profile.exp::%{_player}'s uuid%} to {_value}
+function profileLevelSet(player: offline player, value: integer, cause: string):
+    set {_before} to profileLevelGet({_player})
+    set {profile.level::%{_player}'s uuid%} to {_value}
+    set {_after} to profileLevelGet({_player})
+    logInfo("PROFILE_LEVEL_SET", Profile_Get_LogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+
+#Interface
+local function Profile_Get_LogParameters(uuid: string, cause: string, before: integer, after: integer) :: objects:
+    set {_res::UUID} to {_uuid}
+    set {_res::CAUSE} to {_cause}
+    set {_res::BEFORE} to {_before}
+    set {_res::AFTER} to {_after}
+    return {_res::*}
