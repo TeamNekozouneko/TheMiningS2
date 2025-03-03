@@ -6,6 +6,7 @@
 #==================================================
 function handleDefine():
     #定義セクション
+    set {define::DEVELOPMENT_MODE} to true
 
     #TheMining.sk
     set {define::LANG_ERROR_INVALID_PARAMETER} to "&cパラメーターが不正です。"

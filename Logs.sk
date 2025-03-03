@@ -8,14 +8,17 @@
 function logInfo(logType: string, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH")
+    broadcast "[LOG_INFO] [%{_logType}%] %{_content}%" if getDefine("DEVELOPMENT_MODE") is true
 
 function logWarn(logType: string, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH") with a severity of warning
+    broadcast "[LOG_WARN] [%{_logType}%] %{_content}%" if getDefine("DEVELOPMENT_MODE") is true
 
 function logError(logType: string, parameters: objects):
     set {_content} to getLogParameterContent({_parameters::*})
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH") with a severity of severe
+    broadcast "[LOG_ERR] [%{_logType}%] %{_content}%" if getDefine("DEVELOPMENT_MODE") is true
 
 function getLogParameterContent(parameters: objects) :: string:
     loop {_parameters::*}:
