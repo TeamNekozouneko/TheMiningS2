@@ -18,12 +18,12 @@ function handleDefine():
     #ScoreBoard.sk
     set {define::SCOREBOARD_TITLE} to "&c&l The Mining"
     add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &aレベル: &7${}" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &bEXP: ${}" to {define::SCOREBOARD_CONTENTS::*}
+    add "&8¦¦ &aレベル&7: &a${}" to {define::SCOREBOARD_CONTENTS::*}
+    add "&8¦¦ &bEXP&7: &b${}" to {define::SCOREBOARD_CONTENTS::*}
     add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
     add "&8¦¦ &b採掘数: ${}" to {define::SCOREBOARD_CONTENTS::*}
     add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &e所持金: ${}" to {define::SCOREBOARD_CONTENTS::*}
+    add "&8¦¦ &e所持金&7: &6${}円" to {define::SCOREBOARD_CONTENTS::*}
     add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
     add "&8¦¦ &aThe Mining Season-2公開！" to {define::SCOREBOARD_CONTENTS::*}
     add "&8¦¦ &b皆様のご意見&aはDiscordまで。" to {define::SCOREBOARD_CONTENTS::*}

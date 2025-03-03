@@ -1,0 +1,9 @@
+#==================================================
+#| #Utils.sk
+#| 数式関数や変換関数の実装モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function String(value: object) :: string:
+    return "%{_value}%"
