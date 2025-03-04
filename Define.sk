@@ -44,11 +44,18 @@ function handleDefine():
     set {define::LANG_ITEMS::iron ore} to "鉄"
     set {define::LANG_ITEMS::lapis ore} to "ラピスラズリ"
 
-    set {define::LANG_ENCHANTMENTS::EFFICIENCY} to "効率強化"
-    set {define::LANG_ENCHANTMENTS::FORTUNE} to "幸運"
-    set {define::LANG_ENCHANTMENTS::AUTO_COLLECT} to "自動回収"
-    set {define::LANG_ENCHANTMENTS::AUTO_SELL} to "自動売却"
-    set {define::LANG_ENCHANTMENTS::RANGE_MINING} to "範囲採掘"
+    set {define::LANG_ENCHANTMENTS::efficiency} to "効率強化"
+    set {define::LANG_ENCHANTMENTS::fortune} to "幸運"
+    set {define::LANG_ENCHANTMENTS::auto_collect} to "自動回収"
+    set {define::LANG_ENCHANTMENTS::auto_sell} to "自動売却"
+    set {define::LANG_ENCHANTMENTS::range_mining} to "範囲採掘"
+
+    #Enchantment.sk
+    add "efficiency" to {define::ENCHANTMENT_TYPES::*}
+    add "fortune" to {define::ENCHANTMENT_TYPES::*}
+    add "auto_collect" to {define::ENCHANTMENT_TYPES::*}
+    add "auto_sell" to {define::ENCHANTMENT_TYPES::*}
+    add "range_mining" to {define::ENCHANTMENT_TYPES::*}
 
 function initDefine():
     clear {define::*}

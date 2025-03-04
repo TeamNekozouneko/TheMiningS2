@@ -46,7 +46,8 @@ function getItemId(itemData: itemtype) :: string:
 
 local function toPickaxeFormat(itemData: itemtype) :: itemtype:
     set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_itemData} to false
-    set {_enchantments::*} to compound list tag "TheMining;Enchantments" of custom nbt of {_itemData}
+    set {_enchantments::*} to compound tag "TheMining;Enchantments" of custom nbt of {_itemData}
+    broadcast {_enchantments::*}
     loop {_enchantments::*}:
         set {_enchantmentName} to getDefine("LANG_ENCHANTMENTS::%loop-value%")
         set {_enchantmentLevel} to int tag "TheMining;Enchantments;%loop-value%" of custom nbt of {_itemData}
