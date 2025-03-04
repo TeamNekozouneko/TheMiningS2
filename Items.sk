@@ -14,17 +14,22 @@ function itemInit():
     set {items.data::RAW_IRON} to raw iron named "&a鉄の原石" with lore "&6精錬NPCで焼けるよ！"
     set {items.data::IRON_INGOT} to iron ingot named "&a鉄インゴット"
     set {items.data::LAPIS_LAZULI} to lapis lazuli named "&aラピスラズリ" with lore "&6エンチャントに使えるよ！"
-    set string tag "ITEM_ID" of custom nbt of {items.data::COBBLESTONE} to "COBBLESTONE"
-    set string tag "ITEM_ID" of custom nbt of {items.data::COAL} to "COAL"
-    set string tag "ITEM_ID" of custom nbt of {items.data::RAW_IRON} to "RAW_IRON"
-    set string tag "ITEM_ID" of custom nbt of {items.data::IRON_INGOT} to "IRON_INGOT"
-    set string tag "ITEM_ID" of custom nbt of {items.data::LAPIS_LAZULI} to "LAPIS_LAZULI"
+    set string tag "TheMining;ItemId" of custom nbt of {items.data::COBBLESTONE} to "COBBLESTONE"
+    set string tag "TheMining;ItemId" of custom nbt of {items.data::COAL} to "COAL"
+    set string tag "TheMining;ItemId" of custom nbt of {items.data::RAW_IRON} to "RAW_IRON"
+    set string tag "TheMining;ItemId" of custom nbt of {items.data::IRON_INGOT} to "IRON_INGOT"
+    set string tag "TheMining;ItemId" of custom nbt of {items.data::LAPIS_LAZULI} to "LAPIS_LAZULI"
 
     #Pickaxe
-    set {items.data::FIRST_PICKAXE} to toPickaxeFormat(unbreakable golden pickaxe of efficiency 1 named "&d初期ピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f石炭" and "&7・&f鉄")
-    set {items.data::BLUE_PICKAXE} to toPickaxeFormat(unbreakable diamond pickaxe of efficiency 1 named "&bブルーピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f鉄" and "&7・&fラピスラズリ")
-    set string tag "ITEM_ID" of custom nbt of {items.data::FIRST_PICKAXE} to "FIRST_PICKAXE"
-    set string tag "ITEM_ID" of custom nbt of {items.data::BLUE_PICKAXE} to "BLUE_PICKAXE"
+    set {items.data::FIRST_PICKAXE} to unbreakable golden pickaxe of efficiency 1 named "&d初期ピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f石炭" and "&7・&f鉄"
+    set {items.data::BLUE_PICKAXE} to unbreakable diamond pickaxe of efficiency 1 named "&bブルーピッケル" with lore "&f採掘できる鉱石&7：", "&7・&f石", "&7・&f鉄" and "&7・&fラピスラズリ"
+    set string tag "TheMining;ItemId" of custom nbt of {items.data::FIRST_PICKAXE} to "FIRST_PICKAXE"
+    set string tag "TheMining;ItemId" of custom nbt of {items.data::BLUE_PICKAXE} to "BLUE_PICKAXE"
+
+    set int tag "TheMining;enchantments;efficiency" of custom nbt of {item.data::FIRST_PICKAXE} to 1
+
+    #set {items.data::FIRST_PICKAXE} to toPickaxeFormat({items.data::FIRST_PICKAXE})
+    #set {items.data::BLUE_PICKAXE} to toPickaxeFormat({items.data::BLUE_PICKAXE})
 
 function getItemData(itemId: string) :: itemtype:
     return {items.data::%{_itemId}%}
@@ -36,8 +41,14 @@ function getItemLore(itemId: string) :: objects:
     return lore of {items.data::%{_itemId}%}
 
 function getItemId(itemData: itemtype) :: string:
-    return string tag "ITEM_ID" of custom nbt of {_itemData}
+    return string tag "TheMining;ItemId" of custom nbt of {_itemData}
 
 local function toPickaxeFormat(itemData: itemtype) :: itemtype:
     set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_itemData} to false
+    set {_enchantments::*} to compound list tag "TheMining;enchantments" of custom nbt of {_itemData}
+    loop {_enchantments::*}:
+        set {_enchantmentName} to getDefine("LANG_ENCHANTMENTS::%loop-value%")
+        set {_enchantmentLevel} to int tag "TheMining;enchantments;%loop-value%" of custom nbt of {_itemData}
+        add "%{_enchantmentName}% - %{_enchantmentLevel}%" to {_lore::*}
+    add {_lore::*} to lore of {_itemData}
     return {_itemData}
