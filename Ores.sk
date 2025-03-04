@@ -11,6 +11,8 @@ function breakHandle(player: player, block: block) :: boolean:
     return false if {_itemId} is not set
     return false if {define::BREAKABLE_ORES::%{_itemId}%::*} doesn't contain {_blockType}
 
-    drop getDefine("DROP_ITEMS::%{_blockType}%") at {_block}
+    set {_dropItem} to getDefine("DROP_ITEMS::%{_blockType}%")
+    broadcast "%{define::DROP_ITEMS::stone}% %{_blockType}% - %{_dropItem}% - %location of {_block}%"
+    drop {_dropItem} at location of {_block}
 
     return true
