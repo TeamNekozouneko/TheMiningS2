@@ -41,6 +41,11 @@ function handleDefine():
     add iron ore to {define::BREAKABLE_ORES::BLUE_PICKAXE::*}
     add lapis ore to {define::BREAKABLE_ORES::BLUE_PICKAXE::*}
 
+    set {define::DROP_ITEMS::stone} to getItemData("COBBLESTONE")
+    set {define::DROP_ITEMS::coal ore} to getItemData("COAL")
+    set {define::DROP_ITEMS::iron ore} to getItemData("RAW_IRON")
+    set {define::DROP_ITEMS::lapis ore} to getItemData("LAPIS_LAZULI")
+
     #Items.sk
     set {define::LANG_ITEMS::stone} to "石"
     set {define::LANG_ITEMS::coal ore} to "石炭"
