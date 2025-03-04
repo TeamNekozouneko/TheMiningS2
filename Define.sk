@@ -33,10 +33,27 @@ function handleDefine():
     add "&8¦¦ &bwww.nekozouneko.net" to {define::SCOREBOARD_CONTENTS::*}
 
     #Ores.sk
-    add stone block to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
-    add coal ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
-    add iron ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
-    add lapis ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+    set {define::ORE_MODELS::STONE} to stone block
+    set {define::ORE_MODELS::COAL_ORE} to coal ore
+    set {define::ORE_MODELS::IRON_ORE} to iron ore
+    set {define::ORE_MODELS::LAPIS_ORE} to lapis ore
+
+    add "STONE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+    add "COAL_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+    add "IRON_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+    add "LAPIS_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+
+    #Items.sk
+    set {define::LANG_ITEMS::STONE} to "石"
+    set {define::LANG_ITEMS::COAL_ORE} to "石炭"
+    set {define::LANG_ITEMS::IRON_ORE} to "鉄"
+    set {define::LANG_ITEMS::LAPIS_ORE} to "ラピスラズリ"
+
+    set {define::LANG_ENCHANTMENTS::EFFICIENCY} to "効率強化"
+    set {define::LANG_ENCHANTMENTS::FORTUNE} to "幸運"
+    set {define::LANG_ENCHANTMENTS::AUTO_COLLECT} to "自動回収"
+    set {define::LANG_ENCHANTMENTS::AUTO_SELL} to "自動売却"
+    set {define::LANG_ENCHANTMENTS::RANGE_MINING} to "範囲採掘"
 
 function initDefine():
     clear {define::*}
