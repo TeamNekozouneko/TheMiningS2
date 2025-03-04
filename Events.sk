@@ -16,4 +16,5 @@ on join:
     profileInit(player)
 
 on break:
+    cancel drops
     cancel event if breakHandle(player, event-block) is false
