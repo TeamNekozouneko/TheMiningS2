@@ -36,7 +36,10 @@ function handleDefine():
     add stone to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
     add coal ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
     add iron ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
-    add lapis ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+
+    add stone to {define::BREAKABLE_ORES::BLUE_PICKAXE::*}
+    add iron ore to {define::BREAKABLE_ORES::BLUE_PICKAXE::*}
+    add lapis ore to {define::BREAKABLE_ORES::BLUE_PICKAXE::*}
 
     #Items.sk
     set {define::LANG_ITEMS::stone} to "石"
