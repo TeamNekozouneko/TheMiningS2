@@ -5,47 +5,19 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function itemInit():
-    clear {items.data::*}
-
-    #Item
-    set {items.data::COBBLESTONE} to cobblestone named "&a丸石"
-    set {items.data::COAL} to coal named "&a石炭"
-    set {items.data::RAW_IRON} to raw iron named "&a鉄の原石" with lore "&6精錬NPCで焼けるよ！"
-    set {items.data::IRON_INGOT} to iron ingot named "&a鉄インゴット"
-    set {items.data::LAPIS_LAZULI} to lapis lazuli named "&aラピスラズリ" with lore "&6エンチャントに使えるよ！"
-    set string tag "TheMining;ItemId" of custom nbt of {items.data::COBBLESTONE} to "COBBLESTONE"
-    set string tag "TheMining;ItemId" of custom nbt of {items.data::COAL} to "COAL"
-    set string tag "TheMining;ItemId" of custom nbt of {items.data::RAW_IRON} to "RAW_IRON"
-    set string tag "TheMining;ItemId" of custom nbt of {items.data::IRON_INGOT} to "IRON_INGOT"
-    set string tag "TheMining;ItemId" of custom nbt of {items.data::LAPIS_LAZULI} to "LAPIS_LAZULI"
-
-    #Pickaxe
-    set {items.data::FIRST_PICKAXE} to unbreakable golden pickaxe of efficiency 1 named "&d初期ピッケル"
-    set {items.data::BLUE_PICKAXE} to unbreakable diamond pickaxe of efficiency 1 named "&bブルーピッケル"
-    set string tag "TheMining;ItemId" of custom nbt of {items.data::FIRST_PICKAXE} to "FIRST_PICKAXE"
-    set string tag "TheMining;ItemId" of custom nbt of {items.data::BLUE_PICKAXE} to "BLUE_PICKAXE"
-
-    #ピッケルのエンチャント定義
-    set int tag "TheMining;Enchantments;efficiency" of custom nbt of {items.data::FIRST_PICKAXE} to 1
-    set int tag "TheMining;Enchantments;efficiency" of custom nbt of {items.data::BLUE_PICKAXE} to 1
-
-    set {items.data::FIRST_PICKAXE} to toPickaxeFormat({items.data::FIRST_PICKAXE})
-    set {items.data::BLUE_PICKAXE} to toPickaxeFormat({items.data::BLUE_PICKAXE})
-
 function getItemData(itemId: string) :: itemtype:
-    return {items.data::%{_itemId}%}
+    return getDefine("ITEMS::%{_itemId}%")
 
 function getItemName(itemId: string) :: string:
-    return name of {items.data::%{_itemId}%}
+    return name of getItemData({_itemId})
 
 function getItemLore(itemId: string) :: objects:
-    return lore of {items.data::%{_itemId}%}
+    return lore of getItemData({_itemId})
 
 function getItemId(itemData: itemtype) :: string:
     return string tag "TheMining;ItemId" of custom nbt of {_itemData}
 
-local function toPickaxeFormat(itemData: itemtype) :: itemtype:
+function toPickaxeFormat(itemData: itemtype) :: itemtype:
     #バニラのエンチャント表示を削除
     set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_itemData} to false
 
