@@ -13,9 +13,9 @@ function scoreboardUpdate(player: player):
     add String(profileMoneyGet({_player})) to {_args::*}
 
     #Update Scoreboard
-    set title of {_player}'s scoreboard to {define::SCOREBOARD_TITLE}
+    set title of {_player}'s scoreboard to getDefine("SCOREBOARD_TITLE")
     set {_index} to 1
-    loop {define::SCOREBOARD_CONTENTS::*}:
+    loop getDefineList("SCOREBOARD_CONTENTS"):
         set {_content} to loop-value
         while {_content} contains "${}":
             replace first "${}" with {_args::%{_index}%} in {_content}
