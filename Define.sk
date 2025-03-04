@@ -33,25 +33,16 @@ function handleDefine():
     add "&8¦¦ &bwww.nekozouneko.net" to {define::SCOREBOARD_CONTENTS::*}
 
     #Ores.sk
-    set {define::ORE_MODELS::STONE} to stone
-    set {define::ORE_MODELS::COAL_ORE} to coal ore
-    set {define::ORE_MODELS::IRON_ORE} to iron ore
-    set {define::ORE_MODELS::LAPIS_ORE} to lapis ore
-
-    add "STONE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
-    add "COAL_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
-    add "IRON_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
-    add "LAPIS_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
-
-    #Generate Reversed Ore Models (For Performance)
-    loop getDefineList("ORE_MODELS"):
-        set {define::REVERSED_ORE_MODELS::%loop-value%} to loop-index
+    add stone to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+    add coal ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+    add iron ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+    add lapis ore to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
 
     #Items.sk
-    set {define::LANG_ITEMS::STONE} to "石"
-    set {define::LANG_ITEMS::COAL_ORE} to "石炭"
-    set {define::LANG_ITEMS::IRON_ORE} to "鉄"
-    set {define::LANG_ITEMS::LAPIS_ORE} to "ラピスラズリ"
+    set {define::LANG_ITEMS::stone} to "石"
+    set {define::LANG_ITEMS::coal ore} to "石炭"
+    set {define::LANG_ITEMS::iron ore} to "鉄"
+    set {define::LANG_ITEMS::lapis ore} to "ラピスラズリ"
 
     set {define::LANG_ENCHANTMENTS::EFFICIENCY} to "効率強化"
     set {define::LANG_ENCHANTMENTS::FORTUNE} to "幸運"
