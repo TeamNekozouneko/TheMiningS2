@@ -5,7 +5,7 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function breakHandle(player: player, block: Block) :: boolean:
+function breakHandle(player: player, block: block) :: boolean:
     set {_itemId} to getItemId({_player}'s tool)
     return false if {_itemId} is not set
     return false if {define::BREAKABLE_ORES::%{_itemId}%::*} doesn't contain type of {_block}

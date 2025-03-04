@@ -33,7 +33,7 @@ function handleDefine():
     add "&8¦¦ &bwww.nekozouneko.net" to {define::SCOREBOARD_CONTENTS::*}
 
     #Ores.sk
-    set {define::ORE_MODELS::STONE} to stone block
+    set {define::ORE_MODELS::STONE} to stone
     set {define::ORE_MODELS::COAL_ORE} to coal ore
     set {define::ORE_MODELS::IRON_ORE} to iron ore
     set {define::ORE_MODELS::LAPIS_ORE} to lapis ore
@@ -42,6 +42,10 @@ function handleDefine():
     add "COAL_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
     add "IRON_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
     add "LAPIS_ORE" to {define::BREAKABLE_ORES::FIRST_PICKAXE::*}
+
+    #Generate Reversed Ore Models (For Performance)
+    loop getDefineList("ORE_MODELS"):
+        set {define::REVERSED_ORE_MODELS::%loop-value%} to loop-index
 
     #Items.sk
     set {define::LANG_ITEMS::STONE} to "石"
