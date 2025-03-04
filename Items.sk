@@ -26,10 +26,11 @@ function itemInit():
     set string tag "TheMining;ItemId" of custom nbt of {items.data::FIRST_PICKAXE} to "FIRST_PICKAXE"
     set string tag "TheMining;ItemId" of custom nbt of {items.data::BLUE_PICKAXE} to "BLUE_PICKAXE"
 
-    set int tag "TheMining;enchantments;efficiency" of custom nbt of {item.data::FIRST_PICKAXE} to 1
+    set int tag "TheMining;Enchantments;efficiency" of custom nbt of {items.data::FIRST_PICKAXE} to 1
+    set int tag "TheMining;Enchantments;efficiency" of custom nbt of {items.data::BLUE_PICKAXE} to 1
 
-    #set {items.data::FIRST_PICKAXE} to toPickaxeFormat({items.data::FIRST_PICKAXE})
-    #set {items.data::BLUE_PICKAXE} to toPickaxeFormat({items.data::BLUE_PICKAXE})
+    set {items.data::FIRST_PICKAXE} to toPickaxeFormat({items.data::FIRST_PICKAXE})
+    set {items.data::BLUE_PICKAXE} to toPickaxeFormat({items.data::BLUE_PICKAXE})
 
 function getItemData(itemId: string) :: itemtype:
     return {items.data::%{_itemId}%}
@@ -45,10 +46,10 @@ function getItemId(itemData: itemtype) :: string:
 
 local function toPickaxeFormat(itemData: itemtype) :: itemtype:
     set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_itemData} to false
-    set {_enchantments::*} to compound list tag "TheMining;enchantments" of custom nbt of {_itemData}
+    set {_enchantments::*} to compound list tag "TheMining;Enchantments" of custom nbt of {_itemData}
     loop {_enchantments::*}:
         set {_enchantmentName} to getDefine("LANG_ENCHANTMENTS::%loop-value%")
-        set {_enchantmentLevel} to int tag "TheMining;enchantments;%loop-value%" of custom nbt of {_itemData}
+        set {_enchantmentLevel} to int tag "TheMining;Enchantments;%loop-value%" of custom nbt of {_itemData}
         add "%{_enchantmentName}% - %{_enchantmentLevel}%" to {_lore::*}
     add {_lore::*} to lore of {_itemData}
     return {_itemData}
