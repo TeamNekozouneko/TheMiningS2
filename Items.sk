@@ -46,11 +46,12 @@ function getItemId(itemData: itemtype) :: string:
 
 local function toPickaxeFormat(itemData: itemtype) :: itemtype:
     set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_itemData} to false
-    set {_enchantments::*} to compound tag "TheMining;Enchantments" of custom nbt of {_itemData}
-    broadcast {_enchantments::*}
-    loop {_enchantments::*}:
-        set {_enchantmentName} to getDefine("LANG_ENCHANTMENTS::%loop-value%")
+    loop getDefineList("ENCHANTMENT_TYPES"):
         set {_enchantmentLevel} to int tag "TheMining;Enchantments;%loop-value%" of custom nbt of {_itemData}
-        add "%{_enchantmentName}% - %{_enchantmentLevel}%" to {_lore::*}
-    add {_lore::*} to lore of {_itemData}
+        continue if {_enchantmentLevel} is not set
+        set {_enchantmentName} to getDefine("LANG_ENCHANTMENTS::%loop-value%")
+        add "&a　%{_enchantmentName}% %{_enchantmentLevel}%" to {_enchantment_lore::*}
+    if size of {_enchantment_lore::*} > 0:
+        add "&7エンチャント" to lore of {_itemData}
+        add {_enchantment_lore::*} to lore of {_itemData}
     return {_itemData}
