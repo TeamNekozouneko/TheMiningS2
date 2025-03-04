@@ -15,7 +15,8 @@ function scoreboardUpdate(player: player):
     #Update Scoreboard
     set title of {_player}'s scoreboard to getDefine("SCOREBOARD_TITLE")
     set {_index} to 1
-    loop getDefineList("SCOREBOARD_CONTENTS"):
+    set {_contents::*} to getDefineList("SCOREBOARD_CONTENTS")
+    loop {_contents::*}:
         set {_content} to loop-value
         while {_content} contains "${}":
             replace first "${}" with {_args::%{_index}%} in {_content}
