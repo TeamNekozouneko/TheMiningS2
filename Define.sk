@@ -42,5 +42,8 @@ function initDefine():
     clear {define::*}
     handleDefine()
 
-function getDefine(defineName: text) :: objects:
+function getDefine(defineName: text) :: object:
     return {define::%{_defineName}%}
+
+function getDefineList(defineListName: text) :: objects:
+    return {define::%{_defineListName}%::*}
