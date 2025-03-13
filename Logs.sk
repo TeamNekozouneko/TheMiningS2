@@ -20,7 +20,7 @@ function logError(logType: string, parameters: objects):
     log "[%{_logType}%] %{_content}%" to file getDefine("LOGS_SAVE_PATH") with a severity of severe
     broadcast "[LOG_ERR] [%{_logType}%] %{_content}%" if getDefine("DEVELOPMENT_MODE") is true
 
-function getLogParameterContent(parameters: objects) :: string:
+local function getLogParameterContent(parameters: objects) :: string:
     loop {_parameters::*}:
         add "%loop-index%: %loop-value%" to {_texts::*}
     return concat({_texts::*})

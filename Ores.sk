@@ -9,7 +9,7 @@ function breakHandle(player: player, block: block) :: boolean:
     set {_itemId} to getItemId({_player}'s tool)
     set {_blockType} to type of {_block}
     return false if {_itemId} is not set
-    return false if {define::BREAKABLE_ORES::%{_itemId}%::*} doesn't contain {_blockType}
+    return false if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}
 
     set {_dropItem} to getDefine("DROP_ITEMS::%{_blockType}%")
     drop {_dropItem} at {_block}
