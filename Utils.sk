@@ -11,4 +11,4 @@ function String(value: object) :: string:
 function getLevelupCost(currentLevel: integer) :: number:
     set {_initial_term} to 2000
     set {_common_ratio} to 2
-    return {_initial_term} * {_common_ratio} ^ {_currentLevel}
+    return {_initial_term} * {_common_ratio} ^ ({_currentLevel}-1)
