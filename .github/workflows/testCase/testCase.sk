@@ -6,6 +6,10 @@
 #==================================================
 
 on load:
+    broadcast "Waiting Initialize..."
+    wait 3 second
+    set {define::DEVELOPMENT_MODE} to false
+    
     #テストケース記述欄
     testFail() if defineTestHandler() is false
     logTestHandler()
