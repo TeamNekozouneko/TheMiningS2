@@ -11,7 +11,11 @@ function breakHandle(player: player, block: block) :: boolean:
     return false if {_itemId} is not set
     return false if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}
 
+    #ドロップの処理
     set {_dropItem} to getDefine("DROP_ITEMS::%{_blockType}%")
     drop {_dropItem} at {_block}
+
+    #EXPの獲得処理
+    profileExpIncrease({_player}, getDefine("EARN_EXP::%{_blockType}%"), "ORES_BREAK")
 
     return true

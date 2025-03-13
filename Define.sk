@@ -92,6 +92,18 @@ function handleDefine():
     set {define::DROP_ITEMS::iron ore} to getItemData("RAW_IRON")
     set {define::DROP_ITEMS::lapis ore} to getItemData("LAPIS_LAZULI")
 
+    #採掘時の獲得経験値の定義（Ores.sk）
+    set {define::EARN_EXP::stone} to 0.1
+    set {define::EARN_EXP::coal ore} to 0.2
+    set {define::EARN_EXP::iron ore} to 0.2
+    set {define::EARN_EXP::lapis ore} to 0.3
+
+    #採掘時の鉱石復活時間の定義[秒]（Ores.sk）
+    set {define::REVIVE_TIME::stone} to 180
+    set {define::REVIVE_TIME::coal ore} to 180
+    set {define::REVIVE_TIME::iron ore} to 180
+    set {define::REVIVE_TIME::lapis ore} to 180
+
 function initDefine():
     clear {define::*}
     handleDefine()
