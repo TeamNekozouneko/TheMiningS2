@@ -9,6 +9,7 @@ on load:
     #テストケース記述欄
     testFail() if defineTestHandler() is false
     logTestHandler()
+    testFail() if getLevelupCostTestHandler() is false
     
     wait 3 second
     testSuccess()

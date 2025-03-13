@@ -1,0 +1,46 @@
+#==================================================
+#| #getLevelupCostTest.sk
+#| getLevelupCost関数のランタイムテストケース
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function getLevelupCostTestHandler(amountOfTerm: integer = 20) :: boolean:
+    testLog("getLevelupCostTestHandler", "Amount of Term = %{_amountOfTerm}%")
+
+    #テストケースの定義
+    set {_initial_term} to 2000
+    set {_common_ratio} to 2
+    set {_case::1} to {_initial_term}
+    set {_case::2} to {_case::1}*{_common_ratio}
+    set {_case::3} to {_case::2}*{_common_ratio}
+    set {_case::4} to {_case::3}*{_common_ratio}
+    set {_case::5} to {_case::4}*{_common_ratio}
+    set {_case::6} to {_case::5}*{_common_ratio}
+    set {_case::7} to {_case::6}*{_common_ratio}
+    set {_case::8} to {_case::7}*{_common_ratio}
+    set {_case::9} to {_case::8}*{_common_ratio}
+    set {_case::10} to {_case::9}*{_common_ratio}
+    set {_case::11} to {_case::10}*{_common_ratio}
+    set {_case::12} to {_case::11}*{_common_ratio}
+    set {_case::13} to {_case::12}*{_common_ratio}
+    set {_case::14} to {_case::13}*{_common_ratio}
+    set {_case::15} to {_case::14}*{_common_ratio}
+    set {_case::16} to {_case::15}*{_common_ratio}
+    set {_case::17} to {_case::16}*{_common_ratio}
+    set {_case::18} to {_case::17}*{_common_ratio}
+    set {_case::19} to {_case::18}*{_common_ratio}
+    set {_case::20} to {_case::19}*{_common_ratio}
+
+    #テストデータの準備
+    loop {_amountOfTerm} times:
+        set {_runtimeData::%loop-number%} to getLevelupCost(loop-number)
+    
+    #Test 1-ResultMisMatchingCheck
+    loop {_runtimeData::*}:
+        testLog("getLevelupCostTestHandler", "[1-ResultMisMatchingCheck] %loop-index%/%{_amountOfTerm}% Testing... (Sample: %{_case::%loop-index%}%, Runtime: %loop-value%)")
+        return false if {_case::%loop-index%} is not loop-value
+    testLog("getLevelupCostTestHandler", "[1-ResultMisMatchingCheck] Passed.")
+
+    return true
+    
