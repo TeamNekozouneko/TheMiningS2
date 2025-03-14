@@ -5,6 +5,11 @@
 #| Nekozouneko Group Developer
 #==================================================
 
+function oresInitializeVariables():
+    clear {ores.revivePendingSpans::*}
+    clear {ores.revivePendingLocations::*}
+    clear {ores.revivePendingBlocks::*}
+
 function breakHandle(player: player, block: block) :: boolean:
     set {_itemId} to getItemId({_player}'s tool)
     set {_blockType} to type of {_block}
@@ -18,4 +23,22 @@ function breakHandle(player: player, block: block) :: boolean:
     #EXPの獲得処理
     profileExpIncrease({_player}, getDefine("EARN_EXP::%{_blockType}%"), "ORES_BREAK")
 
+    #鉱石復活のキュー追加
+    set {_unixtime} to floor(unix timestamp of now) #Unixtimeの整数部だけ扱う
+    set {_roundedUnixtime} to {_unixtime} - mod({_unixtime}, 10) #一桁目の数字だけ引いて一桁目の情報を0にそろえる
+    add {_roundedUnixtime} to {ores.revivePendingSpans::*}
+    add (location of {_block}) to {ores.revivePendingLocations::*}
+    add {_blockType} to {ores.revivePendingBlocks::*}
+
     return true
+
+function oreReviveAsyncHandler():
+    async run 0 ticks later repeating every 5 tick:
+        loop getDefine("REVIVE_ORE_PER_INTERVAL") times:
+            exit loop if size of {ores.revivePendingSpans::*} is 0
+            continue if getElapsedUnixtime({ores.revivePendingSpans::1}) < getDefine("REVIVE_TIME::%{ores.revivePendingBlocks::1}%")
+            
+            set block at {ores.revivePendingLocations::1} to {ores.revivePendingBlocks::1}
+            clear {ores.revivePendingSpans::1}
+            clear {ores.revivePendingLocations::1}
+            clear {ores.revivePendingBlocks::1}

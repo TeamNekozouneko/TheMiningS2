@@ -17,3 +17,9 @@ function getLevelupCost(currentLevel: integer) :: number:
 function getDigit(value: number, digit: integer) :: integer:
     set {_coefficient} to 10^({_digit}-1) #基準値
     return mod(floor({_value} / {_coefficient}), 10)
+
+#Unixtimeの経過時間を返却する関数（秒）
+function getElapsedUnixtime(unixtime: number) :: number:
+    set {_deltaTime} to (unix timestamp of now)-{_unixtime}
+    return 0 if {_deltaTime} < 0
+    return {_deltaTime}

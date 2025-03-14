@@ -104,6 +104,9 @@ function handleDefine():
     set {define::REVIVE_TIME::iron ore} to 180
     set {define::REVIVE_TIME::lapis ore} to 180
 
+    #5Tickあたりに処理する鉱石復活数
+    set {define::REVIVE_ORE_PER_INTERVAL} to 50
+
     #レベルアップ用NPCの名前定義
     set {define::LEVELUP_NPC_NAME} to "&6&lレベル屋のおじさん &7[クリック]"
 
