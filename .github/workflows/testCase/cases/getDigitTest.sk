@@ -88,11 +88,11 @@ function getDigitTestHandler() :: boolean:
     add 5 to {_results::*}
 
     #数値20桁<Number>の正解データ
-    add 7 to {_results::*}
-    add 4 to {_results::*}
-    add 2 to {_results::*}
     add 5 to {_results::*}
-    add 9 to {_results::*}
+    add 8 to {_results::*}
+    add 5 to {_results::*}
+    add 3 to {_results::*}
+    add 7 to {_results::*}
 
     #Test 1-ResultMisMatchingTest
     loop {_amountOfCase} times:
