@@ -89,7 +89,7 @@ function getDigitTestHandler() :: boolean:
 
     #数値20桁<Number>の正解データ
     add 5 to {_results::*}
-    add 8 to {_results::*}
+    add 3 to {_results::*}
     add 5 to {_results::*}
     add 3 to {_results::*}
     add 7 to {_results::*}
