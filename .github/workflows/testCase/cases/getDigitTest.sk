@@ -1,0 +1,96 @@
+#==================================================
+#| #getDigitTest.sk
+#| getDigit関数のランタイムテストケース
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function getDigitTestHandler() :: boolean:
+    #テストデータの準備
+    set {_amountOfCase} to 20
+    testLog("getDigitTestHandler", "Amount of Case = %{_amountOfCase}%")
+
+    #整数20桁テストデータ
+    add 36828212876444650233 to {_values::*}
+    add 25430789649053168429 to {_values::*}
+    add 10893475159278436522 to {_values::*}
+    add 10258934567349853333 to {_values::*}
+    add 23740958540968234902 to {_values::*}
+    #整数10桁+少数10桁テストデータ
+    add 7684502347.8562374951 to {_values::*}
+    add 2938456769.4836704638 to {_values::*}
+    add 1538593769.3869000133 to {_values::*}
+    add 4357809240.8482031873 to {_values::*}
+    add 4902906490.7589463754 to {_values::*}
+    #整数4桁+少数16桁テストデータ
+    add 2490.1378648964897520 to {_values::*}
+    add 1750.3780618428030733 to {_values::*}
+    add 5257.9083967845792575 to {_values::*}
+    add 2590.7981759870542344 to {_values::*}
+    add 2259.3748104818044180 to {_values::*}
+    #数値20桁<Number>テストデータ
+    add 59031579848579382593.0 to {_values::*}
+    add 41903589841408184036.0 to {_values::*}
+    add 72059384105892932093.0 to {_values::*}
+    add 59012873500234050787.0 to {_values::*}
+    add 13049572839847638454.0 to {_values::*}
+
+    #整数20桁の桁数
+    add 6 to {_digits::*}
+    add 2 to {_digits::*}
+    add 18 to {_digits::*}
+    add 3 to {_digits::*}
+    add 20 to {_digits::*}
+    #整数10桁+少数10桁の桁数
+    add 8 to {_digits::*}
+    add 1 to {_digits::*}
+    add 6 to {_digits::*}
+    add 4 to {_digits::*}
+    add 2 to {_digits::*}
+    #整数4桁+少数16桁の桁数
+    add 3 to {_digits::*}
+    add 1 to {_digits::*}
+    add 4 to {_digits::*}
+    add 3 to {_digits::*}
+    add 2 to {_digits::*}
+    #数値20桁<Number>の桁数
+    add 19 to {_digits::*}
+    add 11 to {_digits::*}
+    add 7 to {_digits::*}
+    add 3 to {_digits::*}
+    add 2 to {_digits::*}
+
+    #整数20桁の正解データ
+    add 6 to {_results::*}
+    add 2 to {_results::*}
+    add 8 to {_results::*}
+    add 5 to {_results::*}
+    add 2 to {_results::*}
+    #整数10桁+少数10桁の正解データ
+    add 8 to {_results::*}
+    add 9 to {_results::*}
+    add 5 to {_results::*}
+    add 9 to {_results::*}
+    add 9 to {_results::*}
+    #整数4桁+少数16桁の正解データ
+    add 4 to {_results::*}
+    add 0 to {_results::*}
+    add 5 to {_results::*}
+    add 5 to {_results::*}
+    add 5 to {_results::*}
+    #数値20桁<Number>の正解データ
+    add 9 to {_results::*}
+    add 4 to {_results::*}
+    add 2 to {_results::*}
+    add 7 to {_results::*}
+    add 5 to {_results::*}
+    
+    #Test 1-ResultMisMatchingTest
+    loop {_amountOfCase} times:
+        set {_digitResult} to getDigit({_values::%loop-number%}, {_digits::%loop-number%})
+        testLog("getDigitTestHandler", "[1-ResultMisMatchingCheck] %loop-number%/%{_amountOfCase}% Testing... (Value: %{_values::%loop-number%}%, Digit: %{_digits::%loop-number%}%, Expected: %{_results::%loop-number%}%, Runtime: %{_digitResult}%)")
+        return false if {_digitResult} is not {_results::%loop-number%}
+    testLog("getDigitTestHandler", "[1-ResultMisMatchingTest] Passed.")
+
+    return true
+    
