@@ -68,31 +68,31 @@ function getDigitTestHandler() :: boolean:
 
     #整数20桁の正解データ
     add 6 to {_results::*}
-    add 8 to {_results::*}
-    add 5 to {_results::*}
-    add 4 to {_results::*}
     add 2 to {_results::*}
+    add 5 to {_results::*}
+    add 3 to {_results::*}
+    add 9 to {_results::*}
 
     #整数10桁+少数10桁の正解データ
-    add 3 to {_results::*}
-    add 2 to {_results::*}
+    add 8 to {_results::*}
     add 9 to {_results::*}
-    add 7 to {_results::*}
+    add 5 to {_results::*}
+    add 9 to {_results::*}
     add 9 to {_results::*}
 
     #整数4桁+少数16桁の正解データ
-    add 9 to {_results::*}
-    add 1 to {_results::*}
-    add 7 to {_results::*}
-    add 9 to {_results::*}
-    add 2 to {_results::*}
+    add 4 to {_results::*}
+    add 0 to {_results::*}
+    add 5 to {_results::*}
+    add 5 to {_results::*}
+    add 5 to {_results::*}
 
     #数値20桁<Number>の正解データ
-    add 3 to {_results::*}
+    add 7 to {_results::*}
     add 4 to {_results::*}
     add 2 to {_results::*}
-    add 7 to {_results::*}
     add 5 to {_results::*}
+    add 9 to {_results::*}
 
     #Test 1-ResultMisMatchingTest
     loop {_amountOfCase} times:
