@@ -12,3 +12,8 @@ function getLevelupCost(currentLevel: integer) :: number:
     set {_initial_term} to 2000
     set {_common_ratio} to 2
     return {_initial_term} * {_common_ratio} ^ ({_currentLevel}-1)
+
+#Numberの指定桁目を取得する関数
+function getDigit(value: number, digit: integer) :: integer:
+    set {_coefficient} to 10^({_digit}-1) #基準値
+    return mod(floor({_value} / {_coefficient}), 10)
