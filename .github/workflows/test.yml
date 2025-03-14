@@ -29,6 +29,7 @@ jobs:
           mkdir -p ~/plugins/Skript/scripts/
           mv .github/workflows/plugins/Skript-2.10.1.jar ~/plugins/
           mv .github/workflows/plugins/SkBee-3.8.2.jar ~/plugins/
+          mv .github/workflows/plugins/Citizens-2.0.36-b3644.jar ~/plugins/
           cp -r * ~/plugins/Skript/scripts/
           cp -r .github/workflows/testCase/* ~/plugins/Skript/scripts/
           cp .github/workflows/golang/check ~
