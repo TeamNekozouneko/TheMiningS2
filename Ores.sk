@@ -4,6 +4,7 @@
 #|
 #| Nekozouneko Group Developer
 #==================================================
+using queues
 
 function oresInitializeVariables():
     set {ores.revivePendingSpans::*} to a new queue
