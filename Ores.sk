@@ -6,9 +6,9 @@
 #==================================================
 
 function oresInitializeVariables():
-    clear {ores.revivePendingSpans::*}
-    clear {ores.revivePendingLocations::*}
-    clear {ores.revivePendingBlocks::*}
+    set {ores.revivePendingSpans::*} to a new queue
+    set {ores.revivePendingLocations::*} to a new queue
+    set {ores.revivePendingBlocks::*} to a new queue
 
 function breakHandle(player: player, block: block) :: boolean:
     set {_itemId} to getItemId({_player}'s tool)
