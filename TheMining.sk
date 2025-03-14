@@ -4,6 +4,3 @@
 #|
 #| Nekozouneko Group Developer
 #==================================================
-
-function main():
-    initDefine()

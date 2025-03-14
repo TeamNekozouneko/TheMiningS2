@@ -112,10 +112,10 @@ function handleDefine():
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
-        set {define::REVIVE_TIME::stone} to 10
-        set {define::REVIVE_TIME::coal ore} to 10
-        set {define::REVIVE_TIME::iron ore} to 10
-        set {define::REVIVE_TIME::lapis ore} to 10
+        set {define::REVIVE_TIME::stone} to 30
+        set {define::REVIVE_TIME::coal ore} to 30
+        set {define::REVIVE_TIME::iron ore} to 30
+        set {define::REVIVE_TIME::lapis ore} to 30
 
 function initDefine():
     clear {define::*}

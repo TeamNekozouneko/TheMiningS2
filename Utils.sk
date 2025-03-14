@@ -20,6 +20,7 @@ function getDigit(value: number, digit: integer) :: integer:
 
 #Unixtimeの経過時間を返却する関数（秒）
 function getElapsedUnixtime(unixtime: number) :: number:
+    return 0 if {_unixtime} is not set
     set {_deltaTime} to (unix timestamp of now)-{_unixtime}
     return 0 if {_deltaTime} < 0
     return {_deltaTime}

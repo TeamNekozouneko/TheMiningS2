@@ -4,13 +4,6 @@
 #|
 #| Nekozouneko Group Developer
 #==================================================
-using queues
-
-function oresInitializeVariables():
-    set {ores.revivePendingSpans::*} to a new queue
-    set {ores.revivePendingLocations::*} to a new queue
-    set {ores.revivePendingBlocks::*} to a new queue
-
 function breakHandle(player: player, block: block) :: boolean:
     set {_itemId} to getItemId({_player}'s tool)
     set {_blockType} to type of {_block}
@@ -33,13 +26,22 @@ function breakHandle(player: player, block: block) :: boolean:
 
     return true
 
+#鉱石復活の定期処理
 function oreReviveAsyncHandler():
-    async run 0 ticks later repeating every 5 tick:
+    run 0 ticks later repeating every 5 tick:
         loop getDefine("REVIVE_ORE_PER_INTERVAL") times:
-            exit loop if size of {ores.revivePendingSpans::*} is 0
-            continue if getElapsedUnixtime({ores.revivePendingSpans::1}) < getDefine("REVIVE_TIME::%{ores.revivePendingBlocks::1}%")
+            exit loop if size of {ores.revivePendingSpans::*} <= 0
             
-            set block at {ores.revivePendingLocations::1} to {ores.revivePendingBlocks::1}
-            clear {ores.revivePendingSpans::1}
-            clear {ores.revivePendingLocations::1}
-            clear {ores.revivePendingBlocks::1}
+            set {_revivePendingSpan} to the first element of {ores.revivePendingSpans::*}
+            set {_revivePendingBlock} to the first element of {ores.revivePendingBlocks::*}
+            set {_revivePendingLocation} to the first element of {ores.revivePendingLocations::*}
+
+            set {_reviveTimePendingBlock} to getDefine("REVIVE_TIME::%{_revivePendingBlock}%")
+            continue if {_reviveTimePendingBlock} is not set
+            continue if getElapsedUnixtime({_revivePendingSpan}) < {_reviveTimePendingBlock}
+
+            set block at {_revivePendingLocation} to {_revivePendingBlock}
+
+            remove {_revivePendingSpan} from {ores.revivePendingSpans::*}
+            remove {_revivePendingBlock} from {ores.revivePendingBlocks::*}
+            remove {_revivePendingLocation} from {ores.revivePendingLocations::*}
