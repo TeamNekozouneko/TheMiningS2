@@ -17,6 +17,9 @@ function getItemLore(itemId: string) :: objects:
 function getItemId(itemData: itemtype) :: string:
     return string tag "TheMining;ItemId" of custom nbt of {_itemData}
 
+function getItemIdFromDroppedItem(entity: entity) :: string:
+    return string tag "Item;components;minecraft:custom_data;TheMining;ItemId" of nbt of {_entity}
+
 function toPickaxeFormat(itemData: itemtype) :: itemtype:
     #バニラのエンチャント表示を削除
     set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_itemData} to false
