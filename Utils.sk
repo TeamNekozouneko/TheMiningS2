@@ -16,7 +16,7 @@ function getLevelupCost(currentLevel: integer) :: number:
 #Numberの指定桁目を取得する関数
 function getDigit(value: number, digit: integer) :: integer:
     set {_coefficient} to 10^({_digit}-1) #基準値
-    return mod(floor({_value} / {_coefficient}), 10)
+    return mod(abs(floor({_value}) / {_coefficient}), 10)
 
 #Unixtimeの経過時間を返却する関数（秒）
 function getElapsedUnixtime(unixtime: number) :: number:

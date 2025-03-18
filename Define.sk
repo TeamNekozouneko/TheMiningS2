@@ -108,7 +108,7 @@ function handleDefine():
     set {define::REVIVE_ORE_PER_INTERVAL} to 50
 
     #NPC種類の定義
-    add "LEVEUP" to {define::NPCS::*}
+    add "LEVELUP" to {define::NPCS::*}
 
     #レベルアップ用NPCの定義
     set {define::NPC::LEVELUP::NAME} to "&6&lレベル屋のおじさん &7[クリック]"

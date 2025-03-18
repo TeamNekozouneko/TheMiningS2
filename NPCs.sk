@@ -1,0 +1,11 @@
+#==================================================
+#| #NPCs.sk
+#| NPCの実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function initNPCs():
+    loop getDefineList("NPCS"):
+        spawn a player citizen named getDefine("NPC::%loop-value%::NAME") at getDefine("NPC::%loop-value%::LOCATION")
+        set skin of last spawned npc to "nekozouneko"

@@ -8,6 +8,7 @@
 on load:
     initDefine()
     oreReviveAsyncHandler()
+    initNPCs()
 
 every second:
     loop all players:
