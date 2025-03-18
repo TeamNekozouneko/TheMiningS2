@@ -10,3 +10,6 @@ function initNPCs():
     loop getDefineList("NPCS"):
         spawn a player citizen named getDefine("NPC::%loop-value%::NAME") at getDefine("NPC::%loop-value%::LOCATION")
         set skin of last spawned npc to "nekozouneko"
+
+function clickNPCHandle(player: player, npc: npc):
+    return false
