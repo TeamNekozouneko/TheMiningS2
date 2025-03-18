@@ -12,4 +12,4 @@ function initNPCs():
         set skin of last spawned npc to "nekozouneko"
 
 function clickNPCHandle(player: player, npc: npc):
-    return false
+    exit
