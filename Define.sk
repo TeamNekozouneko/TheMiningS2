@@ -107,8 +107,13 @@ function handleDefine():
     #5Tickあたりに処理する鉱石復活数
     set {define::REVIVE_ORE_PER_INTERVAL} to 50
 
-    #レベルアップ用NPCの名前定義
-    set {define::LEVELUP_NPC_NAME} to "&6&lレベル屋のおじさん &7[クリック]"
+    #NPC種類の定義
+    add "LEVEUP" to {define::NPCS::*}
+
+    #レベルアップ用NPCの定義
+    set {define::NPC::LEVELUP::NAME} to "&6&lレベル屋のおじさん &7[クリック]"
+    set {define::NPC::LEVELUP::SKIN} to "nekozouneko"
+    set {define::NPC::LEVELUP::LOCATION} to location(0,100,0, world "world", 90, 180)
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
