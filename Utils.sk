@@ -26,8 +26,6 @@ function getElapsedUnixtime(unixtime: number) :: number:
     return {_deltaTime}
 
 #文章中の引数代入を行う関数
-function substitution(content: string, args: objects) :: string:
-    set {_argumentIndex} to  size of {_args}
-    return "" if {_argumentIndex} <= 0
-    loop {_argumentIndex} times:
-        replace first "${}" with {_args::%loop-number%} in {_content}
+function substitution(content: string, args: string) :: string:
+    replace first "${}" with {_args} in {_content}
+    return {_content}
