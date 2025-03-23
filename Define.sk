@@ -112,7 +112,7 @@ function handleDefine():
 
     #レベルアップ用NPCの定義
     set {define::NPC::LEVELUP::NAME} to "&6&lレベル屋のおじさん &7[クリック]"
-    set {define::NPC::LEVELUP::SKIN} to "kinakomoti019"
+    set {define::NPC::LEVELUP::SKIN} to "Tomato_dayo"
     set {define::NPC::LEVELUP::LOCATION} to location(-101.5, 71, -23.5, world "world", -30, 0)
 
     #場所定義
