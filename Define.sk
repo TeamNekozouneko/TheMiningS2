@@ -11,6 +11,8 @@ function handleDefine():
     #言語定義
     set {define::LANG::ERROR_INVALID_PARAMETER} to "&cパラメーターが不正です。"
     set {define::LANG::SUCCESS_COMMAND_GET_ITME} to "&aアイテムを付与しました。"
+    set {define::LANG::ERROR_NOT_ENOUGH_MONEY_SPECIFIC} to "&cお金が足りません。（不足：${}円）"
+    set {define::LANG::SUCCESS_LEVELUP} to "&aレベルアップしました！"
 
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
@@ -104,16 +106,20 @@ function handleDefine():
     set {define::REVIVE_TIME::iron ore} to 180
     set {define::REVIVE_TIME::lapis ore} to 180
 
-    #5Tickあたりに処理する鉱石復活数
+    #5Tickあたりに処理する鉱石復活数（Ores.sk）
     set {define::REVIVE_ORE_PER_INTERVAL} to 50
 
-    #NPC種類の定義
+    #NPC種類の定義（NPCs.sk）
     add "LEVELUP" to {define::NPCS::*}
 
-    #レベルアップ用NPCの定義
+    #レベルアップ用NPCの定義（NPCs.sk）
     set {define::NPC::LEVELUP::NAME} to "&6&lレベル屋のおじさん &7[クリック]"
     set {define::NPC::LEVELUP::SKIN} to "Tomato_dayo"
     set {define::NPC::LEVELUP::LOCATION} to location(-101.5, 71, -23.5, world "world", -30, 0)
+
+    #レベルアップのコスト計算（profile.sk）
+    set {define::LEVELUP_INITIAL_TERM} to 2000 #初項
+    set {define::LEVELUP_COMMON_RATIO} to 2 #公比
 
     #場所定義
     set {define::LOCATION::LOBBY} to location(-83.5, 67.6, 4.5, world "world", 140, 0)
