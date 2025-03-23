@@ -134,3 +134,6 @@ function getDefine(defineName: text) :: object:
 
 function getDefineList(defineListName: text) :: objects:
     return {define::%{_defineListName}%::*}
+
+function getDistributionURL(path: string) :: string:
+    return "https://raw.githubusercontent.com/TeamNekozouneko/TheMiningS2/refs/heads/master/distribution/%{_path}%"

@@ -9,7 +9,10 @@ function initNPCs():
     delete all npcs
     loop getDefineList("NPCS"):
         spawn a player citizen named getDefine("NPC::%loop-value%::NAME") at getDefine("NPC::%loop-value%::LOCATION")
-        set skin of last spawned npc to getDefine("NPC::%loop-value%::SKIN")
+        set {_npc} to last spawned npc
+        broadcast getDistributionURL(concat(getDefine("NPC::%loop-value%::SKIN"), ".png"))
+        set {_skin} to skin from url getDistributionURL(concat(getDefine("NPC::%loop-value%::SKIN"), ".png"))
+        change skin of {_npc} to {_skin}
 
 function clickNPCHandle(player: player, npc: npc):
     exit
