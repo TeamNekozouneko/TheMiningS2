@@ -27,7 +27,7 @@ jobs:
       - name: Set up plugin environments
         run: |
           mkdir -p ~/plugins/Skript/scripts/
-          mv .github/workflows/plugins/ ~/plugins/
+          mv .github/workflows/plugins/* ~/plugins/
           cp -r * ~/plugins/Skript/scripts/
           cp -r .github/workflows/testCase/* ~/plugins/Skript/scripts/
           cp .github/workflows/golang/check ~
