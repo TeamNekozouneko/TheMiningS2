@@ -24,7 +24,7 @@ on break:
 on place:
     cancel event
 
-on citizen click:
+on citizen right click:
     clickNPCHandle(player, event-npc)
 
 on hunger meter change:

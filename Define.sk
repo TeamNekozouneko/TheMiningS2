@@ -11,7 +11,7 @@ function handleDefine():
     #言語定義
     set {define::LANG::ERROR_INVALID_PARAMETER} to "&cパラメーターが不正です。"
     set {define::LANG::SUCCESS_COMMAND_GET_ITME} to "&aアイテムを付与しました。"
-    set {define::LANG::ERROR_NOT_ENOUGH_MONEY_SPECIFIC} to "&cお金が足りません。（不足：${}円）"
+    set {define::LANG::ERROR_NOT_ENOUGH_MONEY_SPECIFIC} to "&cお金が足りません。&7（不足：${}円）"
     set {define::LANG::SUCCESS_LEVELUP} to "&aレベルアップしました！"
 
     #Logs.sk

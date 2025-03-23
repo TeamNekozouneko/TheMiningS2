@@ -14,4 +14,9 @@ function initNPCs():
         change skin of {_npc} to {_skin}
 
 function clickNPCHandle(player: player, npc: npc):
-    exit
+    if compareName({_npc}, getDefine("NPC::LEVELUP::NAME")) is true:
+        profileLevelupHandle({_player})
+
+local function compareName(npc: npc, name: string) :: boolean:
+    return true if uncoloured mini message from (citizen name of {_npc}) is uncoloured {_name}
+    return false
