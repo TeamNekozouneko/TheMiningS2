@@ -9,8 +9,8 @@ function String(value: object) :: string:
     return "%{_value}%"
 
 function getLevelupCost(currentLevel: integer) :: number:
-    set {_initial_term} to 2000
-    set {_common_ratio} to 2
+    set {_initial_term} to getDefine("LEVELUP_INITIAL_TERM")
+    set {_common_ratio} to getDefine("LEVELUP_COMMON_RATIO")
     return {_initial_term} * {_common_ratio} ^ ({_currentLevel}-1)
 
 #Numberの指定桁目を取得する関数

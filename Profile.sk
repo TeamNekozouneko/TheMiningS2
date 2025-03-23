@@ -82,9 +82,9 @@ local function getProfileLogParameters(uuid: string, cause: string, before: numb
 function profileLevelupHandle(p: player):
     set {_level} to profileLevelGet({_p})
     set {_money} to profileMoneyGet({_p})
-    set {_initialTerm} to getDefine("LEVELUP_INITIAL_TERM")
     set {_commonRatio} to getDefine("LEVELUP_COMMON_RATIO")
-    set {_cost} to {_initialTerm} * {_commonRatio} ^ ( {_level} - 1 )
+    set {_cost} to getLevelupCost({_level})
+    
     if {_cost} > {_money}:
         send substitution(concat(getDefine("LANG::ERROR_NOT_ENOUGH_MONEY"), getDefine("LANG::LEVELUP_CURRENT_COST")), formatNumber({_cost})) to {_p}
     else:
