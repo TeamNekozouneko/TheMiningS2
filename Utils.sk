@@ -24,3 +24,10 @@ function getElapsedUnixtime(unixtime: number) :: number:
     set {_deltaTime} to (unix timestamp of now)-{_unixtime}
     return 0 if {_deltaTime} < 0
     return {_deltaTime}
+
+#文章中の引数代入を行う関数
+function substitution(content: string, args: objects) :: string:
+    set {_argumentIndex} to  size of {_args}
+    return "" if {_argumentIndex} <= 0
+    loop {_argumentIndex} times:
+        replace first "${}" with {_args::%loop-number%} in {_content}
