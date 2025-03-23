@@ -14,8 +14,9 @@ every second:
     loop all players:
         scoreboardUpdate(loop-player)
 
-on join:
+on first join:
     profileInit(player)
+    onFirstJoinHandle(player)
 
 on break:
     cancel drops
