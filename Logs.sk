@@ -23,4 +23,4 @@ function logError(logType: string, parameters: objects):
 local function getLogParameterContent(parameters: objects) :: string:
     loop {_parameters::*}:
         add "%loop-index%: %loop-value%" to {_texts::*}
-    return concat({_texts::*})
+    return (join {_texts::*} with ", ")
