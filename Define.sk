@@ -113,7 +113,10 @@ function handleDefine():
     #レベルアップ用NPCの定義
     set {define::NPC::LEVELUP::NAME} to "&6&lレベル屋のおじさん &7[クリック]"
     set {define::NPC::LEVELUP::SKIN} to "nekozouneko"
-    set {define::NPC::LEVELUP::LOCATION} to location(0,100,0, world "world", 90, 180)
+    set {define::NPC::LEVELUP::LOCATION} to location(-101.5, 71, -23.5, world "world", -30, 0)
+
+    #場所定義
+    set {define::LOCATION::LOBBY} to location(-83.5, 67.6, 4.5, world "world", 140, 0)
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
