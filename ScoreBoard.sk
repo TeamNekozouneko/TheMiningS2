@@ -10,7 +10,7 @@ function scoreboardUpdate(player: player):
     add String(profileLevelGet({_player})) to {_args::*}
     add String(profileExpGet({_player})) to {_args::*}
     add "PLAYER_MINING_QUANTITY" to {_args::*}
-    add String(profileMoneyGet({_player})) to {_args::*}
+    add formatNumber(profileMoneyGet({_player})) to {_args::*}
 
     #Update Scoreboard
     set title of {_player}'s scoreboard to getDefine("SCOREBOARD_TITLE")
