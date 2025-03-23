@@ -15,10 +15,7 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" /dev/null
 
 #Apply Environment
 RUN mkdir -p /root/plugins/Skript/scripts/
-COPY .github/workflows/plugins/Skript-2.10.1.jar /root/plugins/
-COPY .github/workflows/plugins/SkBee-3.8.2.jar /root/plugins/
-COPY .github/workflows/plugins/Citizens-2.0.36-b3644.jar /root/plugins/
-COPY .github/workflows/plugins/Skonic-1.2.2.jar /root/plugins/
+COPY .github/workflows/plugins/*.jar /root/plugins/
 COPY . /root/plugins/Skript/scripts/
 COPY .github/workflows/worlds/*.tar.gz /root/worlds/
 RUN tar xzvf /root/worlds/*.tar.gz -C /root/
