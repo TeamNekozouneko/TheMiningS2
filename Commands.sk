@@ -16,5 +16,11 @@ command /mine [<text>] [<text>]:
         if arg-1 is "give":
             give getItemData(arg-2) to player
             send getDefine("LANG::SUCCESS_COMMAND_GET_ITME") to player
+        else if arg-1 is "setMoney":
+            profileMoneySet(player, arg-2, "COMMAND")
+        else if arg-1 is "setLevel":
+            profileLevelSet(player, arg-2, "COMMAND")
+        else if arg-1 is "setExp":
+            profileExpSet(player, arg-2, "COMMAND")
         else:
             send getDefine("LANG::ERROR_INVALID_PARAMETER") to player
