@@ -15,7 +15,7 @@ ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" /dev/null
 
 #Apply Environment
 RUN mkdir -p /root/plugins/Skript/scripts/
-COPY .github/workflows/plugins/*.jar /root/plugins/
+COPY .github/workflows/plugins/* /root/plugins/
 COPY . /root/plugins/Skript/scripts/
 COPY .github/workflows/worlds/*.tar.gz /root/worlds/
 RUN tar xzvf /root/worlds/*.tar.gz -C /root/
