@@ -141,7 +141,7 @@ function handleDefine():
     set {define::PORTAL_DESTINATION::M1-TO-LOBBY} to "LOBBY"
 
     #ポータル範囲定義（Map.sk）
-    set {define::PORTAL::M1-TO-LOBBY::1} to location(-152.5, 116.5, 251.5, world "world", 0, 0)
+    set {define::PORTAL::M1-TO-LOBBY::1} to location(-152.5, 116.0, 251.5, world "world", 0, 0)
     set {define::PORTAL::M1-TO-LOBBY::2} to location(-154.5, 126.5, 241.5, world "world", 0, 0)
 
     #DEVELOPMENT_MODE用のOverride

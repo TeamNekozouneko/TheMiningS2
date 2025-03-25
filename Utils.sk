@@ -29,3 +29,31 @@ function getElapsedUnixtime(unixtime: number) :: number:
 function substitution(content: string, args: string) :: string:
     replace first "${}" with {_args} in {_content}
     return {_content}
+
+#ある地点がある2地点のロケーションの内側にあるかを調べる関数
+#※<location> is within <location> and <location>はバグりました。
+function isWithinLocation(start: location, end: location, target: location) :: boolean:
+    set {_startX} to x location of {_start}
+    set {_startY} to y location of {_start}
+    set {_startZ} to z location of {_start}
+    set {_endX} to x location of {_end}
+    set {_endY} to y location of {_end}
+    set {_endZ} to z location of {_end}
+    set {_targetX} to x location of {_target}
+    set {_targetY} to y location of {_target}
+    set {_targetZ} to Z location of {_target}
+
+    set {_minX} to min({_startX}, {_endX})
+    set {_minY} to min({_startY}, {_endY})
+    set {_minZ} to min({_startZ}, {_endZ})
+    set {_maxX} to max({_startX}, {_endX})
+    set {_maxY} to max({_startY}, {_endY})
+    set {_maxZ} to max({_startZ}, {_endZ})
+
+    return false if {_minX} > {_targetX}
+    return false if {_maxX} < {_targetX}
+    return false if {_minY} > {_targetY}
+    return false if {_maxY} < {_targetY}
+    return false if {_minZ} > {_targetZ}
+    return false if {_maxZ} < {_targetZ}
+    return true

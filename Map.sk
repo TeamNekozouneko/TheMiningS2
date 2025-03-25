@@ -56,6 +56,6 @@ function portalConditionAsyncHandler():
         loop getDefineList("PORTALS"):
             set {_pos1} to getDefine("PORTAL::%loop-value%::1")
             set {_pos2} to getDefine("PORTAL::%loop-value%::2")
-            loop {_players::*} where [input's location is within {_pos1} and {_pos2}]:
+            loop {_players::*} where [isWithinLocation({_pos1}, {_pos2}, input's location) is true]:
                 portalStartTeleportation(loop-value-2, loop-value-1)
                 
