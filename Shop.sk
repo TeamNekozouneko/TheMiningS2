@@ -91,7 +91,7 @@ function onInventoryCloseShopHandle(p: player):
 
 #Interface
 local function getSellLogParameters(uuid: string, itemId: string, amount: integer) :: objects:
-    set {_res::UUID} to {_uuid}
-    set {_res::ITEM_ID} to {_itemId}
-    set {_res::AMOUNT} to {_amount}
+    add {_uuid} to {_res::*}
+    add {_itemId} to {_res::*}
+    add String({_amount}) to {_res::*}
     return {_res::*}

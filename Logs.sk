@@ -21,6 +21,4 @@ function logError(logType: string, parameters: objects):
     broadcast "[LOG_ERR] [%{_logType}%] %{_content}%" if getDefine("DEVELOPMENT_MODE") is true
 
 local function getLogParameterContent(parameters: objects) :: string:
-    loop {_parameters::*}:
-        add "%loop-index%: %loop-value%" to {_texts::*}
-    return (join {_texts::*} with ", ")
+    return (join {_parameters::*} with ";")

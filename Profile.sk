@@ -75,10 +75,10 @@ function profileLevelSet(player: offline player, value: number, cause: string):
 
 #Interface
 local function getProfileLogParameters(uuid: string, cause: string, before: number, after: number) :: objects:
-    set {_res::UUID} to {_uuid}
-    set {_res::CAUSE} to {_cause}
-    set {_res::BEFORE} to {_before}
-    set {_res::AFTER} to {_after}
+    add {_uuid} to {_res::*}
+    add {_cause} to {_res::*}
+    add String({_before}) to {_res::*}
+    add String({_after}) to {_res::*}
     return {_res::*}
 
 #Other
