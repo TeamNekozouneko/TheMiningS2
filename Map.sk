@@ -1,10 +1,11 @@
 #==================================================
 #| #Map.sk
-#| マップの管理モジュール
+#| マップの実装・管理モジュール
 #|
 #| Nekozouneko Group Developer
 #==================================================
 
+#以下ポータルの実装
 function teleportDestination(p: player, destiName: string) :: boolean:
     set {_location} to getDefine("LOCATION::%{_destiName}%")
     if isDestinationAvailable({_location}) is false:
@@ -49,7 +50,7 @@ function portalStartTeleportation(p: player, portalName: string):
 
     set metadata value "isPortalTeleporting" of {_p} to false #Teleport unLock
 
-#ポータル範囲ないかを定期検査するAsyncHandler
+#ポータル範囲内かを定期検査するAsyncHandler
 function portalConditionAsyncHandler():
     async run 0 ticks later repeating every second:
         set {_players::*} to all players where [metadata value "isPortalTeleporting" of input is false]
@@ -58,4 +59,19 @@ function portalConditionAsyncHandler():
             set {_pos2} to getDefine("PORTAL::%loop-value%::2")
             loop {_players::*} where [isWithinLocation({_pos1}, {_pos2}, input's location) is true]:
                 portalStartTeleportation(loop-value-2, loop-value-1)
+
+#以下ジャンプパッドの実装
+function onJumpPadHandle(p: player, block: block):
+    exit if block under {_block} is not gold block
+
+    set {_speed} to 3
+    set {_maxPitch} to 35
+    set {_yaw} to {_p}'s yaw
+    set {_pitch} to {_p}'s pitch
+
+    set {_pitch} to abs({_pitch})
+    set {_pitch} to {_maxPitch} if {_pitch} > {_maxPitch}
+
+    set {_vector} to vector from yaw {_yaw} and pitch -1*{_pitch}
+    push {_p} {_vector} at speed {_speed}
                 
