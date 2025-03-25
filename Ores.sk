@@ -18,6 +18,9 @@ function breakHandle(player: player, block: block) :: boolean:
     #EXPの獲得処理
     profileExpIncrease({_player}, getDefine("EARN_EXP::%{_blockType}%"), "ORES_BREAK")
 
+    #Statistics
+    profileStatisticsIncrease({_player}, "mineQuantity", 1)
+
     #鉱石復活のキュー追加
     set {_unixtime} to floor(unix timestamp of now) #Unixtimeの整数部だけ扱う
     set {_roundedUnixtime} to {_unixtime} - mod({_unixtime}, 10) #一桁目の数字だけ引いて一桁目の情報を0にそろえる

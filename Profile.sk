@@ -94,3 +94,13 @@ function profileLevelupHandle(p: player):
         profileMoneyDecrease({_p}, {_cost}, "PROFILE_LEVELUP")
         profileLevelIncrease({_p}, 1, "PROFILE_LEVELUP")
         send substitution(getDefine("LANG::SUCCESS_LEVELUP"), formatNumber({_cost}*{_commonRatio})) to {_p}
+
+function profileStatisticsIncrease(p: player, statType: string, value: number):
+    add {_value} to {profile.statistics::%{_p}'s uuid%::%{_statType}%}
+function profileStatisticsDecrease(p: player, statType: string, value: number):
+    remove {_value} from {profile.statistics::%{_p}'s uuid%::%{_statType}%}
+function profileStatisticsSet(p: player, statType: string, value: number):
+    set {profile.statistics::%{_p}'s uuid%::%{_statType}%} to {_value}
+function profileStatisticsGet(p: player, statType: string) :: number:
+    return 0 if {profile.statistics::%{_p}'s uuid%::%{_statType}%} is not set
+    return {profile.statistics::%{_p}'s uuid%::%{_statType}%}
