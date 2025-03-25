@@ -37,8 +37,8 @@ function portalStartTeleportation(p: player, portalName: string):
         set {_cancelled} to true if {_originLocationZ} is not floor(z location of {_p})
         exit loop if {_cancelled} is true
 
-        add 1 to {_tick}
-        wait a tick
+        add 2 to {_tick}
+        wait 2 tick
 
     if {_cancelled} is true:
         send action bar getDefine("LANG::PORTAL_CANCELLED") to {_p}
