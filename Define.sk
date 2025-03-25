@@ -119,11 +119,15 @@ function handleDefine():
 
     #NPC種類の定義（NPCs.sk）
     add "LEVELUP" to {define::NPCS::*}
+    add "SHOP" to {define::NPCS::*}
 
     #レベルアップ用NPCの定義（NPCs.sk）
     set {define::NPC::LEVELUP::NAME} to "&6&lレベル屋のおじさん &7[クリック]"
     set {define::NPC::LEVELUP::SKIN} to "Tomato_dayo"
     set {define::NPC::LEVELUP::LOCATION} to location(-101.5, 71, -23.5, world "world", -30, 0)
+    set {define::NPC::SHOP::NAME} to "&a&l売店 &7[クリック]"
+    set {define::NPC::SHOP::SKIN} to "nekokazokuL"
+    set {define::NPC::SHOP::LOCATION} to location(-93.5, 71, -17.5, world "world", 100, 0)
 
     #レベルアップのコスト計算（profile.sk）
     set {define::LEVELUP_INITIAL_TERM} to 2000 #初項
