@@ -26,20 +26,15 @@ function portalStartTeleportation(p: player, portalName: string):
     set {_waitingTick} to 20*3
     set {_tick} to 0
     set {_destiName} to getDefine("PORTAL_DESTINATION::%{_portalName}%")
-    set {_originLocationX} to floor(x location of {_p})
-    set {_originLocationY} to floor(y location of {_p})
-    set {_originLocationZ} to floor(z location of {_p})
     set {_pos1} to getDefine("PORTAL::%{_portalName}%::1")
     set {_pos2} to getDefine("PORTAL::%{_portalName}%::2")
 
     while {_tick} <= {_waitingTick}:
         send action bar getDefine("LANG::PORTAL_TELEPORTING") to {_p}
 
-        set {_cancelled} to true if {_originLocationX} is not floor(x location of {_p})
-        set {_cancelled} to true if {_originLocationY} is not floor(y location of {_p})
-        set {_cancelled} to true if {_originLocationZ} is not floor(z location of {_p})
-        set {_cancelled} to false if isWithinLocation({_pos1}, {_pos2}, {_p}'s location) is true
-        exit loop if {_cancelled} is true
+        if isWithinLocation({_pos1}, {_pos2}, {_p}'s location) is false:
+            set {_cancelled} to true
+            exit loop
 
         add 5 to {_tick}
         wait 5 tick
