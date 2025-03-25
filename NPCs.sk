@@ -12,6 +12,7 @@ function initNPCs():
         set {_npc} to last spawned npc
         set {_skin} to skin from url getDistributionURL(concat(getDefine("NPC::%loop-value%::SKIN"), ".png"))
         change skin of {_npc} to {_skin}
+        wait second
 
 function clickNPCHandle(player: player, npc: npc):
     if compareName({_npc}, getDefine("NPC::LEVELUP::NAME")) is true:
