@@ -137,16 +137,24 @@ function handleDefine():
     #ポータル一覧の定義（Map.sk）
     add "M1-TO-LOBBY" to {define::PORTALS::*}
     add "LOBBY-TO-M1" to {define::PORTALS::*}
+    add "M2-TO-LOBBY" to {define::PORTALS::*}
+    add "LOBBY-TO-M2" to {define::PORTALS::*}
 
     #ポータルリンクの定義（Map.sk）
     set {define::PORTAL_DESTINATION::M1-TO-LOBBY} to "LOBBY"
     set {define::PORTAL_DESTINATION::LOBBY-TO-M1} to "MINING_1"
+    set {define::PORTAL_DESTINATION::M2-TO-LOBBY} to "LOBBY"
+    set {define::PORTAL_DESTINATION::LOBBY-TO-M2} to "MINING_2"
 
     #ポータル範囲定義（Map.sk）
-    set {define::PORTAL::M1-TO-LOBBY::1} to location(-152.0, 116.0, 251.0, world "world", 0, 0)
-    set {define::PORTAL::M1-TO-LOBBY::2} to location(-154.0, 126.5, 242.0, world "world", 0, 0)
+    set {define::PORTAL::M1-TO-LOBBY::1} to location(-152.0, 116.0, 252.0, world "world", 0, 0)
+    set {define::PORTAL::M1-TO-LOBBY::2} to location(-155.0, 126.5, 240.0, world "world", 0, 0)
     set {define::PORTAL::LOBBY-TO-M1::1} to location(-25.0, 65, -66.0, world "world", 0, 0)
     set {define::PORTAL::LOBBY-TO-M1::2} to location(-26.0, 68, -67.0, world "world", 0, 0)
+    set {define::PORTAL::M2-TO-LOBBY::1} to location(88, 113, 294, world "world", 0, 0)
+    set {define::PORTAL::M2-TO-LOBBY::2} to location(92.0, 117, 293.0, world "world", 0, 0)
+    set {define::PORTAL::LOBBY-TO-M2::1} to location(-70.0, 71, -74.0, world "world", 0, 0)
+    set {define::PORTAL::LOBBY-TO-M2::2} to location(-71.0, 74, -77.0, world "world", 0, 0)
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
