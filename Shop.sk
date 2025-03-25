@@ -1,0 +1,97 @@
+#==================================================
+#| #Shop.sk
+#| ショップ（売店）の実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+Options:
+    MAIN_TITLE_NAME: "&6&l売店 &8売る/買うを選んでね"
+    SELL_TITLE_NAME: "&6&l売店 &8売却するアイテムを入れてね"
+    BUY_TITLE_NAME: "&6&l売店 &8物を買う"
+
+    #SHOP_MAIN
+    MAIN_INFO_ICON: beacon named "&6売店&fとは？" with lore "&7ちょっとしたアイテムを" and "&7売ったり買ったりできる場所です。"
+    MAIN_SELL_ICON: gold ingot named "&6売る" with lore "&7掘った鉱石などを" and "&7売ることができます。" and "&e> クリックして画面を開く"
+    MAIN_BUY_ICON: barrier named "&6買う" with lore "&7ちょっとしたアイテムを" and "&7購入することができます。" and "&cx 現在は実装されていません"
+
+    #SHOP_SELL
+    SELL_UNAVAILABLE_ICON: barrier named "&cここにはアイテムを" with lore "&c入れられないよ！"
+    SELL_INFO_ICON: beacon named "&aアイテムの売り方" with lore "&7売りたいアイテムを入れたら、" and "&7そのままインベントリーを閉じてね" and "&f売れないアイテムは返却されるよ！"
+
+function shopGuiHandle(p: player):
+    openGui({_p}, "SHOP_MAIN")
+
+#enum guiType {
+# SHOP_MAIN,
+# SHOP_SELL,
+# SHOP_BUY（リリース時点では実装せず）
+#}
+local function openGui(p: player, guiType: string):
+    #SHOP_MAIN
+    if {_guiType} is "SHOP_MAIN":
+        open chest inventory with 3 row named {@MAIN_TITLE_NAME} to {_p}
+        set slot 4 of {_p}'s current inventory to {@MAIN_INFO_ICON}
+        set slot 12 of {_p}'s current inventory to {@MAIN_SELL_ICON}
+        set slot 14 of {_p}'s current inventory to {@MAIN_BUY_ICON}
+        
+    #SHOP_SELL
+    else if {_guiType} is "SHOP_SELL":
+        open chest inventory with 6 row named {@SELL_TITLE_NAME} to {_p}
+        loop 9 times:
+            set slot 44+loop-number of {_p}'s current inventory to {@SELL_UNAVAILABLE_ICON}
+        set slot 49 of {_p}'s current inventory to {@SELL_INFO_ICON}
+
+function onInventoryClickShopHandle(p: player, item: itemtype) :: boolean:
+    set {_invName} to name of {_p}'s current inventory
+
+    #SHOP_MAIN
+    if {_invName} is {@MAIN_TITLE_NAME}:
+        if {_item} is {@MAIN_SELL_ICON}:
+            openGui({_p}, "SHOP_SELL")
+        return true
+
+    #SHOP_SELL
+    else if {_invName} is {@SELL_TITLE_NAME}:
+        return true if {_item} is {@SELL_INFO_ICON}
+        return true if {_item} is {@SELL_UNAVAILABLE_ICON}
+
+    return false
+
+function onInventoryCloseShopHandle(p: player):
+    #売却処理
+    set {_invName} to name of {_p}'s current inventory
+    exit if {_invName} is not {@SELL_TITLE_NAME}
+
+    set {_items::*} to all items in {_p}'s current inventory
+    loop {_items::*}:
+        continue if loop-value is {@SELL_UNAVAILABLE_ICON}
+        continue if loop-value is {@SELL_INFO_ICON}
+
+        set {_unSellable} to false
+        set {_itemId} to getItemId(loop-value)
+        set {_price} to getDefine("SELL_PRICE::%{_itemId}%")
+        set {_amount} to item amount of loop-value
+        set {_unSellable} to true if {_itemId} is not set
+        set {_unSellable} to true if {_price} is not set
+
+        if {_unSellable} is true:
+            add loop-value to {_unSellableItems::*}
+            continue
+        
+        logInfo("SHOP_SELL", getSellLogParameters({_p}'s uuid, {_itemId}, {_amount}))
+
+        add {_amount}*{_price} to {_totalSellPrice}
+    if {_totalSellPrice} is not set:
+        send getDefine("LANG::ERROR_SHOP_SOLD_NOTHING") to {_p}
+    else:
+        send substitution(getDefine("LANG::SUCCESS_SHOP_SOLD"), String({_totalSellPrice})) to {_p}
+        profileMoneyIncrease({_p}, {_totalSellPrice}, "SHOP_SELL")
+    give {_unSellableItems::*} to {_p}
+
+#Interface
+local function getSellLogParameters(uuid: string, itemId: string, amount: integer) :: objects:
+    set {_res::UUID} to {_uuid}
+    set {_res::ITEM_ID} to {_itemId}
+    set {_res::AMOUNT} to {_amount}
+    return {_res::*}

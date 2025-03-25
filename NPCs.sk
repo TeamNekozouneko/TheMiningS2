@@ -12,11 +12,13 @@ function initNPCs():
         set {_npc} to last spawned npc
         set {_skin} to skin from url getDistributionURL(concat(getDefine("NPC::%loop-value%::SKIN"), ".png"))
         change skin of {_npc} to {_skin}
-        wait 5 second
+        wait 5 second #API先の429（Too many requests）対策用
 
 function clickNPCHandle(player: player, npc: npc):
     if compareName({_npc}, getDefine("NPC::LEVELUP::NAME")) is true:
         profileLevelupHandle({_player})
+    else if compareName({_npc}, getDefine("NPC::SHOP::NAME")) is true:
+        shopGuiHandle({_player})
 
 local function compareName(npc: npc, name: string) :: boolean:
     return true if uncoloured mini message from (citizen name of {_npc}) is uncoloured {_name}

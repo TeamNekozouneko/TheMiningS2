@@ -22,6 +22,9 @@ function handleDefine():
     set {define::LANG::PORTAL_CANCELLED} to "&c&lポータルから離れたためキャンセルされました。"
     set {define::LANG::ERROR_DESTINATION_NOT_AVAILABLE} to "&cテレポート中にエラーが発生しました。"
 
+    set {define::LANG::SUCCESS_SHOP_SOLD} to "&6&l売店 &7>> &aアイテムを売却しました。&f${}円&7を獲得しました。"
+    set {define::LANG::ERROR_SHOP_SOLD_NOTHING} to "&6&l売店 &7>> &c売れるアイテムがありませんでした。"
+
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
 
@@ -159,6 +162,12 @@ function handleDefine():
     set {define::PORTAL::M2-TO-LOBBY::2} to location(92.0, 117, 293.0, world "world", 0, 0)
     set {define::PORTAL::LOBBY-TO-M2::1} to location(-70.0, 71, -74.0, world "world", 0, 0)
     set {define::PORTAL::LOBBY-TO-M2::2} to location(-71.0, 74, -77.0, world "world", 0, 0)
+
+    #売店の売却価格の定義（Shop.sk）
+    set {define::SELL_PRICE::COBBLESTONE} to 0.5
+    set {define::SELL_PRICE::COAL} to 1.0
+    set {define::SELL_PRICE::IRON_INGOT} to 1.5
+    set {define::SELL_PRICE::LAPIS_LAZULI} to 3.0
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:

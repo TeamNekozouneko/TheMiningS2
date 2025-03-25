@@ -43,6 +43,12 @@ on step on pressure plate:
     cancel event
     onJumpPadHandle(player, event-block)
 
+on inventory click:
+    cancel event if onInventoryClickShopHandle(player, event-item) is true
+
+on inventory close:
+    onInventoryCloseShopHandle(player)
+
 #範囲採掘で使用する用のお試しコード（breakNaturallyで最適化済み、setblockだとラグが増加する模様）
 #     set {_pos1} to block 2 east 2 north 2 above event-block
 #     set {_pos2} to block 2 west 2 south event-block
