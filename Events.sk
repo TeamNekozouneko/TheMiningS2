@@ -9,6 +9,7 @@ on load:
     initDefine()
     oreReviveAsyncHandler()
     initNPCs()
+    portalConditionAsyncHandler()
 
 every second:
     loop all players:
@@ -17,6 +18,9 @@ every second:
 on first join:
     profileInit(player)
     onFirstJoinHandle(player)
+
+on join:
+    profileJoinInit(player)
 
 on break:
     cancel drops

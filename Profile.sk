@@ -20,6 +20,9 @@ function profileInit(player: player, isOverwrite: boolean = false) :: boolean:
     logInfo("PROFILE_INIT", {_parameters::*})
     return true
 
+function profileJoinInit(player: player):
+    set metadata value "isPortalTeleporting" of {_player} to false
+
 #Getter
 function profileMoneyGet(player: offline player) :: number:
     return {profile.money::%{_player}'s uuid%}

@@ -1,0 +1,61 @@
+#==================================================
+#| #Map.sk
+#| マップの管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function teleportDestination(p: player, destiName: string) :: boolean:
+    set {_location} to getDefine("LOCATION::%{_destiName}%")
+    if isDestinationAvailable({_location}) is false:
+        broadcast "DESTI ERROR: %{_destiName}% | %{_location}%"
+        return false
+    force teleport {_p} to {_location}
+    return true
+
+function isDestinationAvailable(desti: location) :: boolean:
+    return false if {_desti} is not set
+    return false if block at {_desti} is not set
+    return false if block above {_desti} is not air
+    return true
+
+function portalStartTeleportation(p: player, portalName: string):
+    set metadata value "isPortalTeleporting" of {_p} to true #Teleport Lock
+
+    set {_waitingTick} to 20*3
+    set {_tick} to 0
+    set {_destiName} to getDefine("PORTAL_DESTINATION::%{_portalName}%")
+    set {_originLocationX} to floor(x location of {_p})
+    set {_originLocationY} to floor(y location of {_p})
+    set {_originLocationZ} to floor(z location of {_p})
+
+    while {_tick} <= {_waitingTick}:
+        send action bar getDefine("LANG::PORTAL_TELEPORTING") to {_p}
+
+        set {_cancelled} to true if {_originLocationX} is not floor(x location of {_p})
+        set {_cancelled} to true if {_originLocationY} is not floor(y location of {_p})
+        set {_cancelled} to true if {_originLocationZ} is not floor(z location of {_p})
+        exit loop if {_cancelled} is true
+
+        add 1 to {_tick}
+        wait a tick
+
+    if {_cancelled} is true:
+        send action bar getDefine("LANG::PORTAL_CANCELLED") to {_p}
+    else if teleportDestination({_p}, {_destiName}) is true:
+        send action bar getDefine("LANG::PORTAL_TELEPORTED") to {_p}
+    else:
+        send action bar getDefine("LANG::ERROR_DESTINATION_NOT_AVAILABLE") to {_p}
+
+    set metadata value "isPortalTeleporting" of {_p} to false #Teleport unLock
+
+#ポータル範囲ないかを定期検査するAsyncHandler
+function portalConditionAsyncHandler():
+    async run 0 ticks later repeating every second:
+        set {_players::*} to all players where [metadata value "isPortalTeleporting" of input is false]
+        loop getDefineList("PORTALS"):
+            set {_pos1} to getDefine("PORTAL::%loop-value%::1")
+            set {_pos2} to getDefine("PORTAL::%loop-value%::2")
+            loop {_players::*} where [input's location is within {_pos1} and {_pos2}]:
+                portalStartTeleportation(loop-value-2, loop-value-1)
+                

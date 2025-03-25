@@ -11,9 +11,16 @@ function handleDefine():
     #言語定義
     set {define::LANG::ERROR_INVALID_PARAMETER} to "&cパラメーターが不正です。"
     set {define::LANG::SUCCESS_COMMAND_GET_ITME} to "&aアイテムを付与しました。"
+
     set {define::LANG::ERROR_NOT_ENOUGH_MONEY} to "&cお金が足りません。"
+
     set {define::LANG::LEVELUP_CURRENT_COST} to "&7レベルアップするには&f${}円&7必要だよ！"
     set {define::LANG::SUCCESS_LEVELUP} to "&aレベルアップしました！&7次のコストは&f${}円&7です！"
+    
+    set {define::LANG::PORTAL_TELEPORTING} to "&a&lテレポートします、動かないでください。"
+    set {define::LANG::PORTAL_TELEPORTED} to "&6&lテレポートしました！"
+    set {define::LANG::PORTAL_CANCELLED} to "&c&l動いたためキャンセルされました。"
+    set {define::LANG::ERROR_DESTINATION_NOT_AVAILABLE} to "&cテレポート中にエラーが発生しました。"
 
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
@@ -122,10 +129,20 @@ function handleDefine():
     set {define::LEVELUP_INITIAL_TERM} to 2000 #初項
     set {define::LEVELUP_COMMON_RATIO} to 2 #公比
 
-    #場所定義
+    #場所定義（Map.sk）
     set {define::LOCATION::LOBBY} to location(-83.5, 67.6, 4.5, world "world", 140, 0)
     set {define::LOCATION::MINING_1} to location(-164.5, 115.1, 246.5, world "world", 90, 0)
     set {define::LOCATION::MINING_2} to location(89.0, 113.1, 291.0, world "world", 135, 0)
+
+    #ポータル一覧の定義（Map.sk）
+    add "M1-TO-LOBBY" to {define::PORTALS::*}
+
+    #ポータルリンクの定義（Map.sk）
+    set {define::PORTAL_DESTINATION::M1-TO-LOBBY} to "LOBBY"
+
+    #ポータル範囲定義（Map.sk）
+    set {define::PORTAL::M1-TO-LOBBY::1} to location(-152.5, 116.5, 251.5, world "world", 0, 0)
+    set {define::PORTAL::M1-TO-LOBBY::2} to location(-154.5, 126.5, 241.5, world "world", 0, 0)
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
