@@ -136,13 +136,17 @@ function handleDefine():
 
     #ポータル一覧の定義（Map.sk）
     add "M1-TO-LOBBY" to {define::PORTALS::*}
+    add "LOBBY-TO-M1" to {define::PORTALS::*}
 
     #ポータルリンクの定義（Map.sk）
     set {define::PORTAL_DESTINATION::M1-TO-LOBBY} to "LOBBY"
+    set {define::PORTAL_DESTINATION::LOBBY-TO-M1} to "MINING_1"
 
     #ポータル範囲定義（Map.sk）
-    set {define::PORTAL::M1-TO-LOBBY::1} to location(-152.5, 116.0, 251.5, world "world", 0, 0)
-    set {define::PORTAL::M1-TO-LOBBY::2} to location(-154.5, 126.5, 241.5, world "world", 0, 0)
+    set {define::PORTAL::M1-TO-LOBBY::1} to location(-152.0, 116.0, 251.0, world "world", 0, 0)
+    set {define::PORTAL::M1-TO-LOBBY::2} to location(-154.0, 126.5, 242.0, world "world", 0, 0)
+    set {define::PORTAL::LOBBY-TO-M1::1} to location(-25.0, 65, -66.0, world "world", 0, 0)
+    set {define::PORTAL::LOBBY-TO-M1::2} to location(-26.0, 68, -67.0, world "world", 0, 0)
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
