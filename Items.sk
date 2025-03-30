@@ -33,7 +33,7 @@ function toPickaxeFormat(itemData: itemtype) :: itemtype:
 
         #エンチャント付与処理（効率強化）
         if loop-value is "efficiency":
-            enchant {_itemData} with efficiency {_enchantmentLevel}
+            enchant {_itemData} with "efficiency %{_enchantmentLevel}%" parsed as enchantment type
     if size of {_enchantmentLore::*} > 0:
         add "&7エンチャント" to lore of {_itemData}
         add {_enchantmentLore::*} to lore of {_itemData}
