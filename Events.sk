@@ -45,9 +45,13 @@ on step on pressure plate:
 
 on inventory click:
     cancel event if onInventoryClickShopHandle(player, event-item) is true
+    cancel event if onInventoryClickEnchantmentHandle(player, event-item) is true
 
 on inventory close:
     onInventoryCloseShopHandle(player)
+
+on right click:
+    cancel event if onRightClickEnchantmentHandle(player, event-block) is true
 
 #範囲採掘で使用する用のお試しコード（breakNaturallyで最適化済み、setblockだとラグが増加する模様）
 #     set {_pos1} to block 2 east 2 north 2 above event-block

@@ -169,6 +169,9 @@ function handleDefine():
     set {define::SELL_PRICE::IRON_INGOT} to 1.5
     set {define::SELL_PRICE::LAPIS_LAZULI} to 3.0
 
+    #エンチャント台の場所定義
+    add location(0, 100, 0 world "world", 0, 0) to {define::ENCHANTMENT::TABLE_LOCATION::*}
+
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
         set {define::REVIVE_TIME::stone} to 30

@@ -1,0 +1,39 @@
+#==================================================
+#| #Enchantment.sk
+#| エンチャント台の実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+Options:
+    MAIN_TITLE_NAME: "&6&lエンチャント"
+
+    #ENCHANTMENT_MAIN
+    MAIN_INFO_ICON: beacon named "&aエンチャントのやり方" with lore "&7この下にピッケルを入れて、" and "&7付けたいエンチャントを押してね。" and "&f※必要分のラピスラズリを持ってる必要があるよ！"
+
+function onRightClickEnchantmentHandle(p: player, b: block) :: boolean:
+    return false if getDefineList("ENCHANTMENT::TABLE_LOCATION") doesn't contain {_b}
+    openGui({_p}, "ENCHANTMENT_MAIN")
+    return true
+
+#enum guiType {
+# ENCHANTMENT_MAIN
+#}
+local function openGui(p: player, guiType: string):
+    if {_guiType} is "ENCHANTMENT_MAIN":
+        open chest inventory with 6 row named {@MAIN_TITLE_NAME} to {_p}
+        loop 54 times:
+            set slot (loop-number)-1 of {_p}'s current inventory to gray stained glass pane named "&r"
+            set slot 4 of {_p}'s current inventory to {@MAIN_INFO_ICON}
+            set slot 13 of {_p}'s current inventory to air #ピッケル投入口
+
+            set slot 29 of {_p}'s current inventory to enchanted book
+            set slot 30 of {_p}'s current inventory to enchanted book
+            set slot 31 of {_p}'s current inventory to enchanted book
+            set slot 32 of {_p}'s current inventory to enchanted book
+            set slot 33 of {_p}'s current inventory to enchanted book
+
+function onInventoryClickEnchantmentHandle(p: player, item: item) :: boolean:
+    if name of {_p}'s current inventory is {@MAIN_TITLE_NAME}:
+        return true
+    return false
