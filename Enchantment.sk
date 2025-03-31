@@ -12,7 +12,20 @@ Options:
     MAIN_INFO_ICON: beacon named "&aエンチャントのやり方" with lore "&7この下にピッケルを入れて、" and "&7付けたいエンチャントを押してね。" and "&f※必要分のラピスラズリを持ってる必要があるよ！"
 
 function onRightClickEnchantmentHandle(p: player, b: block) :: boolean:
-    return false if getDefineList("ENCHANTMENT::TABLE_LOCATION") doesn't contain {_b}
+    set {_blockX} to floor(x location of {_b})
+    set {_blockY} to floor(y location of {_b})
+    set {_blockZ} to floor(z location of {_b})
+    set {_isContain} to false
+    loop getDefineList("ENCHANTMENT::TABLE_LOCATION"):
+        set {_x} to floor(x location of loop-value)
+        set {_y} to floor(y location of loop-value)
+        set {_z} to floor(z location of loop-value)
+        continue if {_x} is not {_blockX}
+        continue if {_y} is not {_blockY}
+        continue if {_z} is not {_blockZ}
+        set {_isContain} to true
+        exit loop
+    return false if {_isContain} is false
     openGui({_p}, "ENCHANTMENT_MAIN")
     return true
 
