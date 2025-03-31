@@ -56,7 +56,7 @@ function onInventoryClickEnchantmentHandle(p: player, item: item) :: boolean:
 
 #レンダリング
 function enchantmentGuiAsyncHandler():
-    async run 0 ticks later repeating every 10 tick:
+    async run 0 ticks later repeating every 5 tick:
         loop all players where [name of input's current inventory is {@MAIN_TITLE_NAME}]:
             set {_item} to slot 13 of loop-player's current inventory
             set {_itemId} to getItemId({_item})
