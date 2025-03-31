@@ -77,4 +77,46 @@ function enchantmentGuiAsyncHandler():
                 else:
                     set slot {_slot} of loop-player's current inventory to {@MAIN_CAN_ENCHANT_ICON}
         
-            continue if {_itemId} is not set
+            #エンチャント本部分の初期化
+            set {_baseSlot} to 29
+            loop 5 times:
+                set {_slot} to {_baseSlot}+(loop-number)-1
+                slot {_slot} of loop-player's current inventory is not air
+                set slot {_slot} of loop-player's current inventory to air
+        
+            #エンチャント本描写
+            continue if {_item} is air
+            continue if {_isEnchantable} is false
+
+            set {_currentExp} to profileExpGet(loop-player)
+            set {_enchantments::*} to getDefineList("ENCHANTMENT_TYPES")
+            set {_baseSlot} to 29
+            loop (size of {_enchantments::*}) times:
+                set {_enchantment} to {_enchantments::%loop-number%}
+                set {_langEnchantment} to getDefine("LANG_ENCHANTMENTS::%{_enchantment}%")
+                set {_currentEnchantmentLevel} to int tag "TheMining;Enchantments;%{_enchantment}%" of custom nbt of {_item}
+                set {_initialTerm} to getDefine("ENCHANTMENT::INITIAL_TERM::%{_enchantment}%")
+                set {_commonRatio} to getDefine("ENCHANTMENT::COMMON_RATIO::%{_enchantment}%")
+                set {_currentCost} to getEqualRatio({_currentEnchantmentLevel}, {_initialTerm}, {_commonRatio})
+                set {_slot} to {_baseSlot}+(loop-number)-1
+
+                set {_isCostEnough} to false
+                set {_isCostEnough} to true if {_currentCost} <= {_currentExp}
+
+                clear {_lores::*}
+                if {_isCostEnough} is true:
+                    add "&aエンチャント可能" to {_lores::*}
+                    set {_icon} to enchanted book
+                else:
+                    add "&cエンチャント不可能" to {_lores::*}
+                    add "&7エンチャントに必要なものが足りていません！" to {_lores::*}
+                    set {_icon} to book
+
+                add "&r" to {_lores::*}
+                add "&eエンチャントに必要なもの" to {_lores::*}
+                add "&f　&f%{_currentCost}% &7EXP" to {_lores::*}
+                add "&f　&f1234 &7ラピスラズリ" to {_lores::*}
+                set slot {_slot} of loop-player's current inventory to {_icon} named "&6%{_langEnchantment}% &eLv.%{_currentEnchantmentLevel}+1%" with lore {_lores::*}
+                
+local function getEqualRatio(n: number, initialTerm: number, commonRatio: number) :: number:
+    return {_initialTerm} * {_commonRatio} ^ ({_n}-1)

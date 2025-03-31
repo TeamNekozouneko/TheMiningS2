@@ -95,6 +95,27 @@ function handleDefine():
     add "auto_sell" to {define::ENCHANTMENT_TYPES::*}
     add "range_mining" to {define::ENCHANTMENT_TYPES::*}
 
+    #エンチャント最大レベルの定義
+    set {define::ENCHANTMENT::MAX_LEVEL::efficiency} to 20
+    set {define::ENCHANTMENT::MAX_LEVEL::fortune} to 20
+    set {define::ENCHANTMENT::MAX_LEVEL::auto_collect} to 1
+    set {define::ENCHANTMENT::MAX_LEVEL::auto_sell} to 10
+    set {define::ENCHANTMENT::MAX_LEVEL::range_mining} to 3
+
+    #エンチャント初期EXPコスト（初項）の定義
+    set {define::ENCHANTMENT::INITIAL_TERM::efficiency} to 20
+    set {define::ENCHANTMENT::INITIAL_TERM::fortune} to 50
+    set {define::ENCHANTMENT::INITIAL_TERM::auto_collect} to 20
+    set {define::ENCHANTMENT::INITIAL_TERM::auto_sell} to 50
+    set {define::ENCHANTMENT::INITIAL_TERM::range_mining} to 200
+
+    #エンチャントコスト増加量（公比）の定義
+    set {define::ENCHANTMENT::COMMON_RATIO::efficiency} to 2
+    set {define::ENCHANTMENT::COMMON_RATIO::fortune} to 2
+    set {define::ENCHANTMENT::COMMON_RATIO::auto_collect} to 2
+    set {define::ENCHANTMENT::COMMON_RATIO::auto_sell} to 2
+    set {define::ENCHANTMENT::COMMON_RATIO::range_mining} to 2
+
     #ピッケルのエンチャント定義（Items.sk）
     set int tag "TheMining;Enchantments;efficiency" of custom nbt of {define::ITEMS::FIRST_PICKAXE} to 1
     set int tag "TheMining;Enchantments;efficiency" of custom nbt of {define::ITEMS::BLUE_PICKAXE} to 1
