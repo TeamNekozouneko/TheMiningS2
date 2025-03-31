@@ -24,14 +24,22 @@ local function openGui(p: player, guiType: string):
         open chest inventory with 6 row named {@MAIN_TITLE_NAME} to {_p}
         loop 54 times:
             set slot (loop-number)-1 of {_p}'s current inventory to gray stained glass pane named "&r"
-            set slot 4 of {_p}'s current inventory to {@MAIN_INFO_ICON}
-            set slot 13 of {_p}'s current inventory to air #ピッケル投入口
+        set slot 4 of {_p}'s current inventory to {@MAIN_INFO_ICON}
+        set slot 13 of {_p}'s current inventory to air #ピッケル投入口
 
-            set slot 29 of {_p}'s current inventory to enchanted book
-            set slot 30 of {_p}'s current inventory to enchanted book
-            set slot 31 of {_p}'s current inventory to enchanted book
-            set slot 32 of {_p}'s current inventory to enchanted book
-            set slot 33 of {_p}'s current inventory to enchanted book
+        set {_types::*} to getDefineList("ENCHANTMENT_TYPES")
+        set {_baseSlot} to 29
+        loop 5 times:
+            set {_type} to {_types::%loop-number%}
+            set {_name} to getDefine("LANG_ENCHANTMENTS::%{_type}%")
+
+            clear {_lores::*}
+            add "&aコスト" to {_lores::*}
+            add "&f　&e10 EXP" to {_lores::*}
+            add "&f　&9ラピスラズリ &b3個" to {_lores::*}
+            set slot 29 of {_p}'s current inventory to enchanted book named "&6%{_name}%" with lore {_lores::*}
+            
+            add 1 to {_baseSlot}
 
 function onInventoryClickEnchantmentHandle(p: player, item: item) :: boolean:
     if name of {_p}'s current inventory is {@MAIN_TITLE_NAME}:
