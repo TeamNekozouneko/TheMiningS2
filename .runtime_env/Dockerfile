@@ -19,6 +19,7 @@ COPY .github/workflows/plugins/ /root/plugins/
 COPY . /root/plugins/Skript/scripts/
 COPY .github/workflows/worlds/*.tar.gz /root/worlds/
 RUN tar xzvf /root/worlds/*.tar.gz -C /root/
+COPY distribution/ops.json /root/
 
 #Runtime
 CMD (cd /root && graalvm-jdk-21.0.6+8.1/bin/java -jar server.jar nogui)
