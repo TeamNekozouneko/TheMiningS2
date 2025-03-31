@@ -125,3 +125,6 @@ function getItemEnchantmentLevel(itemData: item, enchantmentName: string) :: int
     set {_level} to int tag "TheMining;Enchantments;%{_enchantment}%" of custom nbt of {_itemData}
     return 0 if {_level} is not set
     return {_level}
+
+function getItemEnchantments(itemData: item) :: objects:
+    return compound list tag "TheMining;Enchantments" of custom nbt of {_itemData}
