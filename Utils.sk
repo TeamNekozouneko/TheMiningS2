@@ -57,3 +57,8 @@ function isWithinLocation(start: location, end: location, target: location) :: b
     return false if {_minZ} > {_targetZ}
     return false if {_maxZ} < {_targetZ}
     return true
+
+function Glowing(i: item) :: item:
+    enchant {_item} with infinity 255
+    set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_item} to false
+    return {_item}
