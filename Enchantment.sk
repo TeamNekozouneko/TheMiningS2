@@ -63,6 +63,7 @@ function enchantmentGuiAsyncHandler():
             set {_itemId} to getItemId({_item})
             set {_isEnchantable} to false
             set {_isEnchantable} to true if getDefineList("ENCHANTMENT::ENCHANTABLE_ITEMS") contains {_itemId}
+            set {_booksInitialize} to false
             
             #ステータス描写
             set {_baseSlot} to 9
@@ -72,18 +73,21 @@ function enchantmentGuiAsyncHandler():
 
                 if {_item} is air:
                     set slot {_slot} of loop-player's current inventory to {@MAIN_BACKGROUND_ICON}
+                    set {_booksInitialize} to true
                 else if {_isEnchantable} is false:
                     set slot {_slot} of loop-player's current inventory to {@MAIN_CANNOT_ENCHANT_ICON}
+                    set {_booksInitialize} to true
                 else:
                     set slot {_slot} of loop-player's current inventory to {@MAIN_CAN_ENCHANT_ICON}
         
             #エンチャント本部分の初期化
-            set {_baseSlot} to 29
-            loop 5 times:
-                set {_slot} to {_baseSlot}+(loop-number)-1
-                slot {_slot} of loop-player's current inventory is not air
-                set slot {_slot} of loop-player's current inventory to air
-        
+            if {_booksInitialize} is true:
+                set {_baseSlot} to 29
+                loop 5 times:
+                    set {_slot} to {_baseSlot}+(loop-number)-1
+                    slot {_slot} of loop-player's current inventory is not air
+                    set slot {_slot} of loop-player's current inventory to air
+            
             #エンチャント本描写
             continue if {_item} is air
             continue if {_isEnchantable} is false
@@ -109,13 +113,11 @@ function enchantmentGuiAsyncHandler():
                     set {_icon} to enchanted book
                 else:
                     add "&cエンチャント不可能" to {_lores::*}
-                    add "&7エンチャントに必要なものが足りていません！" to {_lores::*}
+                    add "&7EXPが足りていません！" to {_lores::*}
                     set {_icon} to book
 
                 add "&r" to {_lores::*}
-                add "&eエンチャントに必要なもの" to {_lores::*}
-                add "&f　&f%{_currentCost}% &7EXP" to {_lores::*}
-                add "&f　&f1234 &7ラピスラズリ" to {_lores::*}
+                add "&f必要EXP&7: &b%{_currentCost}% EXP" to {_lores::*}
                 set slot {_slot} of loop-player's current inventory to {_icon} named "&6%{_langEnchantment}% &eLv.%{_currentEnchantmentLevel}+1%" with lore {_lores::*}
                 
 local function getEqualRatio(n: number, initialTerm: number, commonRatio: number) :: number:
