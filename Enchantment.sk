@@ -49,7 +49,7 @@ local function openGui(p: player, guiType: string):
 
 function onInventoryClickEnchantmentHandle(p: player, item: item) :: boolean:
     if name of {_p}'s current inventory is {@MAIN_TITLE_NAME}:
-        {_item} is not air
+        {_item} is set
         getItemId({_item}) is not set
         return true
     return false
