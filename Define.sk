@@ -170,7 +170,7 @@ function handleDefine():
     set {define::SELL_PRICE::LAPIS_LAZULI} to 3.0
 
     #エンチャント台の場所定義
-    add location(0, 100, 0, world "world", 0, 0) to {define::ENCHANTMENT::TABLE_LOCATION::*}
+    add location(-80.0, 79.0, 37.0, world "world", 0, 0) to {define::ENCHANTMENT::TABLE_LOCATION::*}
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
