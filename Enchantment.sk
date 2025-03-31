@@ -58,19 +58,22 @@ function onInventoryClickEnchantmentHandle(p: player, item: item) :: boolean:
 function enchantmentGuiAsyncHandler():
     async run 0 ticks later repeating every 10 tick:
         loop all players where [name of input's current inventory is {@MAIN_TITLE_NAME}]:
-            set {_itemId} to getItemId(slot 13 of loop-player's current inventory)
-            continue if {_itemId} is not set
-
+            set {_item} to slot 13 of loop-player's current inventory
+            set {_itemId} to getItemId({_item})
             set {_isEnchantable} to false
             set {_isEnchantable} to true if getDefineList("ENCHANTMENT::ENCHANTABLE_ITEMS") contains {_itemId}
             
             #ステータス描写
             set {_baseSlot} to 9
             loop 9 times:
-                continue if {_baseSlot} is 13 #ピッケル投入口のスロット除外
-                if {_isEnchantable} is false:
-                    set slot {_baseSlot} of loop-player's current inventory to {@MAIN_CANNOT_ENCHANT_ICON}
+                set {_slot} to {_baseSlot}+(loop-number)-1
+                {_slot} is not 13 #ピッケル投入口のスロット除外
+
+                if {_item} is air:
+                    set slot {_slot} of loop-player's current inventory to {@MAIN_BACKGROUND_ICON}
+                else if {_isEnchantable} is false:
+                    set slot {_slot} of loop-player's current inventory to {@MAIN_CANNOT_ENCHANT_ICON}
                 else:
-                    set slot {_baseSlot} of loop-player's current inventory to {@MAIN_BACKGROUND_ICON}
-                add 1 to {_baseSlot}
-            
+                    set slot {_slot} of loop-player's current inventory to {@MAIN_BACKGROUND_ICON}
+        
+            continue if {_itemId} is not set
