@@ -10,6 +10,8 @@ Options:
 
     #ENCHANTMENT_MAIN
     MAIN_INFO_ICON: beacon named "&aエンチャントのやり方" with lore "&7この下にピッケルを入れて、" and "&7付けたいエンチャントを押してね。" and "&f※必要分のラピスラズリを持ってる必要があるよ！"
+    MAIN_BACKGROUND_ICON: gray stained glass pane named "&r"
+    MAIN_CANNOT_ENCHANT_ICON: red stained glass pane named "&cこのアイテムはエンチャントできません。"
 
 function onRightClickEnchantmentHandle(p: player, b: block) :: boolean:
     set {_blockX} to floor(x location of {_b})
@@ -36,13 +38,14 @@ local function openGui(p: player, guiType: string):
     if {_guiType} is "ENCHANTMENT_MAIN":
         open chest inventory with 6 row named {@MAIN_TITLE_NAME} to {_p}
         loop 54 times:
-            set slot (loop-number)-1 of {_p}'s current inventory to gray stained glass pane named "&r"
+            set slot (loop-number)-1 of {_p}'s current inventory to {@MAIN_BACKGROUND_ICON}
         set slot 4 of {_p}'s current inventory to {@MAIN_INFO_ICON}
         set slot 13 of {_p}'s current inventory to air #ピッケル投入口
 
         set {_types::*} to getDefineList("ENCHANTMENT_TYPES")
         set {_baseSlot} to 29
         loop 5 times:
+            set slot 29 of {_p}'s current inventory to air #エンチャントが表示されるところ
             set {_type} to {_types::%loop-number%}
             set {_name} to getDefine("LANG_ENCHANTMENTS::%{_type}%")
 
@@ -56,5 +59,27 @@ local function openGui(p: player, guiType: string):
 
 function onInventoryClickEnchantmentHandle(p: player, item: item) :: boolean:
     if name of {_p}'s current inventory is {@MAIN_TITLE_NAME}:
+        getItemId({_item}) is not set
         return true
     return false
+
+#レンダリング
+function enchantmentGuiAsyncHandler():
+    async run 0 ticks later repeating every 10 tick:
+        loop all players where [name of input's current inventory is {@MAIN_TITLE_NAME}]:
+            set {_itemId} to getItemId(slot 13 of loop-player's current inventory)
+            continue if {_itemId} is not set
+
+            set {_isEnchantable} to false
+            set {_isEnchantable} to true if getDefineList("ENCHANTMENT::ENCHANTABLE_ITEMS") contains {_itemId}:
+            
+            #ステータス描写
+            set {_baseSlot} to 9
+            loop 9 times:
+                continue if {_baseSlot} is 13 #ピッケル投入口のスロット除外
+                if {_isEnchantable} is false:
+                    set slot {_baseSlot} of loop-player's current inventory to {@MAIN_CANNOT_ENCHANT_ICON}
+                else:
+                    set slot {_baseSlot} of loop-player's current inventory to {@MAIN_BACKGROUND_ICON}
+                add 1 to {_baseSlot}
+            

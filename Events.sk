@@ -10,6 +10,7 @@ on load:
     oreReviveAsyncHandler()
     initNPCs()
     portalConditionAsyncHandler()
+    enchantmentGuiAsyncHandler()
 
 every second:
     loop all players:
