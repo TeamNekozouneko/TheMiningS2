@@ -23,7 +23,7 @@ function isDestinationAvailable(desti: location) :: boolean:
 function portalStartTeleportation(p: player, portalName: string):
     set metadata value "isPortalTeleporting" of {_p} to true #Teleport Lock
 
-    set {_waitingTick} to 20*3
+    set {_waitingTick} to 20
     set {_tick} to 0
     set {_destiName} to getDefine("PORTAL_DESTINATION::%{_portalName}%")
     set {_pos1} to getDefine("PORTAL::%{_portalName}%::1")
