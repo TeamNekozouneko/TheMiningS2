@@ -20,14 +20,20 @@ function getItemId(itemData: itemtype) :: string:
 function getItemIdFromDroppedItem(entity: entity) :: string:
     return string tag "Item;components;minecraft:custom_data;TheMining;ItemId" of nbt of {_entity}
 
+function getEnchantedItemData(itemData: itemtype, enchantmentType: string, enchantmentLevel: integer) :: itemtype:
+    set int tag "TheMining;Enchantments;%{_enchantmentType}%" of custom nbt of {_itemData} to {_enchantmentLevel}
+    #バニラ準拠するエンチャントの反映
+    set level of efficiency of {_itemData} to {_enchantmentLevel} if {_enchantmentType} is "efficiency"
+    return {_itemData}
+
 function toPickaxeFormat(itemData: itemtype) :: itemtype:
     #バニラのエンチャント表示を削除
     set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_itemData} to false
 
     #エンチャント表記の生成と反映
     loop getDefineList("ENCHANTMENT_TYPES"):
-        set {_enchantmentLevel} to int tag "TheMining;Enchantments;%loop-value%" of custom nbt of {_itemData}
-        continue if {_enchantmentLevel} is not set
+        set {_enchantmentLevel} to getItemEnchantmentLevel({_itemData}, loop-value)
+        continue if {_enchantmentLevel} is 0
         set {_enchantmentName} to getDefine("LANG_ENCHANTMENTS::%loop-value%")
         add "&a　%{_enchantmentName}% %{_enchantmentLevel}%" to {_enchantmentLore::*}
 
@@ -48,3 +54,8 @@ function toPickaxeFormat(itemData: itemtype) :: itemtype:
         add {_breakableOresLore::*} to lore of {_itemData}
     
     return {_itemData}
+
+function reformatPickaxe(itemData: itemtype) :: itemtype:
+    clear lore of {_itemData}
+    set {_formatted} to toPickaxeFormat({_itemData})
+    return {_formatted}

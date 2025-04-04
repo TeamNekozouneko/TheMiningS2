@@ -48,12 +48,45 @@ local function openGui(p: player, guiType: string):
         loop 5 times:
             set slot {_baseSlot}+(loop-number)-1 of {_p}'s current inventory to air #エンチャントが表示されるところ
 
-function onInventoryClickEnchantmentHandle(p: player, item: item) :: boolean:
+function onInventoryClickEnchantmentHandle(p: player, clickedItem: item) :: boolean:
     if name of {_p}'s current inventory is {@MAIN_TITLE_NAME}:
-        {_item} is set
-        getItemId({_item}) is not set
-        return true
+        if {_clickedItem} is set: #空気アイテムの除外
+            if getItemId({_clickedItem}) is not set:
+                set {_isCancelled} to true
+
+        if {_isCancelled} is true:
+            set {_item} to slot 13 of {_p}'s current inventory
+            giveEnchantmentProcessHandle({_p}, {_clickedItem}, {_item})
+        
+        return true if {_isCancelled} is true
     return false
+
+local function giveEnchantmentProcessHandle(p: player, clickedItem: item, item: item):
+    #Logical Condition Check
+    exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
+
+    set {_enchantment} to string tag "TheMining;EnchantmentType" of custom nbt of {_clickedItem}
+    exit if {_enchantment} is not set
+    exit if getItemId({_item}) is not set
+
+    set {_currentEnchantmentLevel} to getItemEnchantmentLevel({_item}, {_enchantment})
+    exit if {_currentEnchantmentLevel} is 0
+
+    set {_initialTerm} to getDefine("ENCHANTMENT::INITIAL_TERM::%{_enchantment}%")
+    set {_commonRatio} to getDefine("ENCHANTMENT::COMMON_RATIO::%{_enchantment}%")
+    set {_currentCost} to getEqualRatio({_currentEnchantmentLevel}, {_initialTerm}, {_commonRatio})
+    exit if {_currentCost} > profileExpGet({_p})
+
+    set {_maxLevel} to getDefine("ENCHANTMENT::MAX_LEVEL::%{_enchantment}%")
+    exit if {_currentEnchantmentLevel} >= {_maxLevel}
+
+    #Enchantment Process
+    set {_enchantedItem} to reformatPickaxe(getEnchantedItemData({_item}, {_enchantment}, {_currentEnchantmentLevel}+1))
+    set slot 13 of {_p}'s current inventory to {_enchantedItem}
+
+    profileExpDecrease({_p}, {_currentCost}, "ENCHANTMENT")
+    send getDefine("LANG::SUCCESS_ENCHANTMENT") to {_p}
+    
 
 #レンダリング
 function enchantmentGuiAsyncHandler():
@@ -118,13 +151,15 @@ function enchantmentGuiAsyncHandler():
 
                 add "&r" to {_lores::*}
                 add "&f必要EXP&7: &b%{_currentCost}% EXP" to {_lores::*}
-                set slot {_slot} of loop-player's current inventory to {_icon} named "&6%{_langEnchantment}% &eLv.%{_currentEnchantmentLevel}+1%" with lore {_lores::*}
+                set {_bookIcon} to {_icon} named "&6%{_langEnchantment}% &eLv.%{_currentEnchantmentLevel}+1%" with lore {_lores::*}
+                set string tag "TheMining;EnchantmentType" of custom nbt of {_bookIcon} to {_enchantment}
+                set slot {_slot} of loop-player's current inventory to {_bookIcon}
                 
 local function getEqualRatio(n: number, initialTerm: number, commonRatio: number) :: number:
     return {_initialTerm} * {_commonRatio} ^ ({_n}-1)
 
 function getItemEnchantmentLevel(itemData: item, enchantmentName: string) :: integer:
-    set {_level} to int tag "TheMining;Enchantments;%{_enchantment}%" of custom nbt of {_itemData}
+    set {_level} to int tag "TheMining;Enchantments;%{_enchantmentName}%" of custom nbt of {_itemData}
     return 0 if {_level} is not set
     return {_level}
 

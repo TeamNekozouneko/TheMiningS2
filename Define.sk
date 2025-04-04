@@ -25,6 +25,8 @@ function handleDefine():
     set {define::LANG::SUCCESS_SHOP_SOLD} to "&6&l売店 &7>> &aアイテムを売却しました。&f${}円&7を獲得しました。"
     set {define::LANG::ERROR_SHOP_SOLD_NOTHING} to "&6&l売店 &7>> &c売れるアイテムがありませんでした。"
 
+    set {define::LANG::SUCCESS_ENCHANTMENT} to "&6&lエンチャント &7>> &aエンチャントしました！"
+
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
 
