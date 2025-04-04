@@ -135,13 +135,17 @@ function enchantmentGuiAsyncHandler():
                 set {_initialTerm} to getDefine("ENCHANTMENT::INITIAL_TERM::%{_enchantment}%")
                 set {_commonRatio} to getDefine("ENCHANTMENT::COMMON_RATIO::%{_enchantment}%")
                 set {_currentCost} to getEqualRatio({_currentEnchantmentLevel}, {_initialTerm}, {_commonRatio})
+                set {_maxLevel} to getDefine("ENCHANTMENT::MAX_LEVEL::%{_enchantment}%")
                 set {_slot} to {_baseSlot}+(loop-number)-1
 
                 set {_isCostEnough} to false
                 set {_isCostEnough} to true if {_currentCost} <= {_currentExp}
 
                 clear {_lores::*}
-                if {_isCostEnough} is true:
+                if {_currentEnchantmentLevel} >= {_maxLevel}:
+                    add "&c最大レベルです！" to {_lores::*}
+                    set {_icon} to book
+                else if {_isCostEnough} is true:
                     add "&aエンチャント可能" to {_lores::*}
                     set {_icon} to enchanted book
                 else:
