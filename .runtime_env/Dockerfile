@@ -23,6 +23,7 @@ RUN tar xzvf /root/worlds/*.tar.gz -C /root/
 COPY distribution/ops.json /root/
 COPY distribution/server.properties /root/
 COPY distribution/bukkit.yml /root/
+COPY distribution/libraries/ /root/libraries/
 
 #Runtime
 CMD (cd /root && graalvm-jdk-21.0.6+8.1/bin/java -jar server.jar nogui)
