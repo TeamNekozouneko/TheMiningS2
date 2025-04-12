@@ -33,7 +33,7 @@ function toPickaxeFormat(itemData: itemtype) :: itemtype:
     #エンチャント表記の生成と反映
     loop getDefineList("ENCHANTMENT_TYPES"):
         set {_enchantmentLevel} to getItemEnchantmentLevel({_itemData}, loop-value)
-        continue if {_enchantmentLevel} is 0
+        continue if {_enchantmentLevel} is not set
         set {_enchantmentName} to getDefine("LANG_ENCHANTMENTS::%loop-value%")
         add "&a　%{_enchantmentName}% Lv.%{_enchantmentLevel}%" to {_enchantmentLore::*}
 

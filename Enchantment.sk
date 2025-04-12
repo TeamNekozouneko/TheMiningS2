@@ -71,8 +71,6 @@ local function giveEnchantmentProcessHandle(p: player, clickedItem: item, item: 
     exit if getItemId({_item}) is not set
 
     set {_currentEnchantmentLevel} to getItemEnchantmentLevel({_item}, {_enchantment})
-    exit if {_currentEnchantmentLevel} is 0
-
     set {_initialTerm} to getDefine("ENCHANTMENT::INITIAL_TERM::%{_enchantment}%")
     set {_commonRatio} to getDefine("ENCHANTMENT::COMMON_RATIO::%{_enchantment}%")
     set {_currentCost} to getEqualRatio({_currentEnchantmentLevel}, {_initialTerm}, {_commonRatio})
@@ -165,7 +163,6 @@ local function getEqualRatio(n: number, initialTerm: number, commonRatio: number
 
 function getItemEnchantmentLevel(itemData: item, enchantmentName: string) :: integer:
     set {_level} to int tag "TheMining;Enchantments;%{_enchantmentName}%" of custom nbt of {_itemData}
-    return 0 if {_level} is not set
     return {_level}
 
 function getItemEnchantments(itemData: item) :: objects:
