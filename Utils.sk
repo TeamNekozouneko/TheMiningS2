@@ -62,3 +62,8 @@ function Glowing(item: item) :: item:
     enchant {_item} with infinity 255
     set boolean tag "minecraft:enchantments;show_in_tooltip" of nbt of {_item} to false
     return {_item}
+
+function isInventoryFreeSpaceAvailable(p: player) :: boolean:
+    loop 36 times:
+        return true if slot (loop-number)-1 of {_p}'s inventory is air
+    return false
