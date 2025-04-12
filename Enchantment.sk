@@ -44,6 +44,11 @@ local function openGui(p: player, guiType: string):
         set slot 4 of {_p}'s current inventory to {@MAIN_INFO_ICON}
         set slot 13 of {_p}'s current inventory to air #ピッケル投入口
 
+        #過去のアイテムデータがある場合の処理
+        if {enchantment.saveTableItem::%{_p}'s uuid%} is set:
+            set slot 13 of {_p}'s current inventory to {enchantment.saveTableItem::%{_p}'s uuid%}
+            clear {enchantment.saveTableItem::%{_p}'s uuid%}
+
         set {_types::*} to getDefineList("ENCHANTMENT_TYPES")
         set {_baseSlot} to 29
         loop 5 times:
@@ -175,7 +180,10 @@ function enchantmentGuiAsyncHandler():
 function onInventoryCloseEnchantmentHandle(p: player):
     exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
     set {_item} to slot 13 of {_p}'s current inventory
-    give {_item} to {_p}
+    if isInventoryFreeSpaceAvailable({_p}) is true:
+        give {_item} to {_p}
+    else:
+        set {enchantment.saveTableItem::%{_p}'s uuid%} to {_item}
 
 local function getEqualRatio(n: number, initialTerm: number, commonRatio: number) :: number:
     return {_initialTerm} * {_commonRatio} ^ ({_n}-1)
