@@ -11,6 +11,7 @@ on load:
     initNPCs()
     portalConditionAsyncHandler()
     enchantmentGuiAsyncHandler()
+    enchantmentAutoSellPendingApplyHandler()
 
 every second:
     loop all players:

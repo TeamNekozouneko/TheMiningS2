@@ -1,0 +1,33 @@
+#==================================================
+#| #enchantments → AutoSell.sk
+#| エンチャント「AutoSell（自動売却）」の実装モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+Options:
+    SELL_RATIO_PER_LEVEL: 10
+
+function enchantmentAutoSellHandle(p: player, item: item, autoSellLevel: integer) :: boolean:
+    return false if {_autoSellLevel} is not set
+    return false if isInventoryFreeSpaceAvailable({_p}) is true
+    set {_multiplier} to ({_autoSellLevel} * {@SELL_RATIO_PER_LEVEL}) / 100
+
+    #売却処理
+    set {_itemId} to getItemId({_item})
+    set {_price} to getDefine("SELL_PRICE::%{_itemId}%")
+    return false if {_price} is not set
+
+    set {_amount} to item amount of {_item}
+    add {_price} * {_amount} * {_multiplier} to {autosell.pendingApply::%{_p}'s uuid%}
+
+    return true
+
+function enchantmentAutoSellPendingApplyHandler():
+    run 0 ticks later repeating every 5 second:
+        loop all players:
+            set {_money} to {autosell.pendingApply::%loop-player's uuid%}
+            continue if {_money} is not set
+            
+            profileMoneyIncrease(loop-player, {_money}, "AUTO_SELL")
+            clear {autosell.pendingApply::%loop-player's uuid%}

@@ -1,0 +1,12 @@
+#==================================================
+#| #enchantments → AutoCollect.sk
+#| エンチャント「AutoCollect（自動回収）」の実装モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function enchantmentAutoCollectHandle(p: player, item: item, collectLevel: integer) :: boolean:
+    return false if {_collectLevel} is not set
+    return false if isInventoryFreeSpaceAvailable({_p}) is false
+    give {_item} to {_p}
+    return true

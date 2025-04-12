@@ -25,7 +25,7 @@ function profileJoinInit(player: player):
 
 #Getter
 function profileMoneyGet(player: offline player) :: number:
-    return {profile.money::%{_player}'s uuid%}
+    return floor({profile.money::%{_player}'s uuid%}*100)/100
 function profileExpGet(player: offline player) :: number:
     return {profile.exp::%{_player}'s uuid%}
 function profileLevelGet(player: offline player) :: number:

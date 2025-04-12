@@ -5,7 +5,6 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-
 Options:
     PERCENT_PER_FORTUNE_LEVEL: 5
     FORTUNE_MULTIPLIER: random integer between 2 and 3
