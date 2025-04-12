@@ -43,7 +43,7 @@ on place:
     cancel event
 
 on citizen right click:
-    clickNPCHandle(player, event-npc)
+    onCitizenRightClickNPCHandle(player, event-npc)
 
 on hunger meter change:
     cancel event
@@ -62,6 +62,7 @@ on inventory click:
 
 on inventory close:
     onInventoryCloseShopHandle(player)
+    onInventoryCloseEnchantmentHandle(player)
 
 on right click:
     cancel event if onRightClickEnchantmentHandle(player, event-block) is true

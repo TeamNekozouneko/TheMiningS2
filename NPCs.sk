@@ -14,7 +14,7 @@ function initNPCs():
         change skin of {_npc} to {_skin}
         wait 5 second #API先の429（Too many requests）対策用
 
-function clickNPCHandle(player: player, npc: npc):
+function onCitizenRightClickNPCHandle(player: player, npc: npc):
     if compareName({_npc}, getDefine("NPC::LEVELUP::NAME")) is true:
         profileLevelupHandle({_player})
     else if compareName({_npc}, getDefine("NPC::SHOP::NAME")) is true:

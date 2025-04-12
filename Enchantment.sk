@@ -166,7 +166,13 @@ function enchantmentGuiAsyncHandler():
                 set {_bookIcon} to {_icon} named {_iconName} with lore {_iconLores::*}
                 set string tag "TheMining;EnchantmentType" of custom nbt of {_bookIcon} to {_enchantment}
                 set slot {_slot} of loop-player's current inventory to {_bookIcon}
-                
+
+#アイテムが入った状態でインベントリーが閉じられた時の処理
+function onInventoryCloseEnchantmentHandle(p: player):
+    exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
+    set {_item} to slot 13 of {_p}'s current inventory
+    give {_item} to {_p}
+
 local function getEqualRatio(n: number, initialTerm: number, commonRatio: number) :: number:
     return {_initialTerm} * {_commonRatio} ^ ({_n}-1)
 
