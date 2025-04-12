@@ -5,14 +5,18 @@
 #| Nekozouneko Group Developer
 #==================================================
 function onBreakOresHandle(player: player, block: block) :: boolean:
-    set {_itemId} to getItemId({_player}'s tool)
+    set {_item} to {_player}'s tool
+    set {_itemId} to getItemId({_item})
     set {_blockType} to type of {_block}
     set {_blockLocation} to location of {_block}
     return false if {_itemId} is not set
     return false if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}
 
+    set {_fortuneLevel} to getItemEnchantmentLevel({_item}, "fortune")
+
     #ドロップの処理
     set {_dropItem} to getDefine("DROP_ITEMS::%{_blockType}%")
+    set {_dropItem} to enchantmentFortuneDropItemHandle({_dropItem}, {_fortuneLevel})
     drop {_dropItem} at {_blockLocation}
 
     #EXPの獲得処理
