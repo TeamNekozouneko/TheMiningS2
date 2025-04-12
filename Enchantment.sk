@@ -67,8 +67,9 @@ local function giveEnchantmentProcessHandle(p: player, clickedItem: item, item: 
     exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
 
     set {_enchantment} to string tag "TheMining;EnchantmentType" of custom nbt of {_clickedItem}
+    set {_itemId} to getItemId({_item})
     exit if {_enchantment} is not set
-    exit if getItemId({_item}) is not set
+    exit if {_itemId} is not set
 
     set {_currentEnchantmentLevel} to getItemEnchantmentLevel({_item}, {_enchantment})
     set {_initialTerm} to getDefine("ENCHANTMENT::INITIAL_TERM::%{_enchantment}%")
@@ -84,6 +85,7 @@ local function giveEnchantmentProcessHandle(p: player, clickedItem: item, item: 
     set slot 13 of {_p}'s current inventory to {_enchantedItem}
 
     profileExpDecrease({_p}, {_currentCost}, "ENCHANTMENT")
+    logInfo("ENCHANT_GIVE", getEnchantmentLogParameters({_p}'s uuid, {_itemId}, {_enchantment}, {_currentEnchantmentLevel}+1))
     send getDefine("LANG::SUCCESS_ENCHANTMENT") to {_p}
     
 
@@ -182,3 +184,11 @@ function getItemEnchantmentLevel(itemData: item, enchantmentName: string) :: int
 
 function getItemEnchantments(itemData: item) :: objects:
     return compound list tag "TheMining;Enchantments" of custom nbt of {_itemData}
+
+#Interface
+local function getEnchantmentLogParameters(uuid: string, itemId: string, enchantmentName: string, enchantmentLevel: number) :: objects:
+    add {_uuid} to {_res::*}
+    add {_itemId} to {_res::*}
+    add {_enchantmentName} to {_res::*}
+    add String({_enchantmentLevel}) to {_res::*}
+    return {_res::*}

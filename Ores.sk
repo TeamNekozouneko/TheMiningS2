@@ -4,7 +4,7 @@
 #|
 #| Nekozouneko Group Developer
 #==================================================
-function breakHandle(player: player, block: block) :: boolean:
+function onBreakOresHandle(player: player, block: block) :: boolean:
     set {_itemId} to getItemId({_player}'s tool)
     set {_blockType} to type of {_block}
     set {_blockLocation} to location of {_block}
