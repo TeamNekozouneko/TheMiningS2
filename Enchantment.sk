@@ -9,7 +9,7 @@ Options:
     MAIN_TITLE_NAME: "&6&lエンチャント"
 
     #ENCHANTMENT_MAIN
-    MAIN_INFO_ICON: Glowing(beacon named "&aエンチャントのやり方" with lore "&7この下にピッケルを入れて、" and "&7付けたいエンチャントを押してね。" and "&f※必要分のラピスラズリを持ってる必要があるよ！")
+    MAIN_INFO_ICON: Glowing(beacon named "&aエンチャントのやり方" with lore "&7この下にピッケルを入れて、" and "&7付けたいエンチャントを押してね。" and "&f※EXPを消費します！")
     MAIN_BACKGROUND_ICON: gray stained glass pane named "&r"
     MAIN_CANNOT_ENCHANT_ICON: red stained glass pane named "&cこのアイテムはエンチャントできません！" with lore "&7付けたいエンチャントを押してね。"
     MAIN_CAN_ENCHANT_ICON: green stained glass pane named "&aエンチャントできるアイテムです！" with lore "&7付けたいエンチャントを押してね。"
