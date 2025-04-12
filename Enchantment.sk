@@ -13,6 +13,7 @@ Options:
     MAIN_BACKGROUND_ICON: gray stained glass pane named "&r"
     MAIN_CANNOT_ENCHANT_ICON: red stained glass pane named "&cこのアイテムはエンチャントできません！" with lore "&7付けたいエンチャントを押してね。"
     MAIN_CAN_ENCHANT_ICON: green stained glass pane named "&aエンチャントできるアイテムです！" with lore "&7付けたいエンチャントを押してね。"
+    MAIN_FIRST_PUT_PICKAXE: barrier named "&cまずはピッケルを入れてください！"
 
 function onRightClickEnchantmentHandle(p: player, b: block) :: boolean:
     set {_blockX} to floor(x location of {_b})
@@ -46,7 +47,7 @@ local function openGui(p: player, guiType: string):
         set {_types::*} to getDefineList("ENCHANTMENT_TYPES")
         set {_baseSlot} to 29
         loop 5 times:
-            set slot {_baseSlot}+(loop-number)-1 of {_p}'s current inventory to air #エンチャントが表示されるところ
+            set slot {_baseSlot}+(loop-number)-1 of {_p}'s current inventory to {@MAIN_FIRST_PUT_PICKAXE} #エンチャントが表示されるところ
 
 function onInventoryClickEnchantmentHandle(p: player, clickedItem: item) :: boolean:
     if name of {_p}'s current inventory is {@MAIN_TITLE_NAME}:
@@ -118,8 +119,8 @@ function enchantmentGuiAsyncHandler():
                 set {_baseSlot} to 29
                 loop 5 times:
                     set {_slot} to {_baseSlot}+(loop-number)-1
-                    slot {_slot} of loop-player's current inventory is not air
-                    set slot {_slot} of loop-player's current inventory to air
+                    slot {_slot} of loop-player's current inventory is not {@MAIN_FIRST_PUT_PICKAXE}
+                    set slot {_slot} of loop-player's current inventory to {@MAIN_FIRST_PUT_PICKAXE}
             
             #エンチャント本描写
             continue if {_item} is air
