@@ -137,24 +137,33 @@ function enchantmentGuiAsyncHandler():
                 set {_maxLevel} to getDefine("ENCHANTMENT::MAX_LEVEL::%{_enchantment}%")
                 set {_slot} to {_baseSlot}+(loop-number)-1
 
+                #コストが足りているかの判定
                 set {_isCostEnough} to false
                 set {_isCostEnough} to true if {_currentCost} <= {_currentExp}
 
-                clear {_lores::*}
-                if {_currentEnchantmentLevel} >= {_maxLevel}:
-                    add "&c最大レベルです！" to {_lores::*}
-                    set {_icon} to book
-                else if {_isCostEnough} is true:
-                    add "&aエンチャント可能" to {_lores::*}
+                clear {_iconLores::*} #次のイテレータ用の初期化
+                set {_iconName} to "&6%{_langEnchantment}% &eLv.%{_currentEnchantmentLevel}+1%"
+                
+                if {_isCostEnough} is true:
+                    add "&aエンチャント可能" to {_iconLores::*}
                     set {_icon} to enchanted book
                 else:
-                    add "&cエンチャント不可能" to {_lores::*}
-                    add "&7EXPが足りていません！" to {_lores::*}
+                    add "&cエンチャント不可能" to {_iconLores::*}
+                    add "&7EXPが足りていません！" to {_iconLores::*}
                     set {_icon} to book
 
-                add "&r" to {_lores::*}
-                add "&f必要EXP&7: &b%{_currentCost}% EXP" to {_lores::*}
-                set {_bookIcon} to {_icon} named "&6%{_langEnchantment}% &eLv.%{_currentEnchantmentLevel}+1%" with lore {_lores::*}
+                add "&r" to {_iconLores::*}
+                add "&f必要EXP&7: &b%{_currentCost}% EXP" to {_iconLores::*}
+
+                #最大レベルの時は表記を上書きする
+                if {_currentEnchantmentLevel} >= {_maxLevel}:
+                    clear {_iconLores::*}
+                    set {_iconName} to "&6%{_langEnchantment}% &eLv.&e最大"
+                    add "&c最大レベルです！" to {_iconLores::*}
+                    set {_icon} to book
+
+                #アイテムの設置
+                set {_bookIcon} to {_icon} named {_iconName} with lore {_iconLores::*}
                 set string tag "TheMining;EnchantmentType" of custom nbt of {_bookIcon} to {_enchantment}
                 set slot {_slot} of loop-player's current inventory to {_bookIcon}
                 
