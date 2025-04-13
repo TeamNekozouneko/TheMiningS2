@@ -7,6 +7,7 @@
 
 Options:
     SELL_RATIO_PER_LEVEL: 10
+    SELL_PROCESS_PENDING_APPLY_INTERVAL: 5
 
 function enchantmentAutoSellSingleHandle(p: player, item: item, autoSellLevel: integer) :: boolean:
     return false if {_autoSellLevel} is not set
@@ -43,7 +44,7 @@ function enchantmentAutoSellMultipleHandle(p: player, items: objects, autoSellLe
     return {_sellableItems::*}
 
 function enchantmentAutoSellPendingApplyHandler():
-    run 0 ticks later repeating every 5 second:
+    run 0 ticks later repeating every {@SELL_PROCESS_PENDING_APPLY_INTERVAL} second:
         loop all players:
             set {_money} to {autosell.pendingApply::%loop-player's uuid%}
             continue if {_money} is not set
