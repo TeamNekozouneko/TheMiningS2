@@ -4,6 +4,10 @@
 #|
 #| Nekozouneko Group Developer
 #==================================================
+
+Options:
+    DO_NOT_REVIVE_AROUND_BLOCKS: 3
+
 function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     set {_item} to {_p}'s tool
     set {_itemId} to getItemId({_item})
@@ -115,7 +119,7 @@ function oreReviveAsyncHandler():
         loop getDefine("REVIVE_ORE_PER_INTERVAL") times:
             exit loop if size of {_queues::*} <= 0
 
-            set {_revivePendingQueue} to the first element of {_queues::*}
+            set {_revivePendingQueue} to random element out of (the first getDefine("REVIVE_ORE_PER_INTERVAL") elements of {_queues::*})
             set {_revivePendingSpan} to {ores.revivePendingSpans::%{_revivePendingQueue}%}
             set {_revivePendingBlock} to {ores.revivePendingBlocks::%{_revivePendingQueue}%}
             set {_revivePendingLocation} to {ores.revivePendingLocations::%{_revivePendingQueue}%}
@@ -123,6 +127,7 @@ function oreReviveAsyncHandler():
             set {_reviveTimePendingBlock} to getDefine("REVIVE_TIME::%{_revivePendingBlock}%")
             continue if {_reviveTimePendingBlock} is not set
             continue if getElapsedUnixtime({_revivePendingSpan}) < {_reviveTimePendingBlock}
+            continue if size of all players in radius {@DO_NOT_REVIVE_AROUND_BLOCKS} around {_revivePendingLocation} >= 1
 
             set block at {_revivePendingLocation} to {_revivePendingBlock}
 
