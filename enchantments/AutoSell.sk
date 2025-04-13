@@ -8,7 +8,7 @@
 Options:
     SELL_RATIO_PER_LEVEL: 10
 
-function enchantmentAutoSellHandle(p: player, item: item, autoSellLevel: integer) :: boolean:
+function enchantmentAutoSellSingleHandle(p: player, item: item, autoSellLevel: integer) :: boolean:
     return false if {_autoSellLevel} is not set
     return false if isInventoryFreeSpaceAvailable({_p}) is true
     set {_multiplier} to ({_autoSellLevel} * {@SELL_RATIO_PER_LEVEL}) / 100
@@ -16,12 +16,31 @@ function enchantmentAutoSellHandle(p: player, item: item, autoSellLevel: integer
     #売却処理
     set {_itemId} to getItemId({_item})
     set {_price} to getDefine("SELL_PRICE::%{_itemId}%")
+    return false if {_itemId} is not set
     return false if {_price} is not set
 
     set {_amount} to item amount of {_item}
     add {_price} * {_amount} * {_multiplier} to {autosell.pendingApply::%{_p}'s uuid%}
 
     return true
+
+function enchantmentAutoSellMultipleHandle(p: player, items: objects, autoSellLevel: integer) :: objects: #return 売却できたアイテム
+    exit if {_autoSellLevel} is not set
+    exit if isInventoryFreeSpaceAvailable({_p}) is true
+    set {_multiplier} to ({_autoSellLevel} * {@SELL_RATIO_PER_LEVEL}) / 100
+
+    #売却処理
+    loop {_items::*}:
+        set {_itemId} to getItemId(loop-value)
+        set {_price} to getDefine("SELL_PRICE::%{_itemId}%")
+        set {_amount} to item amount of loop-value
+        continue if {_itemId} is not set
+        continue if {_price} is not set
+
+        add {_price} * {_amount} to {_totalPrice}
+        add loop-value to {_sellableItems::*}
+    add {_totalPrice} * {_multiplier} to {autosell.pendingApply::%{_p}'s uuid%}
+    return {_sellableItems::*}
 
 function enchantmentAutoSellPendingApplyHandler():
     run 0 ticks later repeating every 5 second:

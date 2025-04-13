@@ -26,19 +26,12 @@ on join:
 
 on break:
     cancel drops
-    cancel event if onBreakOresHandle(player, event-block) is false
+    cancel event if onBreakOresSingleHandle(player, event-block) is false
 
-#範囲採掘で使用する用のお試しコード（breakNaturallyで最適化済み、setblockだとラグが増加する模様）
-#     set {_pos1} to block 2 east 2 north 2 above event-block
-#     set {_pos2} to block 2 west 2 south event-block
-
-#     loop all blocks within {_pos1} and {_pos2}:
-#         break loop-block if breakHandle(player, loop-block) is true
-
-# on spawn:
-#     exit if event-entity is not a dropped item
-#     exit if getItemIdFromDroppedItem(event-entity) is set
-#     cancel event
+on spawn: #範囲採掘用
+    exit if event-entity is not a dropped item
+    exit if getItemIdFromDroppedItem(event-entity) is set
+    cancel event
 
 on place:
     cancel event

@@ -1,0 +1,17 @@
+#==================================================
+#| #enchantments → RangeMining.sk
+#| エンチャント「RangeMining（範囲採掘）」の実装モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function enchantmentRangeMiningHandle(p: player, block: block, rangeMiningLevel: integer):
+    exit if {_rangeMiningLevel} is not set
+    set {_pos1} to block {_rangeMiningLevel} east {_rangeMiningLevel} north ({_rangeMiningLevel}*2)-1 above {_block}
+    set {_pos2} to block {_rangeMiningLevel} west {_rangeMiningLevel} south 1 under {_block}
+
+    set {_blocks::*} to all blocks within {_pos1} and {_pos2}
+    set {_cancelledBlocks::*} to onBreakOresMultipleHandle({_p}, {_blocks::*})
+    remove {_cancelledBlocks::*} from {_blocks::*}
+    loop {_blocks::*}:
+        break loop-value

@@ -4,7 +4,7 @@
 #|
 #| Nekozouneko Group Developer
 #==================================================
-function onBreakOresHandle(p: player, block: block) :: boolean:
+function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     set {_item} to {_p}'s tool
     set {_itemId} to getItemId({_item})
     set {_blockType} to type of {_block}
@@ -16,14 +16,17 @@ function onBreakOresHandle(p: player, block: block) :: boolean:
     set {_fortuneLevel} to getItemEnchantmentLevel({_item}, "fortune")
     set {_autoCollectLevel} to getItemEnchantmentLevel({_item}, "auto_collect")
     set {_autoSellLevel} to getItemEnchantmentLevel({_item}, "auto_sell")
+    set {_rangeMiningLevel} to getItemEnchantmentLevel({_item}, "range_mining")
     #エンチャントの処理
     #| Fortune
     set {_dropItem} to enchantmentFortuneDropItemHandle({_dropItem}, {_fortuneLevel})
     #| AutoSell
-    set {_isAutoSold} to true if enchantmentAutoSellHandle({_p}, {_dropItem}, {_autoSellLevel}) is true
+    set {_isAutoSold} to true if enchantmentAutoSellSingleHandle({_p}, {_dropItem}, {_autoSellLevel}) is true
     #| AutoCollect
     if {_isAutoSold} is not true:
-        set {_isDropCancelled} to true if enchantmentAutoCollectHandle({_p}, {_dropItem}, {_autoCollectLevel}) is true
+        set {_isDropCancelled} to true if enchantmentAutoCollectSingleHandle({_p}, {_dropItem}, {_autoCollectLevel}) is true
+    #| RangeMining
+    enchantmentRangeMiningHandle({_p}, {_block}, {_rangeMiningLevel})
 
     #ドロップの処理
     if {_isDropCancelled} is not true:
@@ -46,6 +49,63 @@ function onBreakOresHandle(p: player, block: block) :: boolean:
     set {ores.revivePendingBlocks::%{_queueId}%} to {_blockType}
 
     return true
+
+function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #return キャンセルするブロックリスト
+    set {_item} to {_p}'s tool
+    set {_itemId} to getItemId({_item})
+    exit if {_itemId} is not set
+
+    #それぞれの情報をリスト型でまとめる
+    loop {_blocks::*}:
+        set {_blockType} to type of loop-value
+        if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}:
+            add loop-value to {_allowedBlocks::*}
+            continue
+
+        add {_blockType} to {_blockTypes::*}
+        add location of loop-value to {_blockLocations::*}
+        add getDefine("DROP_ITEMS::%{_blockType}%") to {_dropItems::*}
+        add getDefine("EARN_EXP::%{_blockType}%") to {_earnExp}
+        add 1 to {_mineQuantity}
+
+    set {_fortuneLevel} to getItemEnchantmentLevel({_item}, "fortune")
+    set {_autoCollectLevel} to getItemEnchantmentLevel({_item}, "auto_collect")
+    set {_autoSellLevel} to getItemEnchantmentLevel({_item}, "auto_sell")
+    set {_rangeMiningLevel} to getItemEnchantmentLevel({_item}, "range_mining")
+    #エンチャントの処理
+    #| Fortune（1個のアイテムを入れて帰ってきた個数＝幸運の有効率）
+    set {_fortuneAmount} to item amount of enchantmentFortuneDropItemHandle(stone, {_fortuneLevel})
+    loop {_dropItems::*}:
+        set item amount of loop-value to (item amount of loop-value) * {_fortuneAmount}
+    #| AutoSell
+    set {_sellableItems::*} to enchantmentAutoSellMultipleHandle({_p}, {_dropItems::*}, {_autoSellLevel})
+    remove {_sellableItems::*} from {_dropItems::*}
+    #| AutoCollect
+    set {_isAutoCollected} to false
+    set {_isAutoCollected} to true if enchantmentAutoCollectMultipleHandle({_p}, {_dropItems::*}, {_autoCollectLevel}) is true
+
+    #ドロップの処理
+    if {_isAutoCollected} is false:
+        loop {_dropItems::*}:
+            drop loop-value at (random element out of {_blockLocations::*})
+
+    #EXPの獲得処理
+    profileExpIncrease({_p}, {_earnExp}, "ORES_BREAK_MULTIPLE")
+
+    #Statistics
+    profileStatisticsIncrease({_p}, "mineQuantity", {_mineQuantity})
+
+    #鉱石復活のキュー追加
+    set {_unixtime} to floor(unix timestamp of now) #Unixtimeの整数部だけ扱う
+    set {_roundedUnixtime} to {_unixtime} - mod({_unixtime}, 10) #一桁目の数字だけ引いて一桁目の情報を0にそろえる
+    loop {_blockTypes::*}:
+        set {_queueId} to random integer between 1000000000 and 9999999999
+        add {_queueId} to {ores.revivePendingQueues::*}
+        set {ores.revivePendingSpans::%{_queueId}%} to {_roundedUnixtime}
+        set {ores.revivePendingLocations::%{_queueId}%} to {_blockLocations::%loop-index%}
+        set {ores.revivePendingBlocks::%{_queueId}%} to {_blockTypes::%loop-index%}
+
+    return {_allowedBlocks::*}
 
 #鉱石復活の定期処理
 function oreReviveAsyncHandler():
