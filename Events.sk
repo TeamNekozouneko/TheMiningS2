@@ -28,11 +28,6 @@ on break:
     cancel drops
     cancel event if onBreakOresSingleHandle(player, event-block) is false
 
-on spawn: #範囲採掘用
-    exit if event-entity is not a dropped item
-    exit if getItemIdFromDroppedItem(event-entity) is set
-    cancel event
-
 on place:
     cancel event
 

@@ -13,5 +13,4 @@ function enchantmentRangeMiningHandle(p: player, block: block, rangeMiningLevel:
     set {_blocks::*} to all blocks within {_pos1} and {_pos2}
     set {_cancelledBlocks::*} to onBreakOresMultipleHandle({_p}, {_blocks::*})
     remove {_cancelledBlocks::*} from {_blocks::*}
-    loop {_blocks::*}:
-        break loop-value
+    update {_blocks::*} as air without neighbouring updates
