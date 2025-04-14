@@ -14,6 +14,8 @@ function handleDefine():
 
     set {define::LANG::ERROR_NOT_ENOUGH_MONEY} to "&cお金が足りません。"
 
+    set {define::LANG::ERROR_BREAK_FROM_SURFACE} to "&cもっと地表に近いところから採掘してください！"
+
     set {define::LANG::LEVELUP_CURRENT_COST} to "&7レベルアップするには&f${}円&7必要だよ！"
     set {define::LANG::SUCCESS_LEVELUP} to "&aレベルアップしました！&7次のコストは&f${}円&7です！"
     

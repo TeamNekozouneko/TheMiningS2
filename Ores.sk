@@ -7,6 +7,7 @@
 
 Options:
     DO_NOT_REVIVE_AROUND_BLOCKS: 3
+    CANNOT_BREAK_LESS_THAN_SUNLIGHT: 10
 
 function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     set {_item} to {_p}'s tool
@@ -16,6 +17,11 @@ function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     return false if {_itemId} is not set
     return false if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}
     set {_dropItem} to getDefine("DROP_ITEMS::%{_blockType}%")
+
+    #地表チェック
+    if getAroundAverageSunLight(location of {_block}) < {@CANNOT_BREAK_LESS_THAN_SUNLIGHT}:
+        send action bar getDefine("LANG::ERROR_BREAK_FROM_SURFACE") to {_p}
+        return false
 
     set {_fortuneLevel} to getItemEnchantmentLevel({_item}, "fortune")
     set {_autoCollectLevel} to getItemEnchantmentLevel({_item}, "auto_collect")
@@ -63,7 +69,10 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
     loop {_blocks::*}:
         set {_blockType} to type of loop-value
         if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}:
-            add loop-value to {_allowedBlocks::*}
+            add loop-value to {_cancelledBlock::*}
+            continue
+        if getAroundAverageSunLight(location of loop-value) < {@CANNOT_BREAK_LESS_THAN_SUNLIGHT}:
+            add loop-value to {_cancelledBlock::*}
             continue
 
         add {_blockType} to {_blockTypes::*}
@@ -109,7 +118,7 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
         set {ores.revivePendingLocations::%{_queueId}%} to {_blockLocations::%loop-index%}
         set {ores.revivePendingBlocks::%{_queueId}%} to {_blockTypes::%loop-index%}
 
-    return {_allowedBlocks::*}
+    return {_cancelledBlock::*}
 
 #鉱石復活の定期処理
 function oreReviveAsyncHandler():
@@ -138,3 +147,8 @@ function oreReviveAsyncHandler():
             remove {_revivePendingQueue} from {ores.revivePendingQueues::*}
             
             remove {_revivePendingQueue} from {_queues::*}
+
+local function getAroundAverageSunLight(location: location) :: number:
+    loop all blocks in radius 1 around {_location}:
+        add (sunlight level at loop-block) to {_sunlight::*} if loop-block is air
+    return sum({_sunlight::*})/(size of {_sunlight::*})
