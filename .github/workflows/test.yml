@@ -28,6 +28,7 @@ jobs:
         run: |
           mkdir -p ~/plugins/Skript/scripts/
           mv .github/workflows/plugins/* ~/plugins/
+          cp -r .github/workflows/plugins/ /root/plugins/
           cp -r * ~/plugins/Skript/scripts/
           cp -r .github/workflows/testCase/* ~/plugins/Skript/scripts/
           cp .github/workflows/golang/check ~
