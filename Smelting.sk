@@ -17,10 +17,6 @@ Options:
     MAIN_INPUT_INFO_ICON: Glowing(furnace named "&a製錬のやり方" with lore "&7この下に鉱石を入れると、" and "&7入れた鉱石を焼くことができます。" and "&eメニューを閉じても裏で焼いてくれるよ！" and "&r" and "&f現在の製錬スピード：&b1個/秒")
     MAIN_OUTPUT_INFO_ICON: chest named "&a製錬後のアイテム" with lore "&7製錬されたアイテムは、" and "&7この下に焼かれて出てきます。"
 
-    MAIN_FIRE_LEVEL_1_ICON: yellow stained glass pane named "&r"
-    MAIN_FIRE_LEVEL_2_ICON: orange stained glass pane named "&r"
-    MAIN_FIRE_LEVEL_3_ICON: red stained glass pane named "&r"
-
 function smeltingGuiHandle(p: player):
     openGui({_p}, "SMELTING_MAIN")
 
