@@ -26,8 +26,8 @@ jobs:
       #プラグイン環境のセットアップ
       - name: Set up plugin environments
         run: |
-          mkdir -p ~/plugins/Skript/scripts/
           mv .github/workflows/plugins/* ~/plugins/
+          mkdir -p ~/plugins/Skript/scripts/
           cp -r .github/workflows/plugins/ /root/plugins/
           cp -r * ~/plugins/Skript/scripts/
           cp -r .github/workflows/testCase/* ~/plugins/Skript/scripts/

@@ -9,7 +9,6 @@
 function teleportDestination(p: player, destiName: string) :: boolean:
     set {_location} to getDefine("LOCATION::%{_destiName}%")
     if isDestinationAvailable({_location}) is false:
-        broadcast "DESTI ERROR: %{_destiName}% | %{_location}%"
         return false
     force teleport {_p} to {_location}
     return true
