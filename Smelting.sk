@@ -4,3 +4,107 @@
 #|
 #| Nekozouneko Group Developer
 #==================================================
+
+Options:
+    MAIN_TITLE_NAME: "&d&l製錬 &8鉱石を焼く"
+    MAIN_BACKGROUND_ICON: gray stained glass pane named "&r"
+
+    MAIN_INPUT_INFO_ICON: Glowing(furnace named "&a製錬のやり方" with lore "&7この下に鉱石を入れると、" and "&7入れた鉱石を焼くことができます。" and "&f現在の製錬スピード：&b1個/秒")
+    MAIN_OUTPUT_INFO_ICON: chest named "&a製錬後のアイテム" with lore "&7製錬されたアイテムは、" and "&7この下に焼かれて出てきます。"
+
+    MAIN_FIRE_LEVEL_1_ICON: yellow stained glass pane named "&r"
+    MAIN_FIRE_LEVEL_2_ICON: orange stained glass pane named "&r"
+    MAIN_FIRE_LEVEL_3_ICON: red stained glass pane named "&r"
+
+function smeltingGuiHandle(p: player):
+    openGui({_p}, "SMELTING_MAIN")
+
+# enum guiType {
+#  SMELTING_MAIN
+# }
+local function openGui(p: player, guiType: string):
+    #SMELTING_MAIN
+    if {_guiType} is "SMELTING_MAIN":
+        open chest inventory with 6 row named {@MAIN_TITLE_NAME} to {_p}
+        set {_backGroundSlots::*} to getBackGroundSlots()
+        loop {_backGroundSlots::*}:
+            set slot loop-value of {_p}'s current inventory to {@MAIN_BACKGROUND_ICON}
+        
+        set slot 4 of {_p}'s current inventory to {@MAIN_INPUT_INFO_ICON}
+        set slot 22 of {_p}'s current inventory to {@MAIN_OUTPUT_INFO_ICON}
+
+
+function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
+    set {_invName} to name of {_p}'s current inventory
+    #SMELTING_MAIN
+    if {_invName} is {@MAIN_TITLE_NAME}:
+        return true if {_item} is {@MAIN_BACKGROUND_ICON}
+        return true if {_item} is {@MAIN_INPUT_INFO_ICON}
+        return true if {_item} is {@MAIN_OUTPUT_INFO_ICON}
+    return false
+
+function smeltingHandler():
+    set {_baseSlot} to 28
+    loop 7 times:
+        add {_baseSlot}+(loop-number)-1 to {_outputSlots::*}
+    set {_baseSlot} to 37
+    loop 7 times:
+        add {_baseSlot}+(loop-number)-1 to {_outputSlots::*}
+
+    run 0 ticks later repeating every second:
+        loop all players where [name of input's current inventory is {@MAIN_TITLE_NAME}]:
+            #製錬候補の算出
+            set {_baseSlot} to 10
+            loop 7 times:
+                set {_slot} to {_baseSlot}+(loop-number)-1
+                set {_item} to slot {_slot} of loop-player's current inventory
+                set {_itemId} to getItemId({_item})
+                set {_smelledItem} to getDefine("SMELTING_ITEM::%{_itemId}%")
+                exit 1 loop if {_smelledItem} is set
+            continue if {_smelledItem} is not set
+
+            #条件確認
+            #{_isSmeltable} = 製錬後アイテムスロットの空き、もしくは重ねることで精錬できる条件かどうか
+            #{_stackableSlot} = 同じアイテムが製錬後アイテムスロットに存在していて、追加で重ねることができるスロット番号
+            #{_availableSlot} = 製錬後アイテムスロットの空きスロット番号
+            set {_isSmeltable} to false
+            clear {_stackableSlot}
+            loop {_outputSlots::*}:
+                set {_item} to slot (loop-value-2) of loop-player's current inventory
+                set {_itemId} to getItemId({_item})
+
+                if {_itemId} is {_smelledItem}:
+                    if item amount of {_item} < 64:
+                        set {_stackableSlot} to loop-value-2 if {_stackableSlot} is not set
+                        set {_isSmeltable} to true
+                
+                if {_item} is air:
+                    set {_availableSlot} to loop-value-2 if {_availableSlot} is not set
+                    set {_isSmeltable} to true
+            
+            continue if {_isSmeltable} is false
+
+            #製錬処理
+            remove 1 from item amount of (slot {_slot} of loop-player's current inventory)
+            if {_stackableSlot} is set:
+                add 1 to item amount of (slot {_stackableSlot} of loop-player's current inventory)
+            else:
+                set slot {_availableSlot} of loop-player's current inventory to getItemData({_smelledItem})
+
+local function getBackGroundSlots() :: objects:
+    loop 6*9 times:
+        add (loop-number)-1 to {_slots::*}
+    remove 4 from {_slots::*}
+    remove 22 from {_slots::*}
+
+    set {_baseSlot} to 10
+    loop 7 times:
+        remove {_baseSlot}+(loop-number)-1 from {_slots::*}
+    set {_baseSlot} to 28
+    loop 7 times:
+        remove {_baseSlot}+(loop-number)-1 from {_slots::*}
+    set {_baseSlot} to 37
+    loop 7 times:
+        remove {_baseSlot}+(loop-number)-1 from {_slots::*}
+    
+    return {_slots::*}

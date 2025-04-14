@@ -203,6 +203,9 @@ function handleDefine():
     set {define::SELL_PRICE::IRON_INGOT} to 1.5
     set {define::SELL_PRICE::LAPIS_LAZULI} to 3.0
 
+    #製錬アイテムの紐付け（Smelting.sk）
+    set {define::SMELTING_ITEM::RAW_IRON} to "IRON_INGOT"
+
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
         set {define::REVIVE_TIME::stone} to 30
