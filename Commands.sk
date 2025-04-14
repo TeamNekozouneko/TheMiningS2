@@ -10,11 +10,13 @@ command /spawn:
     trigger:
         teleport player to spawn location of world "world"
 
-command /mine [<text>] [<text>]:
+command /mine [<text>] [<text>] [<text>]:
     permission: admin
     trigger:
         if arg-1 is "give":
-            give getItemData(arg-2) to player
+            set {_amount} to arg-3 parsed as integer
+            set {_amount} to 1 if arg-3 is not set
+            give {_amount} of getItemData(arg-2) to player
             send getDefine("LANG::SUCCESS_COMMAND_GET_ITME") to player
         else if arg-1 is "setMoney":
             profileMoneySet(player, arg-2 parsed as number, "COMMAND")

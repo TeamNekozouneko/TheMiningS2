@@ -12,7 +12,8 @@ on load:
     portalConditionAsyncHandler()
     enchantmentGuiAsyncHandler()
     enchantmentAutoSellPendingApplyHandler()
-    smeltingHandler()
+    smeltingSmeltOnGuiHandler()
+    smeltingSmeltOnBackGroundHandler()
 
 every second:
     loop all players:
@@ -54,6 +55,7 @@ on inventory click:
 on inventory close:
     onInventoryCloseShopHandle(player)
     onInventoryCloseEnchantmentHandle(player)
+    onInventoryCloseSmeltingHandle(player)
 
 on right click:
     cancel event if onRightClickEnchantmentHandle(player, event-block) is true

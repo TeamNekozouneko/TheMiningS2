@@ -5,11 +5,16 @@
 #| Nekozouneko Group Developer
 #==================================================
 
+#{smelting.savedInputItems::%<UUID>%::*}
+#{smelting.savedOutputItems::%<UUID>%::*}
+#上記の大域リスト変数は、例えば32個の鉄を保管する際、鉄というアイテム要素をそれぞれ32個リストに保管する
+#（後述のsmeltingSmeltOnBackGroundHandler関数で、一つずつアイテムを処理するときに便利なため）
+
 Options:
     MAIN_TITLE_NAME: "&d&l製錬 &8鉱石を焼く"
     MAIN_BACKGROUND_ICON: gray stained glass pane named "&r"
 
-    MAIN_INPUT_INFO_ICON: Glowing(furnace named "&a製錬のやり方" with lore "&7この下に鉱石を入れると、" and "&7入れた鉱石を焼くことができます。" and "&f現在の製錬スピード：&b1個/秒")
+    MAIN_INPUT_INFO_ICON: Glowing(furnace named "&a製錬のやり方" with lore "&7この下に鉱石を入れると、" and "&7入れた鉱石を焼くことができます。" and "&eメニューを閉じても裏で焼いてくれるよ！" and "&r" and "&f現在の製錬スピード：&b1個/秒")
     MAIN_OUTPUT_INFO_ICON: chest named "&a製錬後のアイテム" with lore "&7製錬されたアイテムは、" and "&7この下に焼かれて出てきます。"
 
     MAIN_FIRE_LEVEL_1_ICON: yellow stained glass pane named "&r"
@@ -32,7 +37,20 @@ local function openGui(p: player, guiType: string):
         
         set slot 4 of {_p}'s current inventory to {@MAIN_INPUT_INFO_ICON}
         set slot 22 of {_p}'s current inventory to {@MAIN_OUTPUT_INFO_ICON}
+        
+        set {_baseSlot} to 10
+        loop (first 7 elements of getStackedItem({smelting.savedInputItems::%{_p}'s uuid%::*})):
+            set slot {_baseSlot}+(loop-iteration)-1 of {_p}'s current inventory to loop-value
 
+        set {_baseSlot} to 28
+        loop (first 7 elements of getStackedItem({smelting.savedOutputItems::%{_p}'s uuid%::*})):
+            set slot {_baseSlot}+(loop-iteration)-1 of {_p}'s current inventory to loop-value
+        set {_baseSlot} to 37
+        loop (elements from 8 to 15 of getStackedItem({smelting.savedOutputItems::%{_p}'s uuid%::*})):
+            set slot {_baseSlot}+(loop-iteration)-1 of {_p}'s current inventory to loop-value
+
+        clear {smelting.savedInputItems::%{_p}'s uuid%::*}
+        clear {smelting.savedOutputItems::%{_p}'s uuid%::*}
 
 function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
     set {_invName} to name of {_p}'s current inventory
@@ -43,7 +61,7 @@ function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
         return true if {_item} is {@MAIN_OUTPUT_INFO_ICON}
     return false
 
-function smeltingHandler():
+function smeltingSmeltOnGuiHandler():
     set {_baseSlot} to 28
     loop 7 times:
         add {_baseSlot}+(loop-number)-1 to {_outputSlots::*}
@@ -69,6 +87,7 @@ function smeltingHandler():
             #{_availableSlot} = 製錬後アイテムスロットの空きスロット番号
             set {_isSmeltable} to false
             clear {_stackableSlot}
+            clear {_availableSlot}
             loop {_outputSlots::*}:
                 set {_item} to slot (loop-value-2) of loop-player's current inventory
                 set {_itemId} to getItemId({_item})
@@ -91,20 +110,72 @@ function smeltingHandler():
             else:
                 set slot {_availableSlot} of loop-player's current inventory to getItemData({_smelledItem})
 
+function smeltingSmeltOnBackGroundHandler():
+    run 0 ticks later repeating every second:
+        loop all players:
+            #製錬候補の算出
+            loop {smelting.savedInputItems::%loop-player's uuid%::*}:
+                set {_itemId} to getItemId(loop-value-2)
+                set {_smelledItem} to getDefine("SMELTING_ITEM::%{_itemId}%")
+                exit 1 loop if {_smelledItem} is set
+            continue if {_smelledItem} is not set
+            #製錬処理
+            remove getItemData({_itemId}) from {smelting.savedInputItems::%loop-player's uuid%::*}
+            add getItemData({_smelledItem}) to {smelting.savedOutputItems::%loop-player's uuid%::*}
+
+function onInventoryCloseSmeltingHandle(p: player):
+    exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
+    set {_inputSlots::*} to getInputInterfaceSlots()
+    loop {_inputSlots::*}:
+        set {_item} to slot loop-value of {_p}'s current inventory
+        continue if {_item} is air
+        loop (item amount of {_item}) times:
+            add 1 of {_item} to {smelting.savedInputItems::%{_p}'s uuid%::*}
+    set {_outputSlots::*} to getOutputInterfaceSlots()
+    loop {_outputSlots::*}:
+        set {_item} to slot loop-value of {_p}'s current inventory
+        continue if {_item} is air
+        loop (item amount of {_item}) times:
+            add 1 of {_item} to {smelting.savedOutputItems::%{_p}'s uuid%::*}
+
+
 local function getBackGroundSlots() :: objects:
     loop 6*9 times:
         add (loop-number)-1 to {_slots::*}
     remove 4 from {_slots::*}
     remove 22 from {_slots::*}
 
+    remove getInputInterfaceSlots() from {_slots::*}
+    remove getOutputInterfaceSlots() from {_slots::*}
+
+    return {_slots::*}
+
+local function getInputInterfaceSlots() :: objects:
     set {_baseSlot} to 10
     loop 7 times:
-        remove {_baseSlot}+(loop-number)-1 from {_slots::*}
+        add {_baseSlot}+(loop-number)-1 to {_slots::*}
+    return {_slots::*}
+
+local function getOutputInterfaceSlots() :: objects:
     set {_baseSlot} to 28
     loop 7 times:
-        remove {_baseSlot}+(loop-number)-1 from {_slots::*}
+        add {_baseSlot}+(loop-number)-1 to {_slots::*}
     set {_baseSlot} to 37
     loop 7 times:
-        remove {_baseSlot}+(loop-number)-1 from {_slots::*}
-    
+        add {_baseSlot}+(loop-number)-1 to {_slots::*}
     return {_slots::*}
+
+local function getStackedItem(items: objects) :: objects:
+    while size of {_items::*} > 0:
+        set {_first} to first element of {_items::*}
+        set {_amount} to size of {_items::*} where [input is {_first}]
+
+        #スタックした時の使用スロット数は{_amount}を64で割った余り+1になる
+        loop mod({_amount}, 64)+1 times:
+            if {_amount} > 64:
+                add 64 of {_first} to {_results::*}
+            else:
+                add {_amount} of {_first} to {_results::*}
+            remove 64 from {_amount}
+        remove all {_first} from {_items::*}
+    return {_results::*}
