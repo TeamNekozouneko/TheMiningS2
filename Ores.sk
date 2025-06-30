@@ -120,6 +120,8 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
 #鉱石復活の定期処理
 function oreReviveAsyncHandler():
     run 0 ticks later repeating every getDefine("REVIVE_INTERVAL"):
+        #復活する鉱石がない場合はスキップ
+        exit if size of {ores.revivePendingQueues::*} <= 0
 
         #Revive Countdown
         playSound(all players, "OreReviveStart")
