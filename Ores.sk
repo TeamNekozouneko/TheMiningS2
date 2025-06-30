@@ -20,9 +20,9 @@ function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     set {_dropItem} to getDefine("DROP_ITEMS::%{_blockType}%")
 
     #地表チェック
-    if getAroundAverageSunLight(location of {_block}) < {@CANNOT_BREAK_LESS_THAN_SUNLIGHT}:
-        send action bar getDefine("LANG::ERROR_BREAK_FROM_SURFACE") to {_p}
-        return false
+    # if block above {_block} is not air:
+    #     send action bar getDefine("LANG::ERROR_BREAK_FROM_SURFACE") to {_p}
+    #     return false
 
     set {_fortuneLevel} to getItemEnchantmentLevel({_item}, "fortune")
     set {_autoCollectLevel} to getItemEnchantmentLevel({_item}, "auto_collect")
@@ -69,9 +69,9 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
         if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}:
             add loop-value to {_cancelledBlock::*}
             continue
-        if getAroundAverageSunLight(location of loop-value) < {@CANNOT_BREAK_LESS_THAN_SUNLIGHT}:
-            add loop-value to {_cancelledBlock::*}
-            continue
+        # if block above loop-value is not air: #地表チェック
+        #     add loop-value to {_cancelledBlock::*}
+        #     continue
 
         add loop-value to {_blocks::*}
         add {_blockType} to {_blockTypes::*}
@@ -119,16 +119,20 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
 
 #鉱石復活の定期処理
 function oreReviveAsyncHandler():
-    set {_reviveMessage} to getDefine("LANG::ORES_REVIVE")
     run 0 ticks later repeating every getDefine("REVIVE_INTERVAL"):
-        send substitution({_reviveMessage}, "10") to all players
-        wait 5 second
-        loop 5 times:
-            send substitution({_reviveMessage}, "%5 - loop-number + 1%") to all players
-            wait a second
+
+        #Revive Countdown
+        playSound(all players, "OreReviveStart")
+        loop 30 times: #15秒分（30 * 10 tick）
+            send action bar getDefine("LANG::ORES_REVIVE_1") to all players if mod(loop-number, 2) != 0
+            send action bar getDefine("LANG::ORES_REVIVE_2") to all players if mod(loop-number, 2) = 0
+            wait 10 tick
+        playSound(all players, "OreReviving")
+        send action bar getDefine("LANG::ORES_REVIVING") to all players
 
         #Revive Processing
         copy {ores.revivePendingQueues::*} to {_queues::*} #元のリスト変数を動かしてはならぬ、データが不整合になるど
+        set {_reviveSize} to size of {_queues::*} #actionBar表示用
         while size of {_queues::*} > 0:
             loop getDefine("REVIVE_ORE_PER_INTERVAL") times:
                 set {_revivePendingQueue} to random element out of (the first getDefine("REVIVE_ORE_PER_INTERVAL") elements of {_queues::*})
@@ -148,6 +152,10 @@ function oreReviveAsyncHandler():
                 
                 remove {_revivePendingQueue} from {_queues::*}
             wait 5 tick
+        
+        #Revive Processed
+        playSound(all players, "OreRevived")
+        send action bar substitution(getDefine("LANG::ORES_REVIVED"), String({_reviveSize})) to all players
 
 local function getAroundAverageSunLight(location: location) :: number:
     loop all blocks in radius 1 around {_location}:

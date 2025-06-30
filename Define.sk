@@ -29,7 +29,9 @@ function handleDefine():
 
     set {define::LANG::SUCCESS_ENCHANTMENT} to "&6&lエンチャント &7>> &aエンチャントしました！"
 
-    set {define::LANG::ORES_REVIVE} to "&c&l鉱石復活 &4» &f${}&7秒後に鉱石が復活します..."
+    set {define::LANG::ORES_REVIVE_1} to "&c&l鉱石復活 &4» &fまもなく鉱石が復活します..."
+    set {define::LANG::ORES_REVIVE_2} to "&c&l鉱石復活 &4» &7まもなく鉱石が復活します..."
+    set {define::LANG::ORES_REVIVING} to "&c&l鉱石復活 &4» &f鉱石を復活させています..."
     set {define::LANG::ORES_REVIVED} to "&c&l鉱石復活 &4» &f${}&7個の鉱石が復活しました！"
 
     #Logs.sk

@@ -1,0 +1,24 @@
+#==================================================
+#| #Sounds.sk
+#| 音源関係の実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+function playSound(p: objects, soundId: string):
+    soundHandle_OreReviveStart({_p::*}) if {_soundId} is "OreReviveStart"
+    soundHandle_OreReviving({_p::*}) if {_soundId} is "OreReviving"
+    soundHandle_OreRevived({_p::*}) if {_soundId} is "OreRevived"
+
+
+local function soundHandle_OreReviveStart(p: objects):
+    play sound "minecraft:block.note_block.bell" with pitch 1 to {_p::*}
+    wait 2 tick
+    play sound "minecraft:block.note_block.bell" with pitch 1.25 to {_p::*}
+
+local function soundHandle_OreReviving(p: objects):
+    play sound "minecraft:block.note_block.bass" with pitch 1 to {_p::*}
+
+local function soundHandle_OreRevived(p: objects):
+    play sound "minecraft:block.note_block.bell" with pitch 2 to {_p::*}
+
