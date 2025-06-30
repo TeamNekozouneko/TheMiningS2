@@ -10,7 +10,7 @@ function enchantmentRangeMiningHandle(p: player, block: block, rangeMiningLevel:
     set {_pos1} to block {_rangeMiningLevel} east {_rangeMiningLevel} north ({_rangeMiningLevel}*2)-1 above {_block}
     set {_pos2} to block {_rangeMiningLevel} west {_rangeMiningLevel} south 1 under {_block}
 
-    set {_blocks::*} to all blocks within {_pos1} and {_pos2}
+    set {_blocks::*} to all blocks within {_pos1} and {_pos2} where [input is not air]
     set {_cancelledBlocks::*} to onBreakOresMultipleHandle({_p}, {_blocks::*})
     remove {_cancelledBlocks::*} from {_blocks::*}
     update {_blocks::*} as air without neighbouring updates

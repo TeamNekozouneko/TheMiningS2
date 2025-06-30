@@ -29,6 +29,9 @@ function handleDefine():
 
     set {define::LANG::SUCCESS_ENCHANTMENT} to "&6&lエンチャント &7>> &aエンチャントしました！"
 
+    set {define::LANG::ORES_REVIVE} to "&c&l鉱石復活 &4» &f${}&7秒後に鉱石が復活します..."
+    set {define::LANG::ORES_REVIVED} to "&c&l鉱石復活 &4» &f${}&7個の鉱石が復活しました！"
+
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
 
@@ -143,14 +146,11 @@ function handleDefine():
     set {define::EARN_EXP::iron ore} to 0.2
     set {define::EARN_EXP::lapis ore} to 0.3
 
-    #採掘時の鉱石復活時間の定義[秒]（Ores.sk）
-    set {define::REVIVE_TIME::stone} to 180
-    set {define::REVIVE_TIME::coal ore} to 180
-    set {define::REVIVE_TIME::iron ore} to 180
-    set {define::REVIVE_TIME::lapis ore} to 180
+    #5Tickあたりに処理する鉱石復活数（Ores.sk
+    set {define::REVIVE_ORE_PER_INTERVAL} to 200
 
-    #5Tickあたりに処理する鉱石復活数（Ores.sk）
-    set {define::REVIVE_ORE_PER_INTERVAL} to 50
+    #鉱石復活間隔（Ores.sk）
+    set {define::REVIVE_INTERVAL} to 300 second
 
     #NPC種類の定義（NPCs.sk）
     add "LEVELUP" to {define::NPCS::*}
@@ -210,10 +210,11 @@ function handleDefine():
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
-        set {define::REVIVE_TIME::stone} to 30
-        set {define::REVIVE_TIME::coal ore} to 30
-        set {define::REVIVE_TIME::iron ore} to 30
-        set {define::REVIVE_TIME::lapis ore} to 30
+        set {define::REVIVE_TIME::stone} to 30 #Deprecated
+        set {define::REVIVE_TIME::coal ore} to 30 #Deprecated
+        set {define::REVIVE_TIME::iron ore} to 30 #Deprecated
+        set {define::REVIVE_TIME::lapis ore} to 30 #Deprecated
+        set {define::REVIVE_INTERVAL} to 30 second
 
 function initDefine():
     clear {define::*}

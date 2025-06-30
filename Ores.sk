@@ -14,6 +14,7 @@ function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     set {_itemId} to getItemId({_item})
     set {_blockType} to type of {_block}
     set {_blockLocation} to location of {_block}
+
     return false if {_itemId} is not set
     return false if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}
     set {_dropItem} to getDefine("DROP_ITEMS::%{_blockType}%")
@@ -50,11 +51,8 @@ function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     profileStatisticsIncrease({_p}, "mineQuantity", 1)
 
     #鉱石復活のキュー追加
-    set {_unixtime} to floor(unix timestamp of now) #Unixtimeの整数部だけ扱う
-    set {_roundedUnixtime} to {_unixtime} - mod({_unixtime}, 10) #一桁目の数字だけ引いて一桁目の情報を0にそろえる
     set {_queueId} to random integer between 1000000000 and 9999999999
     add {_queueId} to {ores.revivePendingQueues::*}
-    set {ores.revivePendingSpans::%{_queueId}%} to {_roundedUnixtime}
     set {ores.revivePendingLocations::%{_queueId}%} to {_blockLocation}
     set {ores.revivePendingBlocks::%{_queueId}%} to {_blockType}
 
@@ -75,6 +73,7 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
             add loop-value to {_cancelledBlock::*}
             continue
 
+        add loop-value to {_blocks::*}
         add {_blockType} to {_blockTypes::*}
         add location of loop-value to {_blockLocations::*}
         add getDefine("DROP_ITEMS::%{_blockType}%") to {_dropItems::*}
@@ -99,8 +98,7 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
 
     #ドロップの処理
     if {_isAutoCollected} is false:
-        loop {_dropItems::*}:
-            drop loop-value at (random element out of {_blockLocations::*})
+        drop getMergedDropItems({_dropItems::*}) at (random element out of {_blockLocations::*})
 
     #EXPの獲得処理
     profileExpIncrease({_p}, {_earnExp}, "ORES_BREAK_MULTIPLE")
@@ -109,46 +107,60 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
     profileStatisticsIncrease({_p}, "mineQuantity", {_mineQuantity})
 
     #鉱石復活のキュー追加
-    set {_unixtime} to floor(unix timestamp of now) #Unixtimeの整数部だけ扱う
-    set {_roundedUnixtime} to {_unixtime} - mod({_unixtime}, 10) #一桁目の数字だけ引いて一桁目の情報を0にそろえる
-    loop {_blockTypes::*}:
+    copy {_blocks::*} to {_queuedBlocks::*}
+    remove {_cancelledBlock::*} from {_queuedBlocks::*}
+    loop {_queuedBlocks::*}:
         set {_queueId} to random integer between 1000000000 and 9999999999
         add {_queueId} to {ores.revivePendingQueues::*}
-        set {ores.revivePendingSpans::%{_queueId}%} to {_roundedUnixtime}
-        set {ores.revivePendingLocations::%{_queueId}%} to {_blockLocations::%loop-index%}
-        set {ores.revivePendingBlocks::%{_queueId}%} to {_blockTypes::%loop-index%}
+        set {ores.revivePendingLocations::%{_queueId}%} to location of loop-value
+        set {ores.revivePendingBlocks::%{_queueId}%} to type of loop-value
 
     return {_cancelledBlock::*}
 
 #鉱石復活の定期処理
 function oreReviveAsyncHandler():
-    run 0 ticks later repeating every 5 tick:
+    set {_reviveMessage} to getDefine("LANG::ORES_REVIVE")
+    run 0 ticks later repeating every getDefine("REVIVE_INTERVAL"):
+        send substitution({_reviveMessage}, "10") to all players
+        wait 5 second
+        loop 5 times:
+            send substitution({_reviveMessage}, "%5 - loop-number + 1%") to all players
+            wait a second
+
+        #Revive Processing
         copy {ores.revivePendingQueues::*} to {_queues::*} #元のリスト変数を動かしてはならぬ、データが不整合になるど
+        while size of {_queues::*} > 0:
+            loop getDefine("REVIVE_ORE_PER_INTERVAL") times:
+                set {_revivePendingQueue} to random element out of (the first getDefine("REVIVE_ORE_PER_INTERVAL") elements of {_queues::*})
+                set {_revivePendingBlock} to {ores.revivePendingBlocks::%{_revivePendingQueue}%}
+                set {_revivePendingLocation} to {ores.revivePendingLocations::%{_revivePendingQueue}%}
 
-        loop getDefine("REVIVE_ORE_PER_INTERVAL") times:
-            exit loop if size of {_queues::*} <= 0
+                set {_reviveTimePendingBlock} to getDefine("REVIVE_TIME::%{_revivePendingBlock}%")
+                continue if {_reviveTimePendingBlock} is not set
+                continue if size of all players in radius {@DO_NOT_REVIVE_AROUND_BLOCKS} around {_revivePendingLocation} >= 1
 
-            set {_revivePendingQueue} to random element out of (the first getDefine("REVIVE_ORE_PER_INTERVAL") elements of {_queues::*})
-            set {_revivePendingSpan} to {ores.revivePendingSpans::%{_revivePendingQueue}%}
-            set {_revivePendingBlock} to {ores.revivePendingBlocks::%{_revivePendingQueue}%}
-            set {_revivePendingLocation} to {ores.revivePendingLocations::%{_revivePendingQueue}%}
+                set block at {_revivePendingLocation} to {_revivePendingBlock}
 
-            set {_reviveTimePendingBlock} to getDefine("REVIVE_TIME::%{_revivePendingBlock}%")
-            continue if {_reviveTimePendingBlock} is not set
-            continue if getElapsedUnixtime({_revivePendingSpan}) < {_reviveTimePendingBlock}
-            continue if size of all players in radius {@DO_NOT_REVIVE_AROUND_BLOCKS} around {_revivePendingLocation} >= 1
-
-            set block at {_revivePendingLocation} to {_revivePendingBlock}
-
-            #キューから削除
-            clear {ores.revivePendingSpans::%{_revivePendingQueue}%}
-            clear {ores.revivePendingBlocks::%{_revivePendingQueue}%}
-            clear {ores.revivePendingLocations::%{_revivePendingQueue}%}
-            remove {_revivePendingQueue} from {ores.revivePendingQueues::*}
-            
-            remove {_revivePendingQueue} from {_queues::*}
+                #キューから削除
+                clear {ores.revivePendingBlocks::%{_revivePendingQueue}%}
+                clear {ores.revivePendingLocations::%{_revivePendingQueue}%}
+                remove {_revivePendingQueue} from {ores.revivePendingQueues::*}
+                
+                remove {_revivePendingQueue} from {_queues::*}
+            wait 5 tick
 
 local function getAroundAverageSunLight(location: location) :: number:
     loop all blocks in radius 1 around {_location}:
         add (sunlight level at loop-block) to {_sunlight::*} if loop-block is air
     return sum({_sunlight::*})/(size of {_sunlight::*})
+
+local function getMergedDropItems(dropItems: objects) :: objects:
+    loop {_dropItems::*}:
+        loop (item amount of loop-value) times:
+            add 1 of loop-value-1 to {_flatted::*}
+    while size of {_flatted::*} > 0:
+        set {_first} to first element of {_flatted::*}
+        set {_amount} to size of {_flatted::*} where [input is {_first}]
+        add {_amount} of {_first} to {_results::*}
+        remove all {_first} from {_flatted::*}
+    return {_results::*}

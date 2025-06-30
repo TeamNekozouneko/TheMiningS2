@@ -5,6 +5,9 @@
 #| Nekozouneko Group Developer
 #==================================================
 
+function initMap():
+    set spawn location of world "world" to getDefine("LOCATION::LOBBY")
+
 function onFirstJoinHandle(p: player):
     teleport {_p} to getDefine("LOCATION::MINING_1")
     give getItemData("FIRST_PICKAXE") to {_p}
