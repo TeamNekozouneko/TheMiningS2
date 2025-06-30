@@ -85,7 +85,7 @@ function onInventoryCloseShopHandle(p: player):
     if {_totalSellPrice} is not set:
         send getDefine("LANG::ERROR_SHOP_SOLD_NOTHING") to {_p}
     else:
-        send substitution(getDefine("LANG::SUCCESS_SHOP_SOLD"), String({_totalSellPrice})) to {_p}
+        send substitution(getDefine("LANG::SUCCESS_SHOP_SOLD"), formatNumber({_totalSellPrice})) to {_p}
         profileMoneyIncrease({_p}, {_totalSellPrice}, "SHOP_SELL")
     give {_unSellableItems::*} to {_p}
 
