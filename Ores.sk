@@ -28,6 +28,13 @@ function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     set {_autoCollectLevel} to getItemEnchantmentLevel({_item}, "auto_collect")
     set {_autoSellLevel} to getItemEnchantmentLevel({_item}, "auto_sell")
     set {_rangeMiningLevel} to getItemEnchantmentLevel({_item}, "range_mining")
+    
+    #Range MiningレベルがあればMultipleHandleに飛ばす
+    if {_rangeMiningLevel} > 0:
+        return false if {ores.rangeMiningCooldown::%{_p}'s uuid%} is set
+        enchantmentRangeMiningHandle({_p}, {_block}, {_rangeMiningLevel})
+        return true
+
     #エンチャントの処理
     #| Fortune
     set {_dropItem} to enchantmentFortuneDropItemHandle({_dropItem}, {_fortuneLevel})
@@ -36,8 +43,6 @@ function onBreakOresSingleHandle(p: player, block: block) :: boolean:
     #| AutoCollect
     if {_isAutoSold} is not true:
         set {_isDropCancelled} to true if enchantmentAutoCollectSingleHandle({_p}, {_dropItem}, {_autoCollectLevel}) is true
-    #| RangeMining
-    enchantmentRangeMiningHandle({_p}, {_block}, {_rangeMiningLevel})
 
     #ドロップの処理
     if {_isDropCancelled} is not true:
@@ -58,13 +63,13 @@ function onBreakOresSingleHandle(p: player, block: block) :: boolean:
 
     return true
 
-function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #return キャンセルするブロックリスト
+function onBreakOresMultipleHandle(p: player, originalBlocks: objects) :: objects: #return キャンセルするブロックリスト
     set {_item} to {_p}'s tool
     set {_itemId} to getItemId({_item})
     exit if {_itemId} is not set
 
     #それぞれの情報をリスト型でまとめる
-    loop {_blocks::*}:
+    loop {_originalBlocks::*}:
         set {_blockType} to type of loop-value
         if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}:
             add loop-value to {_cancelledBlock::*}
@@ -75,11 +80,9 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
 
         add loop-value to {_blocks::*}
         add {_blockType} to {_blockTypes::*}
-        add location of loop-value to {_blockLocations::*}
         add getDefine("DROP_ITEMS::%{_blockType}%") to {_dropItems::*}
         add getDefine("EARN_EXP::%{_blockType}%") to {_earnExp}
-        add 1 to {_mineQuantity}
-
+    
     set {_fortuneLevel} to getItemEnchantmentLevel({_item}, "fortune")
     set {_autoCollectLevel} to getItemEnchantmentLevel({_item}, "auto_collect")
     set {_autoSellLevel} to getItemEnchantmentLevel({_item}, "auto_sell")
@@ -98,23 +101,24 @@ function onBreakOresMultipleHandle(p: player, blocks: objects) :: objects: #retu
 
     #ドロップの処理
     if {_isAutoCollected} is false:
-        drop getMergedDropItems({_dropItems::*}) at (random element out of {_blockLocations::*})
-
+        drop getMergedDropItems({_dropItems::*}) at location of (random element out of {_blocks::*})
+    
     #EXPの獲得処理
     profileExpIncrease({_p}, {_earnExp}, "ORES_BREAK_MULTIPLE")
 
     #Statistics
-    profileStatisticsIncrease({_p}, "mineQuantity", {_mineQuantity})
+    profileStatisticsIncrease({_p}, "mineQuantity", size of {_blocks::*})
 
     #鉱石復活のキュー追加
-    copy {_blocks::*} to {_queuedBlocks::*}
-    remove {_cancelledBlock::*} from {_queuedBlocks::*}
-    loop {_queuedBlocks::*}:
-        set {_queueId} to random integer between 1000000000 and 9999999999
+    remove {_cancelledBlock::*} from {_blocks::*}
+    loop {_blocks::*}:
+        add 1 to {ores.currentQueueIndex}
+        set {_queueId} to {ores.currentQueueIndex}
         add {_queueId} to {ores.revivePendingQueues::*}
         set {ores.revivePendingLocations::%{_queueId}%} to location of loop-value
         set {ores.revivePendingBlocks::%{_queueId}%} to type of loop-value
-
+    
+    clear {ores.rangeMiningCooldown::%{_p}'s uuid%}
     return {_cancelledBlock::*}
 
 #鉱石復活の定期処理
@@ -133,7 +137,7 @@ function oreReviveAsyncHandler():
         send action bar getDefine("LANG::ORES_REVIVING") to all players
 
         #Revive Processing
-        copy {ores.revivePendingQueues::*} to {_queues::*} #元のリスト変数を動かしてはならぬ、データが不整合になるど
+        copy {ores.revivePendingQueues::*} to {_queues::*}
         set {_reviveSize} to size of {_queues::*} #actionBar表示用
         while size of {_queues::*} > 0:
             loop getDefine("REVIVE_ORE_PER_INTERVAL") times:
