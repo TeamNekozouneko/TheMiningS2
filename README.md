@@ -7,6 +7,10 @@
 ![Static Badge](https://img.shields.io/badge/-Docker-2496ED?style=for-the-badge)
 
 [![テスト](https://github.com/TeamNekozouneko/TheMiningS2/actions/workflows/test.yml/badge.svg)](https://github.com/TeamNekozouneko/TheMiningS2/actions/workflows/test.yml)
+> [!CAUTION]
+> **【注意】**  
+> このリポジトリは、一部ストーリーのネタバレを含む可能性があります。  
+> **自己責任**で閲覧してください。
 
 > [!NOTE]
 > The Mining Season-2は、現在開発中です。  
