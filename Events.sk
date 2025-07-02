@@ -15,6 +15,7 @@ on load:
     enchantmentAutoSellPendingApplyHandler()
     smeltingSmeltOnGuiHandler()
     smeltingSmeltOnBackGroundHandler()
+    questAssignHandler()
 
 every second:
     loop all players:
@@ -52,6 +53,7 @@ on inventory click:
     cancel event if onInventoryClickShopHandle(player, event-item) is true
     cancel event if onInventoryClickEnchantmentHandle(player, event-item) is true
     cancel event if onInventoryClickSmeltingHandle(player, event-item) is true
+    cancel event if onInventoryClickQuestHandle(player, event-item) is true
 
 on inventory close:
     onInventoryCloseShopHandle(player)

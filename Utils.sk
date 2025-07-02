@@ -67,3 +67,15 @@ function isInventoryFreeSpaceAvailable(p: player) :: boolean:
     loop 36 times:
         return true if slot (loop-number)-1 of {_p}'s inventory is air
     return false
+
+function getAllBannerPatternItems() :: objects:
+    add skull banner pattern item to {_patterns::*}
+    add flow banner pattern item to {_patterns::*}
+    add guster banner pattern item to {_patterns::*}
+    add piglin banner pattern item to {_patterns::*}
+    add creeper banner pattern item to {_patterns::*}
+    add mojang banner pattern item to {_patterns::*}
+    add bricks banner pattern item to {_patterns::*}
+    add flower banner pattern item to {_patterns::*}
+    add globe banner pattern item to {_patterns::*}
+    return {_patterns::*}

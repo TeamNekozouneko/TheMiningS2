@@ -214,6 +214,10 @@ function handleDefine():
     #製錬アイテムの紐付け（Smelting.sk）
     set {define::SMELTING_ITEM::RAW_IRON} to "IRON_INGOT"
 
+    #クエスト割り当て最大数の定義（Quest.sk）
+    set {define::QUEST_DAILY_ASSIGN_MAX} to 10
+    set {define::QUEST_WEEKLY_ASSIGN_MAX} to 5
+
     #クエストIDの定義（Quest.sk）
     add "SAVING_MONEY_500" to {define::QUESTS::*}
     add "SAVING_MONEY_1000" to {define::QUESTS::*}
@@ -221,6 +225,16 @@ function handleDefine():
     add "SELL_ITEM_100" to {define::QUESTS::*}
     add "VISIT_ANY_MINE" to {define::QUESTS::*}
     add "ENCHANT_PICKAXE_ONCE" to {define::QUESTS::*}
+
+    #クエスト種類の紐付け（Quest.sk）
+    #1: デイリークエスト
+    #2: ウィークリークエスト
+    set {define::QUEST_TYPE::SAVING_MONEY_500} to 1
+    set {define::QUEST_TYPE::SAVING_MONEY_1000} to 1
+    set {define::QUEST_TYPE::SAVING_MONEY_5000} to 1
+    set {define::QUEST_TYPE::SELL_ITEM_100} to 1
+    set {define::QUEST_TYPE::VISIT_ANY_MINE} to 1
+    set {define::QUEST_TYPE::ENCHANT_PICKAXE_ONCE} to 1
 
     #クエスト名の紐付け（Quest.sk）
     set {define::QUEST_TITLE::SAVING_MONEY_500} to "お金を500円貯める"
@@ -237,6 +251,16 @@ function handleDefine():
     set {define::QUEST_COMPLETE_TRIGGER::SELL_ITEM_100} to 100
     set {define::QUEST_COMPLETE_TRIGGER::VISIT_ANY_MINE} to 1
     set {define::QUEST_COMPLETE_TRIGGER::ENCHANT_PICKAXE_ONCE} to 1
+
+    #クエスト報酬の紐付け（Quest.sk）
+    #{define::QUEST_REWARD::<QuestID>::<報酬の種類>}に値を入れる
+    #報酬の種類は、EXPまたはMONEY
+    set {define::QUEST_REWARD::SAVING_MONEY_500::EXP} to 50
+    set {define::QUEST_REWARD::SAVING_MONEY_1000::EXP} to 100
+    set {define::QUEST_REWARD::SAVING_MONEY_5000::EXP} to 150
+    set {define::QUEST_REWARD::SELL_ITEM_100::EXP} to 50
+    set {define::QUEST_REWARD::VISIT_ANY_MINE::EXP} to 50
+    set {define::QUEST_REWARD::ENCHANT_PICKAXE_ONCE::MONEY} to 100
 
 
     #DEVELOPMENT_MODE用のOverride

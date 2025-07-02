@@ -21,6 +21,8 @@ function onCitizenRightClickNPCHandle(player: player, npc: npc):
         shopGuiHandle({_player})
     else if compareName({_npc}, getDefine("NPC::SMELTING::NAME")) is true:
         smeltingGuiHandle({_player})
+    else if compareName({_npc}, getDefine("NPC::QUEST_MASTER::NAME")) is true:
+        questGuiHandle({_player})
 
 local function compareName(npc: npc, name: string) :: boolean:
     return true if uncoloured mini message from (citizen name of {_npc}) is uncoloured {_name}
