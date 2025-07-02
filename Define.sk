@@ -210,12 +210,33 @@ function handleDefine():
     #製錬アイテムの紐付け（Smelting.sk）
     set {define::SMELTING_ITEM::RAW_IRON} to "IRON_INGOT"
 
+    #クエストIDの定義（Quest.sk）
+    add "SAVING_MONEY_500" to {define::QUESTS::*}
+    add "SAVING_MONEY_1000" to {define::QUESTS::*}
+    add "SAVING_MONEY_5000" to {define::QUESTS::*}
+    add "SELL_ITEM_100" to {define::QUESTS::*}
+    add "VISIT_ANY_MINE" to {define::QUESTS::*}
+    add "ENCHANT_PICKAXE_ONCE" to {define::QUESTS::*}
+
+    #クエスト名の紐付け（Quest.sk）
+    set {define::QUEST_TITLE::SAVING_MONEY_500} to "お金を500円貯める"
+    set {define::QUEST_TITLE::SAVING_MONEY_1000} to "お金を1,000円貯める"
+    set {define::QUEST_TITLE::SAVING_MONEY_5000} to "お金を5,000円貯める"
+    set {define::QUEST_TITLE::SELL_ITEM_100} to "アイテムを100個売る"
+    set {define::QUEST_TITLE::VISIT_ANY_MINE} to "いずれかの採掘所に訪れる"
+    set {define::QUEST_TITLE::ENCHANT_PICKAXE_ONCE} to "ピッケルにエンチャントする"
+
+    #完了トリガー数の紐付け（Quest.sk）
+    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_500} to 1
+    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_1000} to 1
+    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_5000} to 1
+    set {define::QUEST_COMPLETE_TRIGGER::SELL_ITEM_100} to 100
+    set {define::QUEST_COMPLETE_TRIGGER::VISIT_ANY_MINE} to 1
+    set {define::QUEST_COMPLETE_TRIGGER::ENCHANT_PICKAXE_ONCE} to 1
+
+
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
-        set {define::REVIVE_TIME::stone} to 30 #Deprecated
-        set {define::REVIVE_TIME::coal ore} to 30 #Deprecated
-        set {define::REVIVE_TIME::iron ore} to 30 #Deprecated
-        set {define::REVIVE_TIME::lapis ore} to 30 #Deprecated
         set {define::REVIVE_INTERVAL} to 30 second
 
 function initDefine():
