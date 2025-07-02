@@ -158,6 +158,7 @@ function handleDefine():
     add "LEVELUP" to {define::NPCS::*}
     add "SHOP" to {define::NPCS::*}
     add "SMELTING" to {define::NPCS::*}
+    add "QUEST_MASTER" to {define::NPCS::*}
 
     #レベルアップ用NPCの定義（NPCs.sk）
     set {define::NPC::LEVELUP::NAME} to "&6&lレベル屋のおじさん &7[クリック]"
@@ -169,6 +170,9 @@ function handleDefine():
     set {define::NPC::SMELTING::NAME} to "&d精錬 &7[クリック]"
     set {define::NPC::SMELTING::SKIN} to "nekozouneko"
     set {define::NPC::SMELTING::LOCATION} to location(-124.5, 75, 8.5, world "world", -90, 0)
+    set {define::NPC::QUEST_MASTER::NAME} to "&6クエストマスター &7[クリック]"
+    set {define::NPC::QUEST_MASTER::SKIN} to "Yeahn"
+    set {define::NPC::QUEST_MASTER::LOCATION} to location(-146.5, 80.5, 23.5, world "world", -90, 0)
 
     #レベルアップのコスト計算（profile.sk）
     set {define::LEVELUP_INITIAL_TERM} to 2000 #初項
