@@ -218,6 +218,9 @@ function handleDefine():
     set {define::QUEST_DAILY_ASSIGN_MAX} to 10
     set {define::QUEST_WEEKLY_ASSIGN_MAX} to 5
 
+    #クエストの完了チェックハンドラーのチェック間隔
+    set {define::QUEST_CHECK_INTERVAL} to 1 second
+
     #クエストIDの定義（Quest.sk）
     add "SAVING_MONEY_500" to {define::QUESTS::*}
     add "SAVING_MONEY_1000" to {define::QUESTS::*}

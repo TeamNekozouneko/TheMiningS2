@@ -22,6 +22,11 @@ Options:
     MAIN_DAILY_INFO_ICON: trial key named "&6デイリークエスト" with lore "&7毎日0:00（日本標準時）に" and "&7更新されるクエストです。（最大10個）"
     MAIN_WEEKLY_INFO_ICON: ominous trial key named "&6ウィークリークエスト" with lore "&7毎週月曜日0:00（日本標準時）に" and "&7更新されるクエストです。（最大5個）"
 
+function questCheckHandlerInit():
+    set {_checkInterval} to getDefine("QUEST_CHECK_INTERVAL")
+    async run 0 ticks later repeating {_checkInterval}:
+        questCompleteCheckHandler_SavingMoney()
+
 function questGuiHandle(p: player):
     openGui({_p}, "QUEST_MAIN")
 
