@@ -217,9 +217,16 @@ function questTriggerIncreaseHandle(p: player, questId: string, increaseValue: i
         #完了処理
         set {quest.triggers::%{_p}'s uuid%::%{_questId}%} to {_maxTrigger}
         questComplete({_p}, {_questId}, true)
+        questTriggerStatisticsCompleteInit({_p}, {_questId})
     else:
         #増加処理
         add {_increaseValue} to {quest.triggers::%{_p}'s uuid%::%{_questId}%}
+
+local function questTriggerStatisticsOrderInit(p: player, questId: string):
+    profileStatisticsSet({_p}, "_questTrigger_currentMoney")
+
+local function questTriggerStatisticsCompleteInit(p: player, questId: string):
+    profileStatisticsClear({_p}, "_questTrigger_currentMoney")
 
 local function getQuestIdFromItem(item: item) :: string:
     return string tag "TheMining;quest;id" of custom nbt of {_item}
@@ -264,6 +271,7 @@ local function questOrder(p: player, questId: string) :: boolean:
         remove {_questId} from {quest.has::%{_p}'s uuid%::*}
         add {_questId} to {quest.ordering::%{_p}'s uuid%::*}
         logInfo("QUEST_ORDERED", getQuestLogParameters({_p}'s uuid, {_questId}))
+        questTriggerStatisticsOrderInit({_p}, {_questId})
         return true
 
     logError("ERR_QUEST_ORDER", getQuestLogParameters({_p}'s uuid, {_questId}))
