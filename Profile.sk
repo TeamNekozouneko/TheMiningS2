@@ -104,3 +104,7 @@ function profileStatisticsSet(p: player, statType: string, value: number):
 function profileStatisticsGet(p: player, statType: string) :: number:
     return 0 if {profile.statistics::%{_p}'s uuid%::%{_statType}%} is not set
     return {profile.statistics::%{_p}'s uuid%::%{_statType}%}
+function profileStatisticsClear(p: player, statType: string) :: boolean:
+    return false if {profile.statistics::%{_p}'s uuid%::%{_statType}%} is not set
+    clear {profile.statistics::%{_p}'s uuid%::%{_statType}%}
+    return true
