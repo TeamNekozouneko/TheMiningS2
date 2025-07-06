@@ -216,7 +216,7 @@ function questTriggerIncreaseHandle(p: player, questId: string, increaseValue: i
     if {_after} >= {_maxTrigger}:
         #完了処理
         set {quest.triggers::%{_p}'s uuid%::%{_questId}%} to {_maxTrigger}
-        questComplete({_p}, {_questId})
+        questComplete({_p}, {_questId}, true)
     else:
         #増加処理
         add {_increaseValue} to {quest.triggers::%{_p}'s uuid%::%{_questId}%}
@@ -269,8 +269,12 @@ local function questOrder(p: player, questId: string) :: boolean:
     logError("ERR_QUEST_ORDER", getQuestLogParameters({_p}'s uuid, {_questId}))
     return false
 
-local function questComplete(p: player, questId: string) :: boolean:
-    if isQuestCompletable({_p}, {_questId}) is true:
+local function questComplete(p: player, questId: string, isSkipCondition: boolean = false) :: boolean:
+    set {_flag} to false
+    set {_flag} to true if {_isSkipCondition} is true
+    set {_flag} to true if isQuestCompletable({_p}, {_questId}) is true
+
+    if {_flag} is true:
         remove {_questId} from {quest.ordering::%{_p}'s uuid%::*}
         add {_questId} to {quest.complete::%{_p}'s uuid%::*}
         logInfo("QUEST_COMPLETE", getQuestLogParameters({_p}'s uuid, {_questId}))
