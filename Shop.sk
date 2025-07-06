@@ -63,6 +63,7 @@ function onInventoryCloseShopHandle(p: player):
     set {_invName} to name of {_p}'s current inventory
     exit if {_invName} is not {@SELL_TITLE_NAME}
 
+    set {_totalAmount} to 0
     set {_items::*} to all items in {_p}'s current inventory
     loop {_items::*}:
         continue if loop-value is {@SELL_UNAVAILABLE_ICON}
@@ -72,6 +73,7 @@ function onInventoryCloseShopHandle(p: player):
         set {_itemId} to getItemId(loop-value)
         set {_price} to getDefine("SELL_PRICE::%{_itemId}%")
         set {_amount} to item amount of loop-value
+        add {_amount} to {_totalAmount}
         set {_unSellable} to true if {_itemId} is not set
         set {_unSellable} to true if {_price} is not set
 
@@ -87,6 +89,9 @@ function onInventoryCloseShopHandle(p: player):
     else:
         send substitution(getDefine("LANG::SUCCESS_SHOP_SOLD"), formatNumber({_totalSellPrice})) to {_p}
         profileMoneyIncrease({_p}, {_totalSellPrice}, "SHOP_SELL")
+
+        #以下、クエスト用処理
+        questTriggerIncreaseHandle({_p}, "SELL_ITEM_100", {_totalAmount})
     give {_unSellableItems::*} to {_p}
 
 #Interface

@@ -1,6 +1,6 @@
 #==================================================
 #| #quests/SavingMoney.sk
-#| SavingMoney500, 1000, 5000の完了チェックハンドラーの実装モジュール
+#| SavingMoney500, 1000, 5000の定期完了チェックハンドラーの実装モジュール
 #|
 #| Nekozouneko Group Developer
 #==================================================
@@ -16,8 +16,8 @@ function questCompleteCheckHandler_SavingMoney():
 
     #Checking
     loop {_players_500::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 500]:
-        questComplete(loop-player, {_questId_500})
+        questTriggerIncreaseHandle(loop-player, {_questId_500})
     loop {_players_1000::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 1000]:
-        questComplete(loop-player, {_questId_1000})
+        questCquestTriggerIncreaseHandleomplete(loop-player, {_questId_1000})
     loop {_players_5000::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 5000]:
-        questComplete(loop-player, {_questId_5000})
+        questTriggerIncreaseHandle(loop-player, {_questId_5000})

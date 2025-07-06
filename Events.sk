@@ -16,6 +16,7 @@ on load:
     smeltingSmeltOnGuiHandler()
     smeltingSmeltOnBackGroundHandler()
     questAssignHandler()
+    questPeriodicCheckHandlerInit()
 
 every second:
     loop all players:
