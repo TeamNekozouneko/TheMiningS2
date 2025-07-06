@@ -208,6 +208,19 @@ local function getTrigger(p: player, questId: string) :: integer:
     return 0 if {_trigger} is not set
     return {_trigger}
 
+function questTriggerIncreaseHandle(p: player, questId: string, increaseValue: integer = 1):
+    exit if isQuestCompletable({_p}, {_questId}) is false
+    
+    set {_after} to getTrigger({_p}, {_questId}) + {_increaseValue}
+    set {_maxTrigger} to getDefine("QUEST_COMPLETE_TRIGGER::%{_questId}%")
+    if {_after} >= {_maxTrigger}:
+        #完了処理
+        set {quest.triggers::%{_p}'s uuid%::%{_questId}%} to {_maxTrigger}
+        questComplete({_p}, {_questId})
+    else:
+        #増加処理
+        add {_increaseValue} to {quest.triggers::%{_p}'s uuid%::%{_questId}%}
+
 local function getQuestIdFromItem(item: item) :: string:
     return string tag "TheMining;quest;id" of custom nbt of {_item}
 
@@ -257,7 +270,7 @@ local function questOrder(p: player, questId: string) :: boolean:
     return false
 
 local function questComplete(p: player, questId: string) :: boolean:
-    if isQuestOrderable({_p}, {_questId}) is true:
+    if isQuestCompletable({_p}, {_questId}) is true:
         remove {_questId} from {quest.ordering::%{_p}'s uuid%::*}
         add {_questId} to {quest.complete::%{_p}'s uuid%::*}
         logInfo("QUEST_COMPLETE", getQuestLogParameters({_p}'s uuid, {_questId}))
