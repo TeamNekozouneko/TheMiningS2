@@ -308,8 +308,8 @@ local function questRewards(p: player, questId: string) :: boolean:
         #報酬の付与
         set {_exp} to getDefine("QUEST_REWARD::%{_questId}%::EXP")
         set {_money} to getDefine("QUEST_REWARD::%{_questId}%::MONEY")
-        profileExpIncrease({_p}, {_exp} parsed as number, "QUEST_REWARDS") if {_exp} is not set
-        profileMoneyIncrease({_p}, {_money} parsed as number, "QUEST_REWARDS") if {_money} is not set
+        profileExpIncrease({_p}, {_exp} parsed as number, "QUEST_REWARDS") if {_exp} is set
+        profileMoneyIncrease({_p}, {_money} parsed as number, "QUEST_REWARDS") if {_money} is set
         logInfo("QUEST_RECEIVE_REWARDS", getQuestLogParameters({_p}'s uuid, {_questId}))
         return true
 
