@@ -272,6 +272,10 @@ local function isQuestRewardable(p: player, questId: string) :: boolean:
     return false if {quest.rewarded::%{_p}'s uuid%::*} contains {_questId}
     return true
 
+function isQuestInProgress(p: player, questId: string) :: boolean:
+    return false if {quest.ordering::%{_p}'s uuid%::*} doesn't contain {_questId}
+    return true
+
 local function questOrder(p: player, questId: string) :: boolean:
     if isQuestOrderable({_p}, {_questId}) is true:
         remove {_questId} from {quest.has::%{_p}'s uuid%::*}
