@@ -10,14 +10,14 @@ function questCompleteCheckHandler_SavingMoney():
     set {_questId_500} to "SAVING_MONEY_500"
     set {_questId_1000} to "SAVING_MONEY_1000"
     set {_questId_5000} to "SAVING_MONEY_5000"
-    set {_players_500::*} to all players where [isQuestCompletable({_p}, {_questId_500})]
-    set {_players_1000::*} to all players where [isQuestCompletable({_p}), {_questId_1000}]
-    set {_players_5000::*} to all players where [isQuestCompletable({_p}), {_questId_5000}]
+    set {_players_500::*} to all players where [isQuestCompletable(input, {_questId_500})]
+    set {_players_1000::*} to all players where [isQuestCompletable(input), {_questId_1000}]
+    set {_players_5000::*} to all players where [isQuestCompletable(input), {_questId_5000}]
 
     #Checking
     loop {_players_500::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 500]:
-        questTriggerIncreaseHandle(loop-player, {_questId_500})
+        questTriggerIncreaseHandle(loop-value, {_questId_500})
     loop {_players_1000::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 1000]:
-        questCquestTriggerIncreaseHandleomplete(loop-player, {_questId_1000})
+        questCquestTriggerIncreaseHandleomplete(loop-value, {_questId_1000})
     loop {_players_5000::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 5000]:
-        questTriggerIncreaseHandle(loop-player, {_questId_5000})
+        questTriggerIncreaseHandle(loop-value, {_questId_5000})

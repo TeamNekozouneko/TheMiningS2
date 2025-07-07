@@ -24,7 +24,7 @@ Options:
 
 function questPeriodicCheckHandlerInit():
     set {_checkInterval} to getDefine("QUEST_CHECK_INTERVAL")
-    async run 0 ticks later repeating {_checkInterval}:
+    async run 0 ticks later repeating every {_checkInterval}:
         #Periodic Handler
         questCompleteCheckHandler_SavingMoney()
 
@@ -229,7 +229,7 @@ function questTriggerIncreaseHandle(p: player, questId: string, increaseValue: i
         add {_increaseValue} to {quest.triggers::%{_p}'s uuid%::%{_questId}%}
 
 local function questTriggerStatisticsOrderInit(p: player, questId: string):
-    profileStatisticsSet({_p}, "_questTrigger_currentMoney")
+    profileStatisticsSet({_p}, "_questTrigger_currentMoney", 0)
 
 local function questTriggerStatisticsCompleteInit(p: player, questId: string):
     profileStatisticsClear({_p}, "_questTrigger_currentMoney")
