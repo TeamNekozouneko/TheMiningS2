@@ -92,6 +92,9 @@ local function giveEnchantmentProcessHandle(p: player, clickedItem: item, item: 
     profileExpDecrease({_p}, {_currentCost}, "ENCHANTMENT")
     logInfo("ENCHANT_GIVE", getEnchantmentLogParameters({_p}'s uuid, {_itemId}, {_enchantment}, {_currentEnchantmentLevel}+1))
     send getDefine("LANG::SUCCESS_ENCHANTMENT") to {_p}
+
+    #クエスト ENCHANT_PICKAXE_ONCE
+    questTriggerIncreaseHandle({_p}, "ENCHANT_PICKAXE_ONCE")
     
 
 #レンダリング
