@@ -11,6 +11,10 @@ function teleportDestination(p: player, destiName: string) :: boolean:
     if isDestinationAvailable({_location}) is false:
         return false
     force teleport {_p} to {_location}
+
+    #クエスト VISIT_ANY_MINE
+    questTriggerIncreaseHandle({_p}, "VISIT_ANY_MINE")
+    
     return true
 
 function isDestinationAvailable(desti: location) :: boolean:
