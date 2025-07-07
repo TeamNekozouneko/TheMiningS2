@@ -58,7 +58,6 @@ function onInventoryClickQuestHandle(p: player, item: itemtype) :: boolean:
     #QUEST_MAIN
     if {_invName} is {@MAIN_TITLE_NAME}:
         set {_questId} to getQuestIdFromItem({_item})
-        broadcast "DEBUG: %{_questId}%"
         return true if {_questId} is not set
         questClickHandle({_p}, {_questId})
         return true
@@ -128,7 +127,7 @@ local function renderQuests(p: player):
     set {_currentDailySlotIndex} to 1
     #未受注（Has）
     loop {quest.has::%{_p}'s uuid%::*}:
-        set {_item} to getBaseQuestDisplayItem(loop-value, {_currentDailySlotIndex})
+        set {_item} to getBaseQuestDisplayItem(loop-value, getBannerPatternItemsFromModulo({_currentDailySlotIndex}))
         #Lores
         add "&r" to lore of {_item}
         add "&cℹ 受注していません" to lore of {_item}
@@ -140,7 +139,7 @@ local function renderQuests(p: player):
     loop {quest.ordering::%{_p}'s uuid%::*}:
         set {_completeTrigger} to getDefine("QUEST_COMPLETE_TRIGGER::%loop-value%")
         set {_currentTrigger} to getTrigger({_p}, loop-value)
-        set {_item} to getBaseQuestDisplayItem(loop-value, {_currentDailySlotIndex})
+        set {_item} to getBaseQuestDisplayItem(loop-value, getBannerPatternItemsFromModulo({_currentDailySlotIndex}))
         #Lores
         add "&r" to lore of {_item}
         add "&7(&3%{_currentTrigger}%&7/%{_completeTrigger}%&7)" to lore of {_item}
@@ -150,17 +149,17 @@ local function renderQuests(p: player):
         add 1 to {_currentDailySlotIndex}
     #完了済み（Complete）
     loop {quest.complete::%{_p}'s uuid%::*}:
-        set {_item} to getBaseQuestDisplayItem(loop-value, {_currentDailySlotIndex})
+        set {_item} to getBaseQuestDisplayItem(loop-value, experience bottle)
         #Lores
         add "&r" to lore of {_item}
         add "&aℹ クエストが達成済みです" to lore of {_item}
         add "&e» クリックして報酬を受け取る «" to lore of {_item}
 
-        set slot {_dailySlots::%{_currentDailySlotIndex}%} of {_p}'s current inventory to Glowing({_item})
+        set slot {_dailySlots::%{_currentDailySlotIndex}%} of {_p}'s current inventory to {_item}
         add 1 to {_currentDailySlotIndex}
     #報酬受け取り済み（Rewarded）
     loop {quest.rewarded::%{_p}'s uuid%::*}:
-        set {_item} to getBaseQuestDisplayItem(loop-value, {_currentDailySlotIndex})
+        set {_item} to getBaseQuestDisplayItem(loop-value, gunpowder)
         #Lores
         add "&r" to lore of {_item}
         add "&cℹ 報酬を受け取り済みです" to lore of {_item}
@@ -168,11 +167,11 @@ local function renderQuests(p: player):
         set slot {_dailySlots::%{_currentDailySlotIndex}%} of {_p}'s current inventory to {_item}
         add 1 to {_currentDailySlotIndex}
 
-local function getBaseQuestDisplayItem(questId: string, itemModuloValue: integer = 1) :: item:
+local function getBaseQuestDisplayItem(questId: string, baseItem: item) :: item:
     set {_questTitle} to getDefine("QUEST_TITLE::%{_questId}%")
     set {_itemName} to "&b%{_questTitle}%"
     set {_lores::*} to "&3» 報酬" and getRewardLores({_questId})
-    set {_item} to getBannerPatternItemsFromModulo({_itemModuloValue}) named {_itemName} with lore {_lores::*}
+    set {_item} to {_baseItem} named {_itemName} with lore {_lores::*}
     set string tag "TheMining;quest;id" of custom nbt of {_item} to {_questId}
     return {_item}
 
@@ -308,8 +307,8 @@ local function questRewards(p: player, questId: string) :: boolean:
         #報酬の付与
         set {_exp} to getDefine("QUEST_REWARD::%{_questId}%::EXP")
         set {_money} to getDefine("QUEST_REWARD::%{_questId}%::MONEY")
-        profileExpIncrease({_p}, {_exp} parsed as number, "QUEST_REWARDS") if {_exp} is set
-        profileMoneyIncrease({_p}, {_money} parsed as number, "QUEST_REWARDS") if {_money} is set
+        profileExpIncrease({_p}, {_exp}, "QUEST_REWARDS") if {_exp} is set
+        profileMoneyIncrease({_p}, {_money}, "QUEST_REWARDS") if {_money} is set
         logInfo("QUEST_RECEIVE_REWARDS", getQuestLogParameters({_p}'s uuid, {_questId}))
         return true
 
