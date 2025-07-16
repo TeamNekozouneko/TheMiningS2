@@ -34,6 +34,17 @@ function handleDefine():
     set {define::LANG::ORES_REVIVING} to "&c&l鉱石復活 &4» &f鉱石を復活させています..."
     set {define::LANG::ORES_REVIVED} to "&c&l鉱石復活 &4» &f${}&7個の鉱石が復活しました！"
 
+    add "&8========================================" to {define::LANG::QUEST_BASE::*}
+    add "&6∵ &6&l${} ${} &6∴" to {define::LANG::QUEST_BASE::*}
+    add "&7${}" to {define::LANG::QUEST_BASE::*}
+    add "&r" to {define::LANG::QUEST_BASE::*}
+    add "&3» 報酬" to {define::LANG::QUEST_BASE::*}
+    add "${}" to {define::LANG::QUEST_BASE::*}
+    add "&8========================================" to {define::LANG::QUEST_BASE::*}
+
+    set {define::LANG::QUEST_DAILY} to "デイリークエスト"
+    set {define::LANG::QUEST_WEEKLY} to "ウィークリークエスト"
+
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
 

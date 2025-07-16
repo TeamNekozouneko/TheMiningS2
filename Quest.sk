@@ -76,13 +76,14 @@ local function questClickHandle(p: player, questId: string):
 
 function questAssignHandler():
     run 0 ticks later repeating every second:
+        set {_quests::*} to getDefineList("QUESTS")
         #ログインプレイヤーのデイリークエスト自動割り当て
         set {_dailyAssignMax} to getDefine("QUEST_DAILY_ASSIGN_MAX")
-        set {_quests::*} to getDefineList("QUESTS") where [isQuestDaily(input) is true]
+        set {_dailyQuests::*} to {_quests::*} where [isQuestDaily(input) is true]
         loop all players:
             set {_assignedAmount} to getAssignedAmount(loop-player, 1)
             while {_assignedAmount} < {_dailyAssignMax}:
-                exit loop if size of {_quests::*} <= {_assignedAmount}
+                exit loop if size of {_dailyQuests::*} <= {_assignedAmount}
                 exit loop if questAssign(loop-player, 1) is false
         #存在しないクエストの自動修正
         loop all players:
@@ -92,10 +93,18 @@ function questAssignHandler():
             remove {quest.rewarded::%loop-player's uuid%::*} where [{_quests::*} doesn't contain input] from {quest.rewarded::%loop-player's uuid%::*}
 
 local function questAssign(p: player, questType: integer) :: boolean:
+    broadcast "ASSIGN=HANDLED"
     if {_questType} is 1:
+        set {_dailyAssignMax} to getDefine("QUEST_DAILY_ASSIGN_MAX")
         set {_quests::*} to getDefineList("QUESTS") where [isQuestDaily(input) is true]
+
         set {_random} to random element out of ({_quests::*} where [{quest.has::%{_p}'s uuid%::*} doesn't contain input])
+        set {_assignedAmount} to getAssignedAmount({_p}, 1)
         return false if {_random} is not set
+        return false if {_assignedAmount} >= {_dailyAssignMax}
+
+        broadcast "HANDLE=DETAILS: %{_random}%, %{_dailyAssignMax}% <= %{_assignedAmount}%"
+
         add {_random} to {quest.has::%{_p}'s uuid%::*}
         logInfo("QUEST_ASSIGNED", getQuestLogParameters({_p}'s uuid, {_random}))
         return true
@@ -194,6 +203,41 @@ local function getBannerPatternItemsFromModulo(digest: integer) :: item:
 
     return {_patterns::%{_index}%}
 
+#enum type {
+# QUEST_ORDERED,
+# QUEST_COMPLETE,
+# QUEST_REWARDS
+#}
+local function sendNotify(p: player, type: string, questId: string):
+    set {_base::*} to getDefineList("LANG::QUEST_BASE")
+    #メッセージベース
+    #1番目：デイリークエスト or ウィークリークエスト
+    #2番目：クエスト状況
+    #3番目：クエスト名
+    #4番目：報酬内容（getRewardLores関数を使用）
+    set {_message} to concat {_base::*} with nl
+
+    #クエスト状況定義
+    set {_status::QUEST_ORDERED} to "&a&l受注"
+    set {_status::QUEST_COMPLETE} to "&b&l完了"
+    set {_status::QUEST_REWARDS} to "&d&l報酬"
+
+    set {_rewards::*} to getRewardLores({_questId})
+    set {_rewardLoreText} to concat {_rewards::*} with nl
+    set {_questType} to getDefine("LANG::QUEST_DAILY") if isQuestDaily({_questId}) is true
+    set {_questType} to getDefine("LANG::QUEST_WEEKLY") if isQuestWeekly({_questId}) is true
+
+    exit if {_status::%{_type}%} is not set
+    exit if size of {_rewards::*} <= 0
+
+    set {_message} to substitution({_message}, {_questType})
+    set {_message} to substitution({_message}, {_status::%{_type}%})
+    set {_message} to substitution({_message}, getDefine("QUEST_TITLE::%{_questId}%"))
+    set {_message} to substitution({_message}, {_rewardLoreText})
+
+    send {_message} to {_p}
+
+
 local function getAssignedAmount(p: player, questType: integer) :: integer:
     set {_result} to 0
     if {_questType} is 1:
@@ -279,6 +323,7 @@ local function questOrder(p: player, questId: string) :: boolean:
     if isQuestOrderable({_p}, {_questId}) is true:
         remove {_questId} from {quest.has::%{_p}'s uuid%::*}
         add {_questId} to {quest.ordering::%{_p}'s uuid%::*}
+        sendNotify({_p}, "QUEST_ORDERED", {_questId})
         logInfo("QUEST_ORDERED", getQuestLogParameters({_p}'s uuid, {_questId}))
         questTriggerStatisticsOrderInit({_p}, {_questId})
         return true
@@ -294,6 +339,7 @@ local function questComplete(p: player, questId: string, isSkipCondition: boolea
     if {_flag} is true:
         remove {_questId} from {quest.ordering::%{_p}'s uuid%::*}
         add {_questId} to {quest.complete::%{_p}'s uuid%::*}
+        sendNotify({_p}, "QUEST_COMPLETE", {_questId})
         logInfo("QUEST_COMPLETE", getQuestLogParameters({_p}'s uuid, {_questId}))
         return true
         
@@ -309,6 +355,7 @@ local function questRewards(p: player, questId: string) :: boolean:
         set {_money} to getDefine("QUEST_REWARD::%{_questId}%::MONEY")
         profileExpIncrease({_p}, {_exp}, "QUEST_REWARDS") if {_exp} is set
         profileMoneyIncrease({_p}, {_money}, "QUEST_REWARDS") if {_money} is set
+        sendNotify({_p}, "QUEST_REWARDS", {_questId})
         logInfo("QUEST_RECEIVE_REWARDS", getQuestLogParameters({_p}'s uuid, {_questId}))
         return true
 
