@@ -323,7 +323,12 @@ local function questOrder(p: player, questId: string) :: boolean:
     if isQuestOrderable({_p}, {_questId}) is true:
         remove {_questId} from {quest.has::%{_p}'s uuid%::*}
         add {_questId} to {quest.ordering::%{_p}'s uuid%::*}
+
+        #UI
+        playSound({_p}, "QuestOrdered")
         sendNotify({_p}, "QUEST_ORDERED", {_questId})
+
+        #データ操作
         logInfo("QUEST_ORDERED", getQuestLogParameters({_p}'s uuid, {_questId}))
         questTriggerStatisticsOrderInit({_p}, {_questId})
         return true
@@ -339,7 +344,11 @@ local function questComplete(p: player, questId: string, isSkipCondition: boolea
     if {_flag} is true:
         remove {_questId} from {quest.ordering::%{_p}'s uuid%::*}
         add {_questId} to {quest.complete::%{_p}'s uuid%::*}
+
+        #UI
+        playSound({_p}, "QuestComplete")
         sendNotify({_p}, "QUEST_COMPLETE", {_questId})
+
         logInfo("QUEST_COMPLETE", getQuestLogParameters({_p}'s uuid, {_questId}))
         return true
         
@@ -350,12 +359,17 @@ local function questRewards(p: player, questId: string) :: boolean:
     if isQuestRewardable({_p}, {_questId}) is true:
         remove {_questId} from {quest.complete::%{_p}'s uuid%::*}
         add {_questId} to {quest.rewarded::%{_p}'s uuid%::*}
+        
         #報酬の付与
         set {_exp} to getDefine("QUEST_REWARD::%{_questId}%::EXP")
         set {_money} to getDefine("QUEST_REWARD::%{_questId}%::MONEY")
         profileExpIncrease({_p}, {_exp}, "QUEST_REWARDS") if {_exp} is set
         profileMoneyIncrease({_p}, {_money}, "QUEST_REWARDS") if {_money} is set
+
+        #UI
+        playSound({_p}, "QuestRewards")
         sendNotify({_p}, "QUEST_REWARDS", {_questId})
+
         logInfo("QUEST_RECEIVE_REWARDS", getQuestLogParameters({_p}'s uuid, {_questId}))
         return true
 

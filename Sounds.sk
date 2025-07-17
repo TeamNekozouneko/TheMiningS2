@@ -9,6 +9,9 @@ function playSound(p: objects, soundId: string):
     soundHandle_OreReviveStart({_p::*}) if {_soundId} is "OreReviveStart"
     soundHandle_OreReviving({_p::*}) if {_soundId} is "OreReviving"
     soundHandle_OreRevived({_p::*}) if {_soundId} is "OreRevived"
+    soundHandle_QuestOrdered({_p::*}) if {_soundId} is "QuestOrdered"
+    soundHandle_QuestComplete({_p::*}) if {_soundId} is "QuestComplete"
+    soundHandle_QuestRewards({_p::*}) if {_soundId} is "QuestRewards"
 
 
 local function soundHandle_OreReviveStart(p: objects):
@@ -21,4 +24,13 @@ local function soundHandle_OreReviving(p: objects):
 
 local function soundHandle_OreRevived(p: objects):
     play sound "minecraft:block.note_block.bell" with pitch 2 to {_p::*}
+
+local function soundHandle_QuestOrdered(p: objects):
+    play sound "minecraft:block.note_block.xylophone" with pitch 1.5 to {_p::*}
+
+local function soundHandle_QuestComplete(p: objects):
+    play sound "entity.player.levelup" with pitch 1.5 to {_p::*}
+
+local function soundHandle_QuestRewards(p: objects):
+    play sound "minecraft:entity.experience_orb.pickup" with pitch 1.5 to {_p::*}
 
