@@ -11,3 +11,12 @@ function initMap():
 function onFirstJoinHandle(p: player):
     teleport {_p} to getDefine("LOCATION::MINING_1")
     give getItemData("FIRST_PICKAXE") to {_p}
+
+function checkInstanceEnvironment():
+    set {_timezone} to now formatted as "z"
+    exit if {_timezone} is "GMT+09:00"
+    send "&c=======================================" to console
+    send "&c[The Mining] InstanceEnvironmentChecker" to console
+    send "&cタイムゾーンが不正です。" to console
+    send "&c時間帯に準拠する処理に不具合が生じる恐れがあります。" to console
+    send "&c=======================================" to console

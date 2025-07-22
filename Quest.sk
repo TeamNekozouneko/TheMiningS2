@@ -15,6 +15,8 @@
 #}
 
 Options:
+    QUEST_RESET_CHECK_INTERVAL: 10 second #0:00を回ったかをチェックする間隔
+
     MAIN_TITLE_NAME: "&6&lクエスト &8マイクエストを見る"
     MAIN_BACKGROUND_ICON: gray stained glass pane named "&r"
 
@@ -88,6 +90,27 @@ function questAssignHandler():
 
                 add {_random} to {quest.has::%loop-player's uuid%::*}
                 logInfo("QUEST_ASSIGNED", getQuestLogParameters(loop-player's uuid, {_random}))
+
+function questResetAssignHandler():
+    run 0 ticks later repeating every {@QUEST_RESET_CHECK_INTERVAL}:
+        set {_now} to now
+        set {_day} to ({_now} formatted as "dd") parsed as integer
+
+        if {quest.lastFlaggedDay} and {_day} is set:
+            if {quest.lastFlaggedDay} is not {_day}:
+                #リセット
+                add {_now} formatted human-readable to {_res::*}
+                add {quest.lastFlaggedDay} to {_res::*}
+                add {_day} to {_res::*}
+                logInfo("QUEST_RESETTED", {_res::*})
+
+                loop all offline players:
+                    clear {quest.has::%loop-value's uuid%::*}
+                    clear {quest.ordering::%loop-value's uuid%::*}
+                    clear {quest.complete::%loop-value's uuid%::*}
+                    clear {quest.rewarded::%loop-value's uuid%::*}
+                
+        set {quest.lastFlaggedDay} to {_day}
 
 local function renderQuests(p: player):
     set {_invName} to name of {_p}'s current inventory

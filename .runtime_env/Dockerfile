@@ -3,7 +3,8 @@ FROM ubuntu:latest
 #Make Environment
 RUN apt clean
 RUN apt update -y
-RUN apt install wget -y
+RUN apt install wget tzdata -y
+RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 RUN wget https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-aarch64_bin.tar.gz -P /root/
 RUN (cd /root && tar xzvf /root/graalvm-jdk-21_linux-aarch64_bin.tar.gz)
 RUN wget https://api.papermc.io/v2/projects/paper/versions/1.21.3/builds/82/downloads/paper-1.21.3-82.jar -O /root/server.jar

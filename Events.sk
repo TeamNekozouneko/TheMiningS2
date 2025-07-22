@@ -6,6 +6,7 @@
 #==================================================
 
 on load:
+    checkInstanceEnvironment()
     initDefine()
     initMap()
     oreReviveAsyncHandler()
@@ -17,6 +18,7 @@ on load:
     smeltingSmeltOnBackGroundHandler()
     questAssignHandler()
     questPeriodicCheckHandlerInit()
+    questResetAssignHandler()
 
 every second:
     loop all players:
