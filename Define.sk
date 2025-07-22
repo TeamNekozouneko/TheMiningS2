@@ -164,6 +164,10 @@ function handleDefine():
     #鉱石復活間隔（Ores.sk）
     set {define::REVIVE_INTERVAL} to 300 second
 
+    #鉱石復活箇所Schematicの定義（〇〇.schem）
+    add "mine01" to {define::REVIVE_ORE_SCHEMATICS::*}
+    add "mine02" to {define::REVIVE_ORE_SCHEMATICS::*}
+
     #NPC種類の定義（NPCs.sk）
     add "LEVELUP" to {define::NPCS::*}
     add "SHOP" to {define::NPCS::*}

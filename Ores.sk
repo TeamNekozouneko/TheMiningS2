@@ -170,7 +170,8 @@ function oreReviveAsyncHandler():
             wait 10 tick
 
         #Revive Processing
-        paste schematic "mine01" at location(0, 0, 0, world "world", 0, 0)
+        loop getDefineList("REVIVE_ORE_SCHEMATICS"):
+            paste schematic loop-value at location(0, 0, 0, world "world", 0, 0)
         
         #Revive Processed
         playSound(all players, "OreRevived")
