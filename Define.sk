@@ -49,20 +49,21 @@ function handleDefine():
 
     #ScoreBoard.sk
     set {define::SCOREBOARD_TITLE} to "&c&l The Mining"
-    add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &aレベル&7: &a${}" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &bEXP&7: &b${}" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &b採掘数: ${}" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &e所持金&7: &6${}円" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &aThe Mining Season-2公開！" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &b皆様のご意見&aはDiscordまで。" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &7Version RELEASE-0" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8¦¦ &bwww.nekozouneko.net" to {define::SCOREBOARD_CONTENTS::*}
+    add "" to {define::SCOREBOARD_CONTENTS::*}
+    add "&b🌐 現在地" to {define::SCOREBOARD_CONTENTS::*}
+    add "&b・&f${}" to {define::SCOREBOARD_CONTENTS::*}
+    add "" to {define::SCOREBOARD_CONTENTS::*}
+    add "&bあなたの情報" to {define::SCOREBOARD_CONTENTS::*}
+    add "&b・&fレベル &a${}" to {define::SCOREBOARD_CONTENTS::*}
+    add "&b・&fEXP &b${}" to {define::SCOREBOARD_CONTENTS::*}
+    add "&b・&f採掘数 &3${}" to {define::SCOREBOARD_CONTENTS::*}
+    add "&b・&f所持金 &6${}円" to {define::SCOREBOARD_CONTENTS::*}
+    add "" to {define::SCOREBOARD_CONTENTS::*}
+    add "&8» &aSeason-2 公開！" to {define::SCOREBOARD_CONTENTS::*}
+    add "&8» &7アップデート要望は" to {define::SCOREBOARD_CONTENTS::*}
+    add "&8» &7Discordまで！" to {define::SCOREBOARD_CONTENTS::*}
+    add "" to {define::SCOREBOARD_CONTENTS::*}
+    add "&bwww.nekozouneko.net" to {define::SCOREBOARD_CONTENTS::*}
 
     #アイテム名の定義（Items.sk）
     set {define::LANG_ITEMS::stone} to "石"
@@ -192,7 +193,7 @@ function handleDefine():
     set {define::LEVELUP_INITIAL_TERM} to 2000 #初項
     set {define::LEVELUP_COMMON_RATIO} to 2 #公比
 
-    #場所定義（Map.sk）
+    #Destination定義（Map.sk）
     set {define::LOCATION::LOBBY} to location(-83.5, 67.6, 4.5, world "world", 140, 0)
     set {define::LOCATION::MINING_1} to location(-164.5, 115.1, 246.5, world "world", 90, 0)
     set {define::LOCATION::MINING_2} to location(89.0, 113.1, 291.0, world "world", 135, 0)
@@ -218,6 +219,24 @@ function handleDefine():
     set {define::PORTAL::M2-TO-LOBBY::2} to location(92.0, 117, 293.0, world "world", 0, 0)
     set {define::PORTAL::LOBBY-TO-M2::1} to location(-70.0, 71, -74.0, world "world", 0, 0)
     set {define::PORTAL::LOBBY-TO-M2::2} to location(-71.0, 74, -77.0, world "world", 0, 0)
+
+    #場所定義（Map.sk）
+    add "LOBBY" to {define::REGIONS::*}
+    add "M1" to {define::REGIONS::*}
+    add "M2" to {define::REGIONS::*}
+
+    #場所範囲定義（Map.sk）
+    set {define::REGION::LOBBY::1} to location(-227.6, 0, -144.5, world "world", 0, 0)
+    set {define::REGION::LOBBY::2} to location(32.5, 300, 115.5, world "world", 0, 0)
+    set {define::REGION::M1::1} to location(-314.5, 0, 377.5, world "world", 0, 0)
+    set {define::REGION::M1::2} to location(-142.5, 300, 160.5, world "world", 0, 0)
+    set {define::REGION::M2::1} to location(156.5, 0, 357.5, world "world", 0, 0)
+    set {define::REGION::M2::2} to location(-35.5, 300, 165.5, world "world", 0, 0)
+
+    #場所の名前定義（Map.sk）
+    set {define::REGION_NAME::LOBBY} to "広場"
+    set {define::REGION_NAME::M1} to "採掘所1"
+    set {define::REGION_NAME::M2} to "採掘所2"
 
     #売店の売却価格の定義（Shop.sk）
     set {define::SELL_PRICE::COBBLESTONE} to 0.5

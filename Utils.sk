@@ -31,7 +31,7 @@ function substitution(content: string, args: string) :: string:
     return {_content}
 
 #ある地点がある2地点のロケーションの内側にあるかを調べる関数
-#※<location> is within <location> and <location>はバグりました。
+#※<location> is within <location> and <location>は小数点を扱う位置だとバグりました。
 function isWithinLocation(start: location, end: location, target: location) :: boolean:
     set {_startX} to x location of {_start}
     set {_startY} to y location of {_start}

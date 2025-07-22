@@ -7,6 +7,9 @@
 
 function scoreboardUpdate(player: player):
     #Define Arguments
+    set {_region} to getDefine("REGION_NAME::%getRegion({_player})%")
+    set {_region} to "不明" if {_region} is not set
+    add {_region} to {_args::*}
     add String(profileLevelGet({_player})) to {_args::*}
     add String(profileExpGet({_player})) to {_args::*}
     add formatNumber(profileStatisticsGet({_player}, "mineQuantity")) to {_args::*}

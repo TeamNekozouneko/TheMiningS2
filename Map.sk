@@ -75,4 +75,19 @@ function onJumpPadHandle(p: player, block: block):
 
     set {_vector} to vector from yaw {_yaw} and pitch -1*{_pitch}
     push {_p} {_vector} at speed {_speed}
-                
+
+
+function isInRegion(p: player, region: string) :: boolean:
+    set {_target} to {_p}'s location
+    loop getDefineList("REGIONS"):
+        set {_start} to getDefine("REGION::%loop-value%::1")
+        set {_end} to getDefine("REGION::%loop-value%::2")
+        return true if isWithinLocation({_start}, {_end}, {_target}) is true
+    return false
+
+function getRegion(p: player) :: string:
+    set {_target} to {_p}'s location
+    loop getDefineList("REGIONS"):
+        set {_start} to getDefine("REGION::%loop-value%::1")
+        set {_end} to getDefine("REGION::%loop-value%::2")
+        return loop-value if isWithinLocation({_start}, {_end}, {_target}) is true
