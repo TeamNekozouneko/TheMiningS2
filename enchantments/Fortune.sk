@@ -9,11 +9,11 @@ Options:
     PERCENT_PER_FORTUNE_LEVEL: 5
     FORTUNE_MULTIPLIER: random integer between 2 and 3
 
-function enchantmentFortuneDropItemHandle(item: item, fortuneLevel: integer) :: item:
-    return {_item} if {_fortuneLevel} is not set
+function enchantmentGetFortuneMultiplier(fortuneLevel: integer) :: integer:
+    return 1 if {_fortuneLevel} is not set
     
     set {_percent} to {_fortuneLevel} * {@PERCENT_PER_FORTUNE_LEVEL}
     set {_randomInt} to random integer between 1 and 100
     if {_randomInt} is between 1 and {_percent}:
-        set item amount of {_item} to (item amount of {_item}) * {@FORTUNE_MULTIPLIER}
-    return {_item}
+        return {@FORTUNE_MULTIPLIER}
+    return 1

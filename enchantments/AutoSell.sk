@@ -9,23 +9,7 @@ Options:
     SELL_RATIO_PER_LEVEL: 10
     SELL_PROCESS_PENDING_APPLY_INTERVAL: 5
 
-function enchantmentAutoSellSingleHandle(p: player, item: item, autoSellLevel: integer) :: boolean:
-    return false if {_autoSellLevel} is not set
-    return false if isInventoryFreeSpaceAvailable({_p}) is true
-    set {_multiplier} to ({_autoSellLevel} * {@SELL_RATIO_PER_LEVEL}) / 100
-
-    #売却処理
-    set {_itemId} to getItemId({_item})
-    set {_price} to getDefine("SELL_PRICE::%{_itemId}%")
-    return false if {_itemId} is not set
-    return false if {_price} is not set
-
-    set {_amount} to item amount of {_item}
-    add {_price} * {_amount} * {_multiplier} to {autosell.pendingApply::%{_p}'s uuid%}
-
-    return true
-
-function enchantmentAutoSellMultipleHandle(p: player, items: objects, autoSellLevel: integer) :: objects: #return 売却できたアイテム
+function enchantmentAutoSellHandle(p: player, items: objects, autoSellLevel: integer) :: objects: #return 売却できたアイテム
     exit if {_autoSellLevel} is not set
     exit if isInventoryFreeSpaceAvailable({_p}) is true
     set {_multiplier} to ({_autoSellLevel} * {@SELL_RATIO_PER_LEVEL}) / 100

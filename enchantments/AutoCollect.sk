@@ -5,14 +5,7 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function enchantmentAutoCollectSingleHandle(p: player, item: item, autoCollectLevel: integer) :: boolean:
-    return false if {_autoCollectLevel} is not set
-    return false if isInventoryFreeSpaceAvailable({_p}) is false
-    async run 0 ticks later:
-        give {_item} to {_p}
-    return true
-
-function enchantmentAutoCollectMultipleHandle(p: player, items: objects, autoCollectLevel: integer) :: boolean:
+function enchantmentAutoCollectHandle(p: player, items: objects, autoCollectLevel: integer) :: boolean:
     return false if {_autoCollectLevel} is not set
     return false if isInventoryFreeSpaceAvailable({_p}) is false
     async run 0 ticks later:

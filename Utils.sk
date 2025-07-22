@@ -79,3 +79,7 @@ function getAllBannerPatternItems() :: objects:
     add flower banner pattern item to {_patterns::*}
     add globe banner pattern item to {_patterns::*}
     return {_patterns::*}
+
+function getObjects(obj: object) :: objects:
+    add {_obj} to {_obj::*}
+    return {_obj::*}

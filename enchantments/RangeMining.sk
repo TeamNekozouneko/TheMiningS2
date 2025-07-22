@@ -5,13 +5,15 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function enchantmentRangeMiningHandle(p: player, block: block, rangeMiningLevel: integer):
-    exit if {_rangeMiningLevel} is not set
+function enchantmentRangeMiningHandle(p: player, tool: item, block: block, rangeMiningLevel: integer) :: objects:
+    #エンチャントがついていない時は、そのまま変更なしで返却する
+    return getObjects({_block}) if {_rangeMiningLevel} is not set
+
+    #Cuboid生成
     set {_pos1} to block {_rangeMiningLevel} east {_rangeMiningLevel} north ({_rangeMiningLevel}*2)-1 above {_block}
     set {_pos2} to block {_rangeMiningLevel} west {_rangeMiningLevel} south 1 under {_block}
 
-    set {ores.rangeMiningCooldown::%{_p}'s uuid%} to true
-    set {_blocks::*} to all blocks within {_pos1} and {_pos2} where [input is not air]
-    set {_cancelledBlocks::*} to onBreakOresMultipleHandle({_p}, {_blocks::*})
-    remove {_cancelledBlocks::*} from {_blocks::*}
-    update {_blocks::*} as air without neighbouring updates
+    set {_allBlocks::*} to all blocks within {_pos1} and {_pos2} where [input is not air]
+    set {_breakableBlocks::*} to {_allBlocks::*} where [isOreBreakable({_tool}, input) is true]
+    remove {_block} from {_breakableBlocks::*}
+    return {_breakableBlocks::*}

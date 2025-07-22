@@ -31,7 +31,7 @@ on join:
 
 on break:
     cancel drops
-    cancel event if onBreakOresSingleHandle(player, event-block) is false
+    cancel event if onBreakOreHandle(player, event-block) is false
 
 on place:
     cancel event
