@@ -162,11 +162,12 @@ function isOreBreakable(tool: item, block: block) :: boolean:
 #鉱石復活の定期処理
 function oreReviveAsyncHandler():
     run 0 ticks later repeating every getDefine("REVIVE_INTERVAL"):
+        set {_players::*} to getAllPlayersInMine()
         #Revive Countdown
-        playSound(all players, "OreReviveStart")
+        playSound({_players::*} , "OreReviveStart")
         loop 30 times: #15秒分（30 * 10 tick）
-            send action bar getDefine("LANG::ORES_REVIVE_1") to all players if mod(loop-number, 2) != 0
-            send action bar getDefine("LANG::ORES_REVIVE_2") to all players if mod(loop-number, 2) = 0
+            send action bar getDefine("LANG::ORES_REVIVE_1") to {_players::*}  if mod(loop-number, 2) != 0
+            send action bar getDefine("LANG::ORES_REVIVE_2") to {_players::*}  if mod(loop-number, 2) = 0
             wait 10 tick
 
         #Revive Processing
@@ -174,8 +175,8 @@ function oreReviveAsyncHandler():
             paste schematic loop-value at location(0, 0, 0, world "world", 0, 0)
         
         #Revive Processed
-        playSound(all players, "OreRevived")
-        send action bar getDefine("LANG::ORES_REVIVED") to all players
+        playSound({_players::*} , "OreRevived")
+        send action bar getDefine("LANG::ORES_REVIVED") to {_players::*}
 
 local function getAroundAverageSunLight(location: location) :: number:
     loop all blocks in radius 1 around {_location}:

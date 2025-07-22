@@ -91,3 +91,11 @@ function getRegion(p: player) :: string:
         set {_start} to getDefine("REGION::%loop-value%::1")
         set {_end} to getDefine("REGION::%loop-value%::2")
         return loop-value if isWithinLocation({_start}, {_end}, {_target}) is true
+
+function getAllPlayersInRegion(region: string) :: objects:
+    return (all players where [getRegion(input) is {_region}])
+
+function getAllPlayersInMine() :: objects:
+    add getAllPlayersInRegion("M1") where [{_obj::*} doesn't contain input] to {_obj::*}
+    add getAllPlayersInRegion("M2") where [{_obj::*} doesn't contain input] to {_obj::*}
+    return {_obj::*}
