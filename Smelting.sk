@@ -5,10 +5,10 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-#{smelting.savedInputItems::%<UUID>%::*}
-#{smelting.savedOutputItems::%<UUID>%::*}
-#上記の大域リスト変数は、例えば32個の鉄を保管する際、鉄というアイテム要素をそれぞれ32個リストに保管する
-#（後述のsmeltingSmeltOnBackGroundHandler関数で、一つずつアイテムを処理するときに便利なため）
+#{smelting.savedInputIndexes::%<UUID>%::*} 保管しているアイテムIDリスト
+#{smelting.savedInputItems::%<UUID>%::<ItemID>} アイテムIDごとの保管数
+#{smelting.savedOutputIndexes::%<UUID>%::*} 保管しているアイテムIDリスト
+#{smelting.savedOutputItems::%<UUID>%::<ItemID>} アイテムIDごとの保管数
 
 Options:
     MAIN_TITLE_NAME: "&d&l製錬 &8鉱石を焼く"
@@ -33,20 +33,26 @@ local function openGui(p: player, guiType: string):
         
         set slot 4 of {_p}'s current inventory to {@MAIN_INPUT_INFO_ICON}
         set slot 22 of {_p}'s current inventory to {@MAIN_OUTPUT_INFO_ICON}
-        
-        set {_baseSlot} to 10
-        loop (first 7 elements of getStackedItem({smelting.savedInputItems::%{_p}'s uuid%::*})):
-            set slot {_baseSlot}+(loop-iteration)-1 of {_p}'s current inventory to loop-value
 
-        set {_baseSlot} to 28
-        loop (first 7 elements of getStackedItem({smelting.savedOutputItems::%{_p}'s uuid%::*})):
-            set slot {_baseSlot}+(loop-iteration)-1 of {_p}'s current inventory to loop-value
-        set {_baseSlot} to 37
-        loop (elements from 8 to 15 of getStackedItem({smelting.savedOutputItems::%{_p}'s uuid%::*})):
-            set slot {_baseSlot}+(loop-iteration)-1 of {_p}'s current inventory to loop-value
+        set {_inputSlots::*} to getInputInterfaceSlots()
+        loop {smelting.savedInputIndexes::%{_p}'s uuid%::*}:
+            set {_itemAmount} to {smelting.savedInputItems::%{_p}'s uuid%::%loop-value%}
+            set {_stack} to ceil({_itemAmount} / 64) #スタック数は個数を64で割った数を繰り上げた数
+            set {_remain} to mod({_itemAmount}, 64) #最終スタック目の余剰分（64で割り切れないとき）は64で割ったmodになる
+            loop {_stack} times:
+                set slot {_inputSlots::%loop-number%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
+            if {_remain} is not 0: #割り切れていない時は余剰分を反映させる
+                set slot {_inputSlots::%{_stack}%} of {_p}'s current inventory to {_remain} of getItemData(loop-value)
 
-        clear {smelting.savedInputItems::%{_p}'s uuid%::*}
-        clear {smelting.savedOutputItems::%{_p}'s uuid%::*}
+        set {_outputSlots::*} to getOutputInterfaceSlots()
+        loop {smelting.savedOutputIndexes::%{_p}'s uuid%::*}:
+            set {_itemAmount} to {smelting.savedOutputItems::%{_p}'s uuid%::%loop-value%}
+            set {_stack} to ceil({_itemAmount} / 64) #スタック数は個数を64で割った数を繰り上げた数
+            set {_remain} to mod({_itemAmount}, 64) #最終スタック目の余剰分（64で割り切れないとき）は64で割ったmodになる
+            loop {_stack} times:
+                set slot {_outputSlots::%loop-number%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
+            if {_remain} is not 0: #割り切れていない時は余剰分を反映させる
+                set slot {_outputSlots::%{_stack}%} of {_p}'s current inventory to {_remain} of getItemData(loop-value)
 
 function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
     set {_invName} to name of {_p}'s current inventory
@@ -55,6 +61,8 @@ function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
         return true if {_item} is {@MAIN_BACKGROUND_ICON}
         return true if {_item} is {@MAIN_INPUT_INFO_ICON}
         return true if {_item} is {@MAIN_OUTPUT_INFO_ICON}
+        set {_itemId} to getItemId({_item})
+        return true if getDefine("SMELTING_ITEM::%{_itemId}%") is not set
     return false
 
 function smeltingSmeltOnGuiHandler():
@@ -110,30 +118,40 @@ function smeltingSmeltOnBackGroundHandler():
     run 0 ticks later repeating every second:
         loop all players:
             #製錬候補の算出
-            loop {smelting.savedInputItems::%loop-player's uuid%::*}:
-                set {_itemId} to getItemId(loop-value-2)
+            loop {smelting.savedInputIndexes::%loop-player's uuid%::*}:
+                set {_itemId} to loop-value-2
                 set {_smelledItem} to getDefine("SMELTING_ITEM::%{_itemId}%")
                 exit 1 loop if {_smelledItem} is set
             continue if {_smelledItem} is not set
             #製錬処理
-            remove getItemData({_itemId}) from {smelting.savedInputItems::%loop-player's uuid%::*}
-            add getItemData({_smelledItem}) to {smelting.savedOutputItems::%loop-player's uuid%::*}
+            remove 1 from {smelting.savedInputItems::%loop-player's uuid%::%{_itemId}%} 
+            add 1 to {smelting.savedOutputItems::%loop-player's uuid%::%{_smelledItem}%} 
 
 function onInventoryCloseSmeltingHandle(p: player):
     exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
+    clear {smelting.savedInputIndexes::%{_p}'s uuid%::*}
+    clear {smelting.savedInputItems::%{_p}'s uuid%::*}    
+    clear {smelting.savedOutputIndexes::%{_p}'s uuid%::*}
+    clear {smelting.savedOutputItems::%{_p}'s uuid%::*}    
+
     set {_inputSlots::*} to getInputInterfaceSlots()
     loop {_inputSlots::*}:
         set {_item} to slot loop-value of {_p}'s current inventory
         continue if {_item} is air
-        loop (item amount of {_item}) times:
-            add 1 of {_item} to {smelting.savedInputItems::%{_p}'s uuid%::*}
+        set {_itemId} to getItemId({_item})
+        continue if {_itemId} is not set
+
+        add {_itemId} to {smelting.savedInputIndexes::%{_p}'s uuid%::*} if {smelting.savedInputIndexes::%{_p}'s uuid%::*} doesn't contain {_itemId}
+        add item amount of {_item} to {smelting.savedInputItems::%{_p}'s uuid%::%{_itemId}%}
     set {_outputSlots::*} to getOutputInterfaceSlots()
     loop {_outputSlots::*}:
         set {_item} to slot loop-value of {_p}'s current inventory
         continue if {_item} is air
-        loop (item amount of {_item}) times:
-            add 1 of {_item} to {smelting.savedOutputItems::%{_p}'s uuid%::*}
+        set {_itemId} to getItemId({_item})
+        continue if {_itemId} is not set
 
+        add {_itemId} to {smelting.savedOutputIndexes::%{_p}'s uuid%::*} if {smelting.savedOutputIndexes::%{_p}'s uuid%::*} doesn't contain {_itemId}
+        add item amount of {_item} to {smelting.savedOutputItems::%{_p}'s uuid%::%{_itemId}%}
 
 local function getBackGroundSlots() :: objects:
     loop 6*9 times:
