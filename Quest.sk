@@ -85,12 +85,6 @@ function questAssignHandler():
             while {_assignedAmount} < {_dailyAssignMax}:
                 exit loop if size of {_dailyQuests::*} <= {_assignedAmount}
                 exit loop if questAssign(loop-player, 1) is false
-        #存在しないクエストの自動修正
-        loop all players:
-            remove {quest.has::%loop-player's uuid%::*} where [{_quests::*} doesn't contain input] from {quest.has::%loop-player's uuid%::*}
-            remove {quest.ordering::%loop-player's uuid%::*} where [{_quests::*} doesn't contain input] from {quest.ordering::%loop-player's uuid%::*}
-            remove {quest.complete::%loop-player's uuid%::*} where [{_quests::*} doesn't contain input] from {quest.complete::%loop-player's uuid%::*}
-            remove {quest.rewarded::%loop-player's uuid%::*} where [{_quests::*} doesn't contain input] from {quest.rewarded::%loop-player's uuid%::*}
 
 local function questAssign(p: player, questType: integer) :: boolean:
     broadcast "ASSIGN=HANDLED"
