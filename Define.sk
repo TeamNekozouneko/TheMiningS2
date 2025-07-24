@@ -298,6 +298,21 @@ function handleDefine():
     set {define::QUEST_REWARD::VISIT_ANY_MINE::EXP} to 50
     set {define::QUEST_REWARD::ENCHANT_PICKAXE_ONCE::MONEY} to 100
 
+    #会話IDの登録（Talk.sk）
+    add "LEVELUP" to {define::TALKS::*}
+
+    #話者の紐付け（Talk.sk）
+    set {define::TALK_SPEAKER::LEVELUP} to "修行屋のおじさん"
+
+    #会話IDのループ設定
+    set {define::TALK_LOOPING::LEVELUP} to false
+
+    #会話内容の登録（Talk.sk）
+    #DTMのように、会話開始時から何秒目（0スタート）にどのメッセージを表示するかで定義します。
+    set {define::TALK_CONTENT::LEVELUP::0} to "どうしてこんな集落に落ちてきてしまったんだい？"
+    set {define::TALK_CONTENT::LEVELUP::4} to "この集落に一度でも来てしまったならば、生涯ここで過ごすことになるだろうね。"
+    set {define::TALK_CONTENT::LEVELUP::9} to "私はこの集落で、修行屋をやってるよ。"
+    set {define::TALK_CONTENT::LEVELUP::12} to "レベルアップがしたかったら、ここにおいで。"
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
@@ -307,11 +322,17 @@ function initDefine():
     clear {define::*}
     handleDefine()
 
-function getDefine(defineName: text) :: object:
+function getDefine(defineName: string) :: object:
     return {define::%{_defineName}%}
 
-function getDefineList(defineListName: text) :: objects:
+function getDefineList(defineListName: string) :: objects:
     return {define::%{_defineListName}%::*}
+
+function getIndexList(defineListName: string) :: objects:
+    loop {define::%{_defineListName}%::*}:
+        add loop-index to {_indexes::*}
+    return {_indexes::*}
+
 
 function getDistributionURL(path: string) :: string:
     return "https://raw.githubusercontent.com/TeamNekozouneko/TheMiningS2/refs/heads/master/distribution/%{_path}%"

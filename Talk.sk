@@ -1,0 +1,75 @@
+#==================================================
+#| #Talk.sk
+#| 会話機能の実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+#talkHandle関数がtrueだった場合、会話を開始したことになります。
+#例えばNPCクリック時に、下記のようなコードを追加すると、初回クリック時はクリック処理をキャンセルして会話の開始処理を行うことができます。
+#exit if talkHandle(player, talkId) is true
+
+#会話ステート: {talk.state::<UUID>::<talkId>}
+#none: 会話が始まっていない
+#talking: 会話トラックが再生中
+#ended: ループを行わない会話トラックで、会話トラックの再生が終了した状態
+#（ループを行う会話トラックは、会話終了後ステートがnoneに戻る）
+
+Options:
+    TALK_FORMAT: "&6[${}&6/${}&6] &6${}&8: &e${}&e"
+
+function talkHandle(p: player, talkId: string) :: boolean:
+    set {_talks::*} to getDefineList("TALKS")
+    return false if {_talks::*} doesn't contain {_talkId}
+    return false if getState({_p}, {_talkId}) is set
+
+    async run 0 ticks later:
+        setState({_p}, {_talkId}, "talking")
+        set {_talkContents::*} to getDefineList("TALK_CONTENT::%{_talkId}%")
+        set {_talkIndex::*} to sorted getIndexList("TALK_CONTENT::%{_talkId}%")
+        set {_talkCount} to size of {_talkContents::*}
+        set {_talkSpeaker} to getDefine("TALK_SPEAKER::%{_talkId}%")
+        set {_talkIsLoop} to getDefine("TALK_LOOPING::%{_talkId}%")
+
+        set {_lastIndex} to 0
+        loop {_talkIndex::*}:
+            #一個前のフレームとの差分のみ待つ
+            loop (loop-value parsed as integer)-{_lastIndex} times:
+                wait a second
+
+            set {_message} to {@TALK_FORMAT}
+            set {_message} to substitution({_message}, String(loop-iteration))
+            set {_message} to substitution({_message}, String({_talkCount}))
+            set {_message} to substitution({_message}, {_talkSpeaker})
+            set {_message} to substitution({_message}, {_talkContents::%loop-iteration%})
+            send {_message} to {_p}
+            playSound(getObjects({_p}), "Talk")
+
+            set {_lastIndex} to loop-value parsed as integer
+
+        #ループする場合は、終了後すぐにnoneステートに変更
+        if {_talkIsLoop} is true:
+            setState({_p}, {_talkId}, "none")
+        else:
+            setState({_p}, {_talkId}, "ended")
+
+    return true
+
+#enum state {
+#   none,
+#   talking,
+#   ended
+#}
+local function setState(p: player, talkId: string, state: string):
+    set {_stateType::*} to "none", "talking" and "ended"
+    exit if {_stateType::*} doesn't contain {_state}
+
+    #noneの時はclearする
+    if {_state} is "none":
+        clear {talk.state::%{_p}'s uuid%::%{_talkId}%}
+        exit
+
+    set {talk.state::%{_p}'s uuid%::%{_talkId}%} to {_state}
+
+local function getState(p: player, talkId: string) :: string:
+    return {talk.state::%{_p}'s uuid%::%{_talkId}%}

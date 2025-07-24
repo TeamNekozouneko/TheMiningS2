@@ -16,6 +16,7 @@ function initNPCs():
 
 function onCitizenRightClickNPCHandle(player: player, npc: npc):
     if compareName({_npc}, getDefine("NPC::LEVELUP::NAME")) is true:
+        exit if talkHandle({_player}, "LEVELUP") is true
         profileLevelupHandle({_player})
     else if compareName({_npc}, getDefine("NPC::SHOP::NAME")) is true:
         shopGuiHandle({_player})

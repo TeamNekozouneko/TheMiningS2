@@ -11,6 +11,7 @@ function playSound(p: objects, soundId: string):
     soundHandle_QuestOrdered({_p::*}) if {_soundId} is "QuestOrdered"
     soundHandle_QuestComplete({_p::*}) if {_soundId} is "QuestComplete"
     soundHandle_QuestRewards({_p::*}) if {_soundId} is "QuestRewards"
+    soundHandle_Talk({_p::*}) if {_soundId} is "Talk"
 
 
 local function soundHandle_OreReviveStart(p: objects):
@@ -29,4 +30,7 @@ local function soundHandle_QuestComplete(p: objects):
 
 local function soundHandle_QuestRewards(p: objects):
     play sound "minecraft:entity.experience_orb.pickup" with pitch 1.5 to {_p::*}
+
+local function soundHandle_Talk(p: objects):
+    play sound "minecraft:entity.villager.ambient" with pitch 1 to {_p::*}
 
