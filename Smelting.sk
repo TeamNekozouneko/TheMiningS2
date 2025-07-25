@@ -66,8 +66,14 @@ function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
         return true if {_item} is {@MAIN_BACKGROUND_ICON}
         return true if {_item} is {@MAIN_INPUT_INFO_ICON}
         return true if {_item} is {@MAIN_OUTPUT_INFO_ICON}
+
+        #精錬できる or 精錬してできるアイテムかどうか
         set {_itemId} to getItemId({_item})
-        return true if getDefine("SMELTING_ITEM::%{_itemId}%") is not set
+        set {_smeltableItems::*} to getDefineList("SMELTING_ITEM")
+        if {_itemId} is set:
+            if getDefine("SMELTING_ITEM::%{_itemId}%") is not set:
+                if {_smeltableItems::*} doesn't contain {_itemId}:
+                    return true
     return false
 
 function smeltingSmeltOnGuiHandler():
