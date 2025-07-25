@@ -34,7 +34,7 @@ function talkHandle(p: player, talkId: string) :: boolean:
         set {_lastIndex} to 0
         loop {_talkIndex::*}:
             #一個前のフレームとの差分のみ待つ
-            loop (loop-value parsed as integer)-{_lastIndex} times:
+            loop (loop-value - {_lastIndex}) times:
                 wait a second
 
             set {_message} to {@TALK_FORMAT}
@@ -45,7 +45,7 @@ function talkHandle(p: player, talkId: string) :: boolean:
             send {_message} to {_p}
             playSound(getObjects({_p}), "Talk")
 
-            set {_lastIndex} to loop-value parsed as integer
+            set {_lastIndex} to loop-value
 
         #ループする場合は、終了後すぐにnoneステートに変更
         if {_talkIsLoop} is true:

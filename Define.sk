@@ -329,7 +329,7 @@ function getDefineList(defineListName: string) :: objects:
 
 function getIndexList(defineListName: string) :: objects:
     loop {define::%{_defineListName}%::*}:
-        add loop-index to {_indexes::*}
+        add loop-index parsed as integer to {_indexes::*}
     return {_indexes::*}
 
 
