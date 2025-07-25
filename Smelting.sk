@@ -35,24 +35,29 @@ local function openGui(p: player, guiType: string):
         set slot 22 of {_p}'s current inventory to {@MAIN_OUTPUT_INFO_ICON}
 
         set {_inputSlots::*} to getInputInterfaceSlots()
+        set {_currentInputSlotIndex} to 0
         loop {smelting.savedInputIndexes::%{_p}'s uuid%::*}:
             set {_itemAmount} to {smelting.savedInputItems::%{_p}'s uuid%::%loop-value%}
             set {_stack} to ceil({_itemAmount} / 64) #スタック数は個数を64で割った数を繰り上げた数
             set {_remain} to mod({_itemAmount}, 64) #最終スタック目の余剰分（64で割り切れないとき）は64で割ったmodになる
+            broadcast "%loop-value%: %{_stack}% + %{_remain}%"
             loop {_stack} times:
-                set slot {_inputSlots::%loop-number%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
+                add 1 to {_currentInputSlotIndex}
+                set slot {_inputSlots::%{_currentInputSlotIndex}%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
             if {_remain} is not 0: #割り切れていない時は余剰分を反映させる
-                set slot {_inputSlots::%{_stack}%} of {_p}'s current inventory to {_remain} of getItemData(loop-value)
+                set slot {_inputSlots::%{_currentInputSlotIndex}%} of {_p}'s current inventory to {_remain} of getItemData(loop-value)
 
         set {_outputSlots::*} to getOutputInterfaceSlots()
+        set {_currentOutputSlotIndex} to 0
         loop {smelting.savedOutputIndexes::%{_p}'s uuid%::*}:
             set {_itemAmount} to {smelting.savedOutputItems::%{_p}'s uuid%::%loop-value%}
             set {_stack} to ceil({_itemAmount} / 64) #スタック数は個数を64で割った数を繰り上げた数
             set {_remain} to mod({_itemAmount}, 64) #最終スタック目の余剰分（64で割り切れないとき）は64で割ったmodになる
             loop {_stack} times:
-                set slot {_outputSlots::%loop-number%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
+                add 1 to {_currentOutputSlotIndex}
+                set slot {_outputSlots::%{_currentOutputSlotIndex}%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
             if {_remain} is not 0: #割り切れていない時は余剰分を反映させる
-                set slot {_outputSlots::%{_stack}%} of {_p}'s current inventory to {_remain} of getItemData(loop-value)
+                set slot {_outputSlots::%{_currentOutputSlotIndex}%} of {_p}'s current inventory to {_remain} of getItemData(loop-value)
 
 function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
     set {_invName} to name of {_p}'s current inventory
