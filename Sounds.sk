@@ -6,13 +6,21 @@
 #==================================================
 
 function playSound(p: objects, soundId: string):
+    soundHandle_Error({_p::*}) if {_soundId} is "Error"
+    soundHandle_Click({_p::*}) if {_soundId} is "Click"
     soundHandle_OreReviveStart({_p::*}) if {_soundId} is "OreReviveStart"
     soundHandle_OreRevived({_p::*}) if {_soundId} is "OreRevived"
     soundHandle_QuestOrdered({_p::*}) if {_soundId} is "QuestOrdered"
     soundHandle_QuestComplete({_p::*}) if {_soundId} is "QuestComplete"
     soundHandle_QuestRewards({_p::*}) if {_soundId} is "QuestRewards"
     soundHandle_Talk({_p::*}) if {_soundId} is "Talk"
+    soundHandle_Levelup({_p::*}) if {_soundId} is "Levelup"
 
+local function soundHandle_Error(p: objects):
+    play sound "minecraft:block.note_block.bass" with pitch 1 to {_p::*}
+
+local function soundHandle_Click(p: objects):
+    play sound "minecraft:ui.button.click" with pitch 1 to {_p::*}
 
 local function soundHandle_OreReviveStart(p: objects):
     play sound "minecraft:block.note_block.bell" with pitch 1 to {_p::*}
@@ -33,4 +41,7 @@ local function soundHandle_QuestRewards(p: objects):
 
 local function soundHandle_Talk(p: objects):
     play sound "minecraft:entity.villager.ambient" with pitch 1 to {_p::*}
+
+local function soundHandle_Levelup(p: objects):
+    play sound "minecraft:entity.player.levelup" with pitch 1 to {_p::*}
 

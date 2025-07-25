@@ -1,0 +1,87 @@
+#==================================================
+#| #Levelup.sk
+#| 「修行屋のおじさん」の実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+Options:
+    TITLE_NAME: "&6&l修行屋 &8修行していく？"
+
+    LEVELUP_ICON: anvil named "&6レベルアップ"
+    LEVELUP_LORE: "&7ゴールドを払って、%nl%&7レベルを上げられるよ。%nl%%nl%&fレベル&8: &c${} &f→ &a${}%nl%&fコスト&8: &a${}&aG%nl%%nl%&e> クリックしてレベルを上げる"
+    NOT_ENOUGH_ICON: barrier named "&6レベルアップ"
+    NOT_ENOUGH_LORE: "&7ゴールドを払って、%nl%&7レベルを上げられるよ。%nl%%nl%&fレベル&8: &c${} &f→ &a${}%nl%&fコスト&8: &c${}&cG%nl%%nl%&cx ゴールドが足りません"
+
+function levelupGuiHandle(p: player):
+    playSound(getObjects({_p}), "Talk")
+    open chest inventory with 3 row named {@TITLE_NAME} to {_p}
+    refancyGui({_p})
+
+function onInventoryClickLevelupHandle(p: player, item: itemtype) :: boolean:
+    set {_invName} to name of {_p}'s current inventory
+    if isIconItem({_item}) is true:
+        levelupHandle({_p})
+        refancyGui({_p})
+        return true
+    return false
+
+local function refancyGui(p: player):
+    exit if name of {_p}'s current inventory is not {@TITLE_NAME}
+
+    set {_money} to profileMoneyGet({_p})
+    set {_level} to profileLevelGet({_p})
+    set {_cost} to getLevelupCost({_level})
+
+    if {_money} < {_cost}:
+        set {_item} to getIcon("NOT_ENOUGH", {_level}, {_level}+1, {_cost})
+    else:
+        set {_item} to getIcon("LEVELUP", {_level}, {_level}+1, {_cost})
+    set slot 13 of {_p}'s current inventory to {_item}
+
+local function levelupHandle(p: player):
+    set {_money} to profileMoneyGet({_p})
+    set {_level} to profileLevelGet({_p})
+    set {_cost} to getLevelupCost({_level})
+
+    if {_money} < {_cost}:
+        send getDefine("LANG::ERROR_NOT_ENOUGH_MONEY") to {_p}
+        playSound(getObjects({_p}), "Error")
+    else:
+        profileMoneyDecrease({_p}, {_cost}, "PROFILE_LEVELUP")
+        profileLevelIncrease({_p}, 1, "PROFILE_LEVELUP")
+        set {_msg} to getDefine("LANG::SUCCESS_LEVELUP")
+        set {_msg} to substitution({_msg}, String({_level}))
+        set {_msg} to substitution({_msg}, String({_level}+1))
+        send {_msg} to {_p}
+        playSound(getObjects({_p}), "Levelup")
+
+
+#enum iconType {
+#   LEVELUP,
+#   NOT_ENOUGH,
+#}
+local function getIcon(iconType: string, oldLevel: integer, newLevel: integer, cost: number) :: item:
+    if {_iconType} is "LEVELUP":
+        set {_item} to {@LEVELUP_ICON}
+        set {_lore} to {@LEVELUP_LORE}
+        set {_lore} to substitution({_lore}, String({_oldLevel}))
+        set {_lore} to substitution({_lore}, String({_newLevel}))
+        set {_lore} to substitution({_lore}, String({_cost}))
+        set lore of {_item} to {_lore}
+        set boolean tag "TheMining;LevelupGuiIcon" of custom nbt of {_item} to true
+        return {_item}
+    else if {_iconType} is "NOT_ENOUGH":
+        set {_item} to {@NOT_ENOUGH_ICON}
+        set {_lore} to {@NOT_ENOUGH_LORE}
+        set {_lore} to substitution({_lore}, String({_oldLevel}))
+        set {_lore} to substitution({_lore}, String({_newLevel}))
+        set {_lore} to substitution({_lore}, String({_cost}))
+        set lore of {_item} to {_lore}
+        set boolean tag "TheMining;LevelupGuiIcon" of custom nbt of {_item} to true
+        return {_item}
+
+local function isIconItem(item: item) :: boolean:
+    set {_bool} to boolean tag "TheMining;LevelupGuiIcon" of custom nbt of {_item}
+    return true if {_bool} is set
+    return false
