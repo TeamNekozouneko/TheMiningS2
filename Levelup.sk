@@ -67,7 +67,7 @@ local function getIcon(iconType: string, oldLevel: integer, newLevel: integer, c
         set {_lore} to {@LEVELUP_LORE}
         set {_lore} to substitution({_lore}, String({_oldLevel}))
         set {_lore} to substitution({_lore}, String({_newLevel}))
-        set {_lore} to substitution({_lore}, String({_cost}))
+        set {_lore} to substitution({_lore}, formatNumber({_cost}))
         set lore of {_item} to {_lore}
         set boolean tag "TheMining;LevelupGuiIcon" of custom nbt of {_item} to true
         return {_item}
@@ -76,7 +76,7 @@ local function getIcon(iconType: string, oldLevel: integer, newLevel: integer, c
         set {_lore} to {@NOT_ENOUGH_LORE}
         set {_lore} to substitution({_lore}, String({_oldLevel}))
         set {_lore} to substitution({_lore}, String({_newLevel}))
-        set {_lore} to substitution({_lore}, String({_cost}))
+        set {_lore} to substitution({_lore}, formatNumber({_cost}))
         set lore of {_item} to {_lore}
         set boolean tag "TheMining;LevelupGuiIcon" of custom nbt of {_item} to true
         return {_item}
