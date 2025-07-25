@@ -12,7 +12,7 @@ function handleDefine():
     set {define::LANG::ERROR_INVALID_PARAMETER} to "&cパラメーターが不正です。"
     set {define::LANG::SUCCESS_COMMAND_GET_ITME} to "&aアイテムを付与しました。"
 
-    set {define::LANG::ERROR_NOT_ENOUGH_MONEY} to "&cお金が足りません。"
+    set {define::LANG::ERROR_NOT_ENOUGH_MONEY} to "&cゴールドが足りません。"
 
     set {define::LANG::ERROR_BREAK_FROM_SURFACE} to "&cもっと地表に近いところから採掘してください！"
 
@@ -23,7 +23,7 @@ function handleDefine():
     set {define::LANG::PORTAL_CANCELLED} to "&c&lポータルから離れたためキャンセルされました。"
     set {define::LANG::ERROR_DESTINATION_NOT_AVAILABLE} to "&cテレポート中にエラーが発生しました。"
 
-    set {define::LANG::SUCCESS_SHOP_SOLD} to "&6&l売店 &8» &aアイテムを売却しました。&f${}円&7を獲得しました。"
+    set {define::LANG::SUCCESS_SHOP_SOLD} to "&6&l売店 &8» &aアイテムを売却しました。&f${}&fG&7を獲得しました。"
     set {define::LANG::ERROR_SHOP_SOLD_NOTHING} to "&6&l売店 &8» &c売れるアイテムがありませんでした。"
 
     set {define::LANG::SUCCESS_ENCHANTMENT} to "&6&lエンチャント &8» &aエンチャントしました！"
@@ -56,7 +56,7 @@ function handleDefine():
     add "&b・&fレベル &a${}" to {define::SCOREBOARD_CONTENTS::*}
     add "&b・&fEXP &b${}" to {define::SCOREBOARD_CONTENTS::*}
     add "&b・&f採掘数 &3${}" to {define::SCOREBOARD_CONTENTS::*}
-    add "&b・&f所持金 &6${}円" to {define::SCOREBOARD_CONTENTS::*}
+    add "&b・&f所持金 &6${}&6G" to {define::SCOREBOARD_CONTENTS::*}
     add "" to {define::SCOREBOARD_CONTENTS::*}
     add "&8» &aSeason-2 公開！" to {define::SCOREBOARD_CONTENTS::*}
     add "&8» &7アップデート要望は" to {define::SCOREBOARD_CONTENTS::*}
@@ -272,9 +272,9 @@ function handleDefine():
     set {define::QUEST_TYPE::ENCHANT_PICKAXE_ONCE} to 1
 
     #クエスト名の紐付け（Quest.sk）
-    set {define::QUEST_TITLE::SAVING_MONEY_500} to "お金を500円貯める"
-    set {define::QUEST_TITLE::SAVING_MONEY_1000} to "お金を1,000円貯める"
-    set {define::QUEST_TITLE::SAVING_MONEY_5000} to "お金を5,000円貯める"
+    set {define::QUEST_TITLE::SAVING_MONEY_500} to "ゴールドを500G貯める"
+    set {define::QUEST_TITLE::SAVING_MONEY_1000} to "ゴールドを1,000G貯める"
+    set {define::QUEST_TITLE::SAVING_MONEY_5000} to "ゴールドを5,000G貯める"
     set {define::QUEST_TITLE::SELL_ITEM_100} to "アイテムを100個売る"
     set {define::QUEST_TITLE::VISIT_ANY_MINE} to "いずれかの採掘所に訪れる"
     set {define::QUEST_TITLE::ENCHANT_PICKAXE_ONCE} to "ピッケルにエンチャントする"
