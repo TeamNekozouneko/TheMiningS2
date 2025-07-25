@@ -40,7 +40,6 @@ local function openGui(p: player, guiType: string):
             set {_itemAmount} to {smelting.savedInputItems::%{_p}'s uuid%::%loop-value%}
             set {_stack} to ceil({_itemAmount} / 64) #スタック数は個数を64で割った数を繰り上げた数
             set {_remain} to mod({_itemAmount}, 64) #最終スタック目の余剰分（64で割り切れないとき）は64で割ったmodになる
-            broadcast "%loop-value%: %{_stack}% + %{_remain}%"
             loop {_stack} times:
                 add 1 to {_currentInputSlotIndex}
                 set slot {_inputSlots::%{_currentInputSlotIndex}%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
