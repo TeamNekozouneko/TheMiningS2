@@ -26,6 +26,7 @@ function smeltingGuiHandle(p: player):
 local function openGui(p: player, guiType: string):
     #SMELTING_MAIN
     if {_guiType} is "SMELTING_MAIN":
+        playSound(getObjects({_p}), "Talk")
         open chest inventory with 6 row named {@MAIN_TITLE_NAME} to {_p}
         set {_backGroundSlots::*} to getBackGroundSlots()
         loop {_backGroundSlots::*}:
@@ -69,13 +70,7 @@ function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
     return false
 
 function smeltingSmeltOnGuiHandler():
-    set {_baseSlot} to 28
-    loop 7 times:
-        add {_baseSlot}+(loop-number)-1 to {_outputSlots::*}
-    set {_baseSlot} to 37
-    loop 7 times:
-        add {_baseSlot}+(loop-number)-1 to {_outputSlots::*}
-
+    set {_outputSlots::*} to getOutputInterfaceSlots()
     run 0 ticks later repeating every second:
         loop all players where [name of input's current inventory is {@MAIN_TITLE_NAME}]:
             #製錬候補の算出
@@ -116,6 +111,8 @@ function smeltingSmeltOnGuiHandler():
                 add 1 to item amount of (slot {_stackableSlot} of loop-player's current inventory)
             else:
                 set slot {_availableSlot} of loop-player's current inventory to getItemData({_smelledItem})
+
+            playSound(getObjects(loop-player), "Smelting")
 
 function smeltingSmeltOnBackGroundHandler():
     run 0 ticks later repeating every second:

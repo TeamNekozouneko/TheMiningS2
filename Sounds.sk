@@ -5,10 +5,18 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-using script reflection
-
 function playSound(p: objects, soundId: string):
-    run function named "soundHandle_%{_soundId}%" with arguments {_p::*}
+    soundHandle_Error({_p::*}) if {_soundId} is "Error"
+    soundHandle_Click({_p::*}) if {_soundId} is "Click"
+    soundHandle_OreReviveStart({_p::*}) if {_soundId} is "OreReviveStart"
+    soundHandle_OreRevived({_p::*}) if {_soundId} is "OreRevived"
+    soundHandle_QuestOrdered({_p::*}) if {_soundId} is "QuestOrdered"
+    soundHandle_QuestComplete({_p::*}) if {_soundId} is "QuestComplete"
+    soundHandle_QuestRewards({_p::*}) if {_soundId} is "QuestRewards"
+    soundHandle_Talk({_p::*}) if {_soundId} is "Talk"
+    soundHandle_Levelup({_p::*}) if {_soundId} is "Levelup"
+    soundHandle_ShopSold({_p::*}) if {_soundId} is "ShopSold"
+    soundHandle_Smelting({_p::*}) if {_soundId} is "Smelting"
 
 local function soundHandle_Error(p: objects):
     play sound "minecraft:block.note_block.bass" with pitch 1 to {_p::*}
@@ -48,3 +56,6 @@ local function soundHandle_ShopSold(p: objects):
     wait 2 tick
     play sound "minecraft:block.note_block.harp" with pitch 0.94 to {_p::*}
     play sound "minecraft:block.note_block.harp" with pitch 1.18 to {_p::*}
+
+local function soundHandle_Smelting(p: objects):
+    play sound "minecraft:block.fire.ambient" with pitch 1 to {_p::*}
