@@ -36,6 +36,7 @@ function questGuiHandle(p: player):
 local function openGui(p: player, guiType: string):
     #QUEST_MAIN
     if {_guiType} is "QUEST_MAIN":
+        playSound(getObjects({_p}), "Talk")
         open chest inventory with 6 row named {@MAIN_TITLE_NAME} to {_p}
         
         #Draw Frames
