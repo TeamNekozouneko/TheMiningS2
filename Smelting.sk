@@ -122,6 +122,12 @@ function smeltingSmeltOnBackGroundHandler():
         loop all players:
             #製錬候補の算出
             loop {smelting.savedInputIndexes::%loop-player's uuid%::*}:
+                #精錬済みの入力スロットの削除処理
+                if {smelting.savedInputItems::%loop-player's uuid%::%loop-value-2%} <= 0:
+                    remove loop-value-2 from {smelting.savedInputIndexes::%loop-player's uuid%::*}
+                    clear {smelting.savedInputItems::%loop-player's uuid%::%loop-value-2%}
+                    continue
+
                 set {_itemId} to loop-value-2
                 set {_smelledItem} to getDefine("SMELTING_ITEM::%{_itemId}%")
                 exit 1 loop if {_smelledItem} is set
