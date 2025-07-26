@@ -48,6 +48,7 @@ function talkHandle(p: player, talkId: string) :: boolean:
             set {_lastIndex} to loop-value
 
         #ループする場合は、終了後すぐにnoneステートに変更
+        send getDefine("LANG::TALK_CONTINUE_AGAIN") to {_p}
         if {_talkIsLoop} is true:
             setState({_p}, {_talkId}, "none")
         else:
