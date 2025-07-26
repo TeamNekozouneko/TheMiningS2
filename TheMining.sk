@@ -20,3 +20,23 @@ function checkInstanceEnvironment():
     send "&cタイムゾーンが不正です。" to console
     send "&c時間帯に準拠する処理に不具合が生じる恐れがあります。" to console
     send "&c=======================================" to console
+
+function switchSafeMode():
+    set whitelist to true
+    kick all players due to "&cシステムエラーが発生したため、自動的にフェイルセーフを実施しました。%nl%管理者の対応をお待ちください。"
+
+function criticalErrorDetectionHandler():
+    clear {themining.crd::*}
+
+    #Database Writing Error
+    run 0 ticks later repeating every 30 tick:
+        set {_randomId} to random integer between -999999999 and 999999999
+        set {themining.crd::dwe} to {_randomId}
+        wait a second #DBレスポンスが1000ms以上だと書き込まれない=不整合が起きる可能性が高い
+        if {themining.crd::dwe} is not {_randomId}:
+            logError("ERR_CRITICAL_SYSTEM_ERROR", getLogParameters("Database Writing Error > Expected: %{_randomId}%, Actual: %{themining.crd::dwe}%"))
+            switchSafeMode()
+
+local function getLogParameters(moduleName: string) :: objects:
+    add {_moduleName} to {_res::*}
+    return {_res::*}
