@@ -175,8 +175,9 @@ function handleDefine():
     add "SHOP" to {define::NPCS::*}
     add "SMELTING" to {define::NPCS::*}
     add "QUEST_MASTER" to {define::NPCS::*}
+    add "YEAHN" to {define::NPCS::*}
 
-    #レベルアップ用NPCの定義（NPCs.sk）
+    #NPCの定義（NPCs.sk）
     set {define::NPC::LEVELUP::NAME} to "&6&l修行屋のおじさん &7[クリック]"
     set {define::NPC::LEVELUP::SKIN} to "Tomato_dayo"
     set {define::NPC::LEVELUP::LOCATION} to location(-101.5, 71, -23.5, world "world", -30, 0)
@@ -189,6 +190,9 @@ function handleDefine():
     set {define::NPC::QUEST_MASTER::NAME} to "&6依頼屋 &7[クリック]"
     set {define::NPC::QUEST_MASTER::SKIN} to "kik0423"
     set {define::NPC::QUEST_MASTER::LOCATION} to location(-146.5, 80.5, 23.5, world "world", -90, 0)
+    set {define::NPC::YEAHN::NAME} to "&7クリックで話しかける"
+    set {define::NPC::YEAHN::SKIN} to "Yeahn"
+    set {define::NPC::YEAHN::LOCATION} to location(-143, 78.5, 5, world "world", -125, 0)
 
     #レベルアップのコスト計算（profile.sk）
     set {define::LEVELUP_INITIAL_TERM} to 2000 #初項
@@ -304,18 +308,21 @@ function handleDefine():
     add "SHOP" to {define::TALKS::*}
     add "SMELTING" to {define::TALKS::*}
     add "QUEST_MASTER" to {define::TALKS::*}
+    add "YEAHN" to {define::TALKS::*}
 
     #話者の紐付け（Talk.sk）
     set {define::TALK_SPEAKER::LEVELUP} to "修行屋のおじさん"
     set {define::TALK_SPEAKER::SHOP} to "売店"
     set {define::TALK_SPEAKER::SMELTING} to "ウネ・ゾ"
     set {define::TALK_SPEAKER::QUEST_MASTER} to "キキ・ゾ"
+    set {define::TALK_SPEAKER::YEAHN} to "イェ・アン"
 
     #会話IDのループ設定
     set {define::TALK_LOOPING::LEVELUP} to false
     set {define::TALK_LOOPING::SHOP} to false
     set {define::TALK_LOOPING::SMELTING} to false
     set {define::TALK_LOOPING::QUEST_MASTER} to false
+    set {define::TALK_LOOPING::YEAHN} to true
 
     #会話内容の登録（Talk.sk）
     #DTMのように、会話開始時から何秒目（0スタート）にどのメッセージを表示するかで定義します。
@@ -334,6 +341,13 @@ function handleDefine():
     set {define::TALK_CONTENT::QUEST_MASTER::0} to "やあ、もしかして、君も働きに来たのかい？"
     set {define::TALK_CONTENT::QUEST_MASTER::4} to "僕に話しかけてくれれば、ちょっとした試練をあげるよ。"
     set {define::TALK_CONTENT::QUEST_MASTER::8} to "もちろん少しばかりの報酬も用意してるよ。ぜひ来てね。"
+    set {define::TALK_CONTENT::YEAHN::0} to "よっ！お前さん！俺に話しかけるなんて奇遇だな！"
+    set {define::TALK_CONTENT::YEAHN::4} to "俺もちょうど誰かと話したかったところなんだ！"
+    set {define::TALK_CONTENT::YEAHN::8} to "..."
+    set {define::TALK_CONTENT::YEAHN::11} to "あの崖上から落ちてきたんだって？？ハハ、それは災難だな"
+    set {define::TALK_CONTENT::YEAHN::16} to "まあこの村で休んでいきな！田舎だけどな！ハハハ"
+    set {define::TALK_CONTENT::YEAHN::20} to "安心しな、みんな優しくて悪いところじゃねぇよ"
+    set {define::TALK_CONTENT::YEAHN::24} to "一部を除いてな。"
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
