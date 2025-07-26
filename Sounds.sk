@@ -17,6 +17,9 @@ function playSound(p: objects, soundId: string):
     soundHandle_Levelup({_p::*}) if {_soundId} is "Levelup"
     soundHandle_ShopSold({_p::*}) if {_soundId} is "ShopSold"
     soundHandle_Smelting({_p::*}) if {_soundId} is "Smelting"
+    soundHandle_JumpPad({_p::*}) if {_soundId} is "JumpPad"
+    soundHandle_TeleportStart({_p::*}) if {_soundId} is "TeleportStart"
+    soundHandle_Teleported({_p::*}) if {_soundId} is "Teleported"
 
 local function soundHandle_Error(p: objects):
     play sound "minecraft:block.note_block.bass" with pitch 1 to {_p::*}
@@ -59,3 +62,12 @@ local function soundHandle_ShopSold(p: objects):
 
 local function soundHandle_Smelting(p: objects):
     play sound "minecraft:block.fire.ambient" with pitch 1 to {_p::*}
+
+local function soundHandle_JumpPad(p: objects):
+    play sound "minecraft:entity.firework_rocket.blast_far" with pitch 1 to {_p::*}
+
+local function soundHandle_TeleportStart(p: objects):
+    play sound "minecraft:entity.tnt.primed" with pitch 1 to {_p::*}
+
+local function soundHandle_Teleported(p: objects):
+    play sound "minecraft:entity.generic.explode" with pitch 1 to {_p::*}

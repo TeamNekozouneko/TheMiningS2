@@ -32,6 +32,8 @@ function portalStartTeleportation(p: player, portalName: string):
     set {_pos1} to getDefine("PORTAL::%{_portalName}%::1")
     set {_pos2} to getDefine("PORTAL::%{_portalName}%::2")
 
+    playSound(getObjects({_p}), "TeleportStart")
+
     while {_tick} <= {_waitingTick}:
         send action bar getDefine("LANG::PORTAL_TELEPORTING") to {_p}
 
@@ -44,10 +46,13 @@ function portalStartTeleportation(p: player, portalName: string):
 
     if {_cancelled} is true:
         send action bar getDefine("LANG::PORTAL_CANCELLED") to {_p}
+        playSound(getObjects({_p}), "Error")
     else if teleportDestination({_p}, {_destiName}) is true:
         send action bar getDefine("LANG::PORTAL_TELEPORTED") to {_p}
+        playSound(getObjects({_p}), "Teleported")
     else:
         send action bar getDefine("LANG::ERROR_DESTINATION_NOT_AVAILABLE") to {_p}
+        playSound(getObjects({_p}), "Error")
 
     set metadata value "isPortalTeleporting" of {_p} to false #Teleport unLock
 
@@ -76,6 +81,7 @@ function onJumpPadHandle(p: player, block: block):
     set {_vector} to vector from yaw {_yaw} and pitch -1*{_pitch}
     push {_p} {_vector} at speed {_speed}
 
+    playSound(getObjects({_p}), "JumpPad")
 
 function isInRegion(p: player, region: string) :: boolean:
     set {_target} to {_p}'s location
