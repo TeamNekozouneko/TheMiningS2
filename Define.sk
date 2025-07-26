@@ -18,10 +18,10 @@ function handleDefine():
 
     set {define::LANG::SUCCESS_LEVELUP} to "&6&l修行屋 &8» &a&lLEVELUP!&8: &c${} &f→ &a${}"
     
-    set {define::LANG::PORTAL_TELEPORTING} to "&a&lまもなくテレポートします..."
-    set {define::LANG::PORTAL_TELEPORTED} to "&6&lテレポートしました！"
-    set {define::LANG::PORTAL_CANCELLED} to "&c&lポータルから離れたためキャンセルされました。"
-    set {define::LANG::ERROR_DESTINATION_NOT_AVAILABLE} to "&cテレポート中にエラーが発生しました。"
+    set {define::LANG::PORTAL_TELEPORTING} to "&a&lエリアを移動しています..."
+    set {define::LANG::PORTAL_TELEPORTED} to "&6&l移動しました！"
+    set {define::LANG::PORTAL_CANCELLED} to "&cポータルから離れたため移動できませんでした。"
+    set {define::LANG::ERROR_DESTINATION_NOT_AVAILABLE} to "&c移動中にエラーが発生しました。"
 
     set {define::LANG::SUCCESS_SHOP_SOLD} to "&6&l売店 &8» &aアイテムを売却しました。&f${}&fG&7を獲得しました。"
     set {define::LANG::ERROR_SHOP_SOLD_NOTHING} to "&6&l売店 &8» &c売れるアイテムがありませんでした。"
@@ -183,10 +183,10 @@ function handleDefine():
     set {define::NPC::SHOP::NAME} to "&a&l売店 &7[クリック]"
     set {define::NPC::SHOP::SKIN} to "nekokazokuL"
     set {define::NPC::SHOP::LOCATION} to location(-93.5, 71, -17.5, world "world", 100, 0)
-    set {define::NPC::SMELTING::NAME} to "&d精錬 &7[クリック]"
+    set {define::NPC::SMELTING::NAME} to "&d製錬屋 &7[クリック]"
     set {define::NPC::SMELTING::SKIN} to "nekozouneko"
     set {define::NPC::SMELTING::LOCATION} to location(-124.5, 75, 8.5, world "world", -90, 0)
-    set {define::NPC::QUEST_MASTER::NAME} to "&6クエストマスター &7[クリック]"
+    set {define::NPC::QUEST_MASTER::NAME} to "&6依頼屋 &7[クリック]"
     set {define::NPC::QUEST_MASTER::SKIN} to "Yeahn"
     set {define::NPC::QUEST_MASTER::LOCATION} to location(-146.5, 80.5, 23.5, world "world", -90, 0)
 
@@ -308,8 +308,8 @@ function handleDefine():
     #話者の紐付け（Talk.sk）
     set {define::TALK_SPEAKER::LEVELUP} to "修行屋のおじさん"
     set {define::TALK_SPEAKER::SHOP} to "売店"
-    set {define::TALK_SPEAKER::SMELTING} to "精錬"
-    set {define::TALK_SPEAKER::QUEST_MASTER} to "クエストマスター"
+    set {define::TALK_SPEAKER::SMELTING} to "ウネ・ゾ"
+    set {define::TALK_SPEAKER::QUEST_MASTER} to "キキ・ゾ"
 
     #会話IDのループ設定
     set {define::TALK_LOOPING::LEVELUP} to false
