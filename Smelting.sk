@@ -66,13 +66,6 @@ function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
         return true if {_item} is {@MAIN_INPUT_INFO_ICON}
         return true if {_item} is {@MAIN_OUTPUT_INFO_ICON}
 
-        #精錬できる or 精錬してできるアイテムかどうか
-        set {_itemId} to getItemId({_item})
-        set {_smeltableItems::*} to getDefineList("SMELTING_ITEM")
-        if {_itemId} is set:
-            if getDefine("SMELTING_ITEM::%{_itemId}%") is not set:
-                if {_smeltableItems::*} doesn't contain {_itemId}:
-                    return true
     return false
 
 function smeltingSmeltOnGuiHandler():
@@ -139,6 +132,26 @@ function smeltingSmeltOnBackGroundHandler():
 
 function onInventoryCloseSmeltingHandle(p: player):
     exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
+
+    #入力スロットの精錬できないアイテムを返却
+    set {_inputSlots::*} to getInputInterfaceSlots()
+    loop {_inputSlots::*}:
+        set {_slotItem} to slot (loop-value) of {_p}'s current inventory
+        set {_slotItemId} to getItemId({_slotItem})
+        if getDefine("SMELTING_ITEM::%{_slotItemId}%") is not set:
+            give {_slotItem} to {_p}
+            clear slot (loop-value) of {_p}'s current inventory
+
+    #出力スロットの精錬してできないアイテムを返却
+    set {_outputSlots::*} to getOutputInterfaceSlots()
+    set {_smeltableItems::*} to getDefineList("SMELTING_ITEM")
+    loop {_outputSlots::*}:
+        set {_slotItem} to slot (loop-value) of {_p}'s current inventory
+        set {_slotItemId} to getItemId({_slotItem})
+        if {_smeltableItems::*} doesn't contain {_slotItemId}:
+            give {_slotItem} to {_p}
+            clear slot (loop-value) of {_p}'s current inventory
+
     clear {smelting.savedInputIndexes::%{_p}'s uuid%::*}
     clear {smelting.savedInputItems::%{_p}'s uuid%::*}    
     clear {smelting.savedOutputIndexes::%{_p}'s uuid%::*}
