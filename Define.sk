@@ -187,7 +187,7 @@ function handleDefine():
     set {define::NPC::SMELTING::SKIN} to "nekozouneko"
     set {define::NPC::SMELTING::LOCATION} to location(-124.5, 75, 8.5, world "world", -90, 0)
     set {define::NPC::QUEST_MASTER::NAME} to "&6依頼屋 &7[クリック]"
-    set {define::NPC::QUEST_MASTER::SKIN} to "Yeahn"
+    set {define::NPC::QUEST_MASTER::SKIN} to "kik0423"
     set {define::NPC::QUEST_MASTER::LOCATION} to location(-146.5, 80.5, 23.5, world "world", -90, 0)
 
     #レベルアップのコスト計算（profile.sk）
