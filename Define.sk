@@ -192,7 +192,7 @@ function handleDefine():
     set {define::NPC::QUEST_MASTER::LOCATION} to location(-146.5, 80.5, 23.5, world "world", -90, 0)
     set {define::NPC::YEAHN::NAME} to "&7クリックで話しかける"
     set {define::NPC::YEAHN::SKIN} to "Yeahn"
-    set {define::NPC::YEAHN::LOCATION} to location(-143, 78.5, 5, world "world", -125, 0)
+    set {define::NPC::YEAHN::LOCATION} to location(-142.5, 78.5, 5.5, world "world", -125, 0)
 
     #レベルアップのコスト計算（profile.sk）
     set {define::LEVELUP_INITIAL_TERM} to 2000 #初項

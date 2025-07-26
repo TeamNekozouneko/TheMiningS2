@@ -12,7 +12,7 @@ function initNPCs():
         set {_npc} to last spawned npc
         set {_skin} to skin from url getDistributionURL(concat(getDefine("NPC::%loop-value%::SKIN"), ".png"))
         change skin of {_npc} to {_skin}
-        wait 5 second #API先の429（Too many requests）対策用
+        wait 8 second #API先の429（Too many requests）対策用
 
 function onCitizenRightClickNPCHandle(player: player, npc: npc):
     if compareName({_npc}, getDefine("NPC::LEVELUP::NAME")) is true:
