@@ -19,10 +19,13 @@ function onCitizenRightClickNPCHandle(player: player, npc: npc):
         exit if talkHandle({_player}, "LEVELUP") is true
         levelupGuiHandle({_player})
     else if compareName({_npc}, getDefine("NPC::SHOP::NAME")) is true:
+        exit if talkHandle({_player}, "SHOP") is true
         shopGuiHandle({_player})
     else if compareName({_npc}, getDefine("NPC::SMELTING::NAME")) is true:
+        exit if talkHandle({_player}, "SMELTING") is true
         smeltingGuiHandle({_player})
     else if compareName({_npc}, getDefine("NPC::QUEST_MASTER::NAME")) is true:
+        exit if talkHandle({_player}, "QUEST_MASTER") is true
         questGuiHandle({_player})
 
 local function compareName(npc: npc, name: string) :: boolean:

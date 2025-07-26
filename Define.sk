@@ -299,12 +299,21 @@ function handleDefine():
 
     #会話IDの登録（Talk.sk）
     add "LEVELUP" to {define::TALKS::*}
+    add "SHOP" to {define::TALKS::*}
+    add "SMELTING" to {define::TALKS::*}
+    add "QUEST_MASTER" to {define::TALKS::*}
 
     #話者の紐付け（Talk.sk）
     set {define::TALK_SPEAKER::LEVELUP} to "修行屋のおじさん"
+    set {define::TALK_SPEAKER::SHOP} to "売店"
+    set {define::TALK_SPEAKER::SMELTING} to "精錬"
+    set {define::TALK_SPEAKER::QUEST_MASTER} to "クエストマスター"
 
     #会話IDのループ設定
     set {define::TALK_LOOPING::LEVELUP} to false
+    set {define::TALK_LOOPING::SHOP} to false
+    set {define::TALK_LOOPING::SMELTING} to false
+    set {define::TALK_LOOPING::QUEST_MASTER} to false
 
     #会話内容の登録（Talk.sk）
     #DTMのように、会話開始時から何秒目（0スタート）にどのメッセージを表示するかで定義します。
@@ -312,6 +321,17 @@ function handleDefine():
     set {define::TALK_CONTENT::LEVELUP::4} to "この集落に一度でも来てしまったならば、生涯ここで過ごすことになるだろうね。"
     set {define::TALK_CONTENT::LEVELUP::9} to "私はこの集落で、修行屋をやってるよ。"
     set {define::TALK_CONTENT::LEVELUP::12} to "レベルアップがしたかったら、ここにおいで。"
+    set {define::TALK_CONTENT::SHOP::0} to "こんにちは！あんまりここら辺だと見ない顔ですね、"
+    set {define::TALK_CONTENT::SHOP::4} to "私は、鉱物やインゴットをみなさんから買い取ってます。"
+    set {define::TALK_CONTENT::SHOP::9} to "そのうち物を売ることも考えてます。気軽に売りにきてください。"
+    set {define::TALK_CONTENT::SMELTING::0} to "..."
+    set {define::TALK_CONTENT::SMELTING::4} to "なんだ、新しい子かい？"
+    set {define::TALK_CONTENT::SMELTING::7} to "簡単にいえば、俺は鉱石をインゴットに変える仕事をしてるさ。"
+    set {define::TALK_CONTENT::SMELTING::12} to "もし掘った鉱石があれば、俺のところに持ってきてくれ。"
+    set {define::TALK_CONTENT::SMELTING::16} to "インゴットにすれば、価値が上がって市場で売れるようになるんだ。"
+    set {define::TALK_CONTENT::QUEST_MASTER::0} to "やあ、もしかして、君も働きに来たのかい？"
+    set {define::TALK_CONTENT::QUEST_MASTER::4} to "僕に話しかけてくれれば、ちょっとした試練をあげるよ。"
+    set {define::TALK_CONTENT::QUEST_MASTER::8} to "もちろん少しばかりの報酬も用意してるよ。ぜひ来てね。"
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:
