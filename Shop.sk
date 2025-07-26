@@ -20,6 +20,7 @@ Options:
     SELL_INFO_ICON: beacon named "&aアイテムの売り方" with lore "&7売りたいアイテムを入れたら、" and "&7そのままインベントリーを閉じてね" and "&f売れないアイテムは返却されるよ！"
 
 function shopGuiHandle(p: player):
+    playSound(getObjects({_p}), "Talk")
     openGui({_p}, "SHOP_MAIN")
 
 #enum guiType {
@@ -37,6 +38,7 @@ local function openGui(p: player, guiType: string):
         
     #SHOP_SELL
     else if {_guiType} is "SHOP_SELL":
+        playSound(getObjects({_p}), "Click")
         open chest inventory with 6 row named {@SELL_TITLE_NAME} to {_p}
         loop 9 times:
             set slot 44+loop-number of {_p}'s current inventory to {@SELL_UNAVAILABLE_ICON}
@@ -85,8 +87,10 @@ function onInventoryCloseShopHandle(p: player):
 
         add {_amount}*{_price} to {_totalSellPrice}
     if {_totalSellPrice} is not set:
+        playSound(getObjects({_p}), "Error")
         send getDefine("LANG::ERROR_SHOP_SOLD_NOTHING") to {_p}
     else:
+        playSound(getObjects({_p}), "ShopSold")
         send substitution(getDefine("LANG::SUCCESS_SHOP_SOLD"), formatNumber({_totalSellPrice})) to {_p}
         profileMoneyIncrease({_p}, {_totalSellPrice}, "SHOP_SELL")
 
