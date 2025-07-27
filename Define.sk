@@ -52,6 +52,9 @@ function handleDefine():
     set {define::LANG::QUEST_DAILY} to "デイリークエスト"
     set {define::LANG::QUEST_WEEKLY} to "ウィークリークエスト"
 
+    set {define::LANG::GUIDE_BASE} to "&6チュートリアル &8» &e${} &7${}"
+    set {define::LANG::GUIDE_COMPLETE} to "&6チュートリアル &8» &a&l達成 &e${} &7${}"
+
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
 
@@ -355,6 +358,59 @@ function handleDefine():
     set {define::TALK_CONTENT::YEAHN::16} to "まあこの村で休んでいきな！田舎だけどな！ハハハ"
     set {define::TALK_CONTENT::YEAHN::20} to "安心しな、みんな優しくて悪いところじゃねぇよ"
     set {define::TALK_CONTENT::YEAHN::24} to "一部を除いてな。"
+
+    #ガイドIDの登録（Guide.sk）
+    add "GO_MINE_01" to {define::GUIDES::*}
+    add "MINE_ORE_10" to {define::GUIDES::*}
+    add "TALK_WITH_YEAHN" to {define::GUIDES::*}
+    add "SELL_ITEM" to {define::GUIDES::*}
+    add "ENCHANT_PICKAXE" to {define::GUIDES::*}
+    add "LEVELUP" to {define::GUIDES::*}
+    add "ORDER_QUEST" to {define::GUIDES::*}
+    add "COMPLETE_QUEST" to {define::GUIDES::*}
+    add "REWARD_QUEST" to {define::GUIDES::*}
+
+    #ガイドタイトルの紐付け（Guide.sk）
+    set {define::GUIDE_TITLE::GO_MINE_01} to "採掘所1に行く"
+    set {define::GUIDE_TITLE::MINE_ORE_10} to "鉱石を掘る"
+    set {define::GUIDE_TITLE::TALK_WITH_YEAHN} to "イェさんと話そう"
+    set {define::GUIDE_TITLE::SELL_ITEM} to "鉱物を売る"
+    set {define::GUIDE_TITLE::ENCHANT_PICKAXE} to "ピッケルにエンチャントする"
+    set {define::GUIDE_TITLE::LEVELUP} to "レベルアップする"
+    set {define::GUIDE_TITLE::ORDER_QUEST} to "クエストを受注する"
+    set {define::GUIDE_TITLE::COMPLETE_QUEST} to "クエストを完了させる"
+    set {define::GUIDE_TITLE::REWARD_QUEST} to "クエスト報酬を受け取る"
+
+    #ガイド説明（ヒント）の紐付け（Guide.sk）
+    set {define::GUIDE_HINT::GO_MINE_01} to "鳥居の下にゲートがあるよ"
+    set {define::GUIDE_HINT::TALK_WITH_YEAHN} to "ロビーのどこかにいるらしい"
+    set {define::GUIDE_HINT::SELL_ITEM} to "売店が近くにあるらしい！"
+    set {define::GUIDE_HINT::ENCHANT_PICKAXE} to "エンチャント台を探そう"
+    set {define::GUIDE_HINT::LEVELUP} to "近くにおじさんがいるらしい？"
+    set {define::GUIDE_HINT::ORDER_QUEST} to "依頼屋を探そう"
+    set {define::GUIDE_HINT::REWARD_QUEST} to "依頼屋に話しかけてみよう"
+
+    #ガイドトラックの紐付け（Guide.sk）
+    #このガイドが終了したら、次はなんのガイドに引き継ぐかの紐付け
+    set {define::GUIDE_NEXT::GO_MINE_01} to "MINE_ORE_10"
+    set {define::GUIDE_NEXT::MINE_ORE_10} to "TALK_WITH_YEAHN"
+    set {define::GUIDE_NEXT::TALK_WITH_YEAHN} to "SELL_ITEM"
+    set {define::GUIDE_NEXT::SELL_ITEM} to "ENCHANT_PICKAXE"
+    set {define::GUIDE_NEXT::ENCHANT_PICKAXE} to "LEVELUP"
+    set {define::GUIDE_NEXT::LEVELUP} to "ORDER_QUEST"
+    set {define::GUIDE_NEXT::ORDER_QUEST} to "COMPLETE_QUEST"
+    set {define::GUIDE_NEXT::COMPLETE_QUEST} to "REWARD_QUEST"
+
+    #ガイドの完了トリガー登録（Guide.sk）
+    set {define::GUIDE_COMPLETE_TRIGGER::GO_MINE_01} to 1
+    set {define::GUIDE_COMPLETE_TRIGGER::MINE_ORE_10} to 10
+    set {define::GUIDE_COMPLETE_TRIGGER::TALK_WITH_YEAHN} to 1
+    set {define::GUIDE_COMPLETE_TRIGGER::SELL_ITEM} to 1
+    set {define::GUIDE_COMPLETE_TRIGGER::ENCHANT_PICKAXE} to 1
+    set {define::GUIDE_COMPLETE_TRIGGER::LEVELUP} to 1
+    set {define::GUIDE_COMPLETE_TRIGGER::ORDER_QUEST} to 1
+    set {define::GUIDE_COMPLETE_TRIGGER::COMPLETE_QUEST} to 1
+    set {define::GUIDE_COMPLETE_TRIGGER::REWARD_QUEST} to 1
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:

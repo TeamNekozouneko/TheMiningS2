@@ -56,6 +56,9 @@ local function levelupHandle(p: player):
         send {_msg} to {_p}
         playSound(getObjects({_p}), "Levelup")
 
+        #ガイド LEVELUP
+        guideTriggerIncreaseHandle({_p}, "LEVELUP")
+
 
 #enum iconType {
 #   LEVELUP,

@@ -341,6 +341,10 @@ local function questOrder(p: player, questId: string) :: boolean:
         #データ操作
         logInfo("QUEST_ORDERED", getQuestLogParameters({_p}'s uuid, {_questId}))
         questTriggerStatisticsOrderInit({_p}, {_questId})
+
+        #ガイド ORDER_QUEST
+        guideTriggerIncreaseHandle({_p}, "ORDER_QUEST")
+
         return true
 
     logError("ERR_QUEST_ORDER", getQuestLogParameters({_p}'s uuid, {_questId}))
@@ -360,6 +364,10 @@ local function questComplete(p: player, questId: string, isSkipCondition: boolea
         sendNotify({_p}, "QUEST_COMPLETE", {_questId})
 
         logInfo("QUEST_COMPLETE", getQuestLogParameters({_p}'s uuid, {_questId}))
+
+        #ガイド COMPLETE_QUEST
+        guideTriggerIncreaseHandle({_p}, "COMPLETE_QUEST")
+
         return true
         
     logError("ERR_QUEST_COMPLETE", getQuestLogParameters({_p}'s uuid, {_questId}))
@@ -381,6 +389,10 @@ local function questRewards(p: player, questId: string) :: boolean:
         sendNotify({_p}, "QUEST_REWARDS", {_questId})
 
         logInfo("QUEST_RECEIVE_REWARDS", getQuestLogParameters({_p}'s uuid, {_questId}))
+        
+        #ガイド REWARD_QUEST
+        guideTriggerIncreaseHandle({_p}, "REWARD_QUEST")
+        
         return true
 
     logError("ERR_QUEST_RECEIVE_REWARDS", getQuestLogParameters({_p}'s uuid, {_questId}))

@@ -53,6 +53,9 @@ function talkHandle(p: player, talkId: string) :: boolean:
             setState({_p}, {_talkId}, "none")
         else:
             setState({_p}, {_talkId}, "ended")
+        
+        #ガイド TALK_WITH_YEAHN
+        guideTriggerIncreaseHandle({_p}, "TALK_WITH_YEAHN") if {_talkId} is "YEAHN"
 
     return true
 

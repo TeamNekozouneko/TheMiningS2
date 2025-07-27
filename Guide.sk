@@ -1,0 +1,111 @@
+#==================================================
+#| #Items.sk
+#| ガイドの実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+#{guide.currentGuide::<UUID>} 現在進行中のガイドID
+#{guide.triggers::<UUID>} 現在のガイドのトリガー数
+
+function guideBossBarInit(p: player):
+    set {_bar} to boss bar with id "Guide.%{_p}'s uuid%" with title ""
+    set bar color of {_bar} to yellow
+    set bar progress of {_bar} to 0
+    set {guide.bar::%{_p}'s uuid%} to {_bar}
+
+    #すでに進行中のガイドがあれば、再描写する
+    set {_currentGuideId} to {guide.currentGuide::%{_p}'s uuid%}
+    if {_currentGuideId} is set:
+        set {_title} to getDefine("LANG::GUIDE_BASE")
+        set {_title} to substitution({_title}, getDefine("GUIDE_TITLE::%{_currentGuideId}%"))
+        set {_hint} to getDefine("GUIDE_HINT::%{_currentGuideId}%")
+        set {_completeTrigger} to getDefine("GUIDE_COMPLETE_TRIGGER::%{_currentGuideId}%")
+        set {_currentTrigger} to {guide.triggers::%{_p}'s uuid%}
+
+        if {_hint} is set:
+            set {_title} to substitution({_title}, {_hint})
+        else:
+            set {_title} to substitution({_title}, "")
+        set bar title of {_bar} to {_title}
+        set bar style of {_bar} to segmented 10
+        set bar progress of {_bar} to floor( 100 * ({_currentTrigger} / {_completeTrigger}) ) 
+        set bar players of {_bar} to {_p}
+
+function guideBossBarClear(p: player):
+    clear {guide.bar::%{_p}'s uuid%}
+    delete boss bar with id "Guide.%{_p}'s uuid%"
+
+function guideStart(p: player, guideId: string):
+    #ボスバーが存在するか
+    set {_bar} to {guide.bar::%{_p}'s uuid%}
+    exit if {_bar} is not set
+    #進行中のガイドがないか
+    exit if {guide.currentGuide::%{_p}'s uuid%} is set
+    #ガイドIDが存在するか
+    exit if getDefineList("GUIDES") doesn't contain {_guideId}
+
+    set {guide.currentGuide::%{_p}'s uuid%} to {_guideId}
+    set {guide.triggers::%{_p}'s uuid%} to 0
+    set {_title} to getDefine("LANG::GUIDE_BASE")
+    set {_title} to substitution({_title}, getDefine("GUIDE_TITLE::%{_guideId}%"))
+    set {_hint} to getDefine("GUIDE_HINT::%{_guideId}%")
+    if {_hint} is set:
+        set {_title} to substitution({_title}, {_hint})
+    else:
+        set {_title} to substitution({_title}, "")
+    set bar title of {_bar} to {_title}
+    set bar progress of {_bar} to 0
+    set bar players of {_bar} to {_p}
+
+function guideTriggerIncreaseHandle(p: player, guideId: string, increaseValue: integer = 1):
+    set {_currentGuideId} to {guide.currentGuide::%{_p}'s uuid%}
+    #進行中のガイドかどうか
+    exit if {_guideId} is not {_currentGuideId}
+    #ボスバーが存在するか
+    set {_bar} to {guide.bar::%{_p}'s uuid%}
+    exit if {_bar} is not set
+    #トリガーが正常に初期化されているか
+    exit if {guide.triggers::%{_p}'s uuid%} is not set
+
+    set {_completeTrigger} to getDefine("GUIDE_COMPLETE_TRIGGER::%{_currentGuideId}%")
+    exit if {_completeTrigger} is not set
+
+    set {_afterTrigger} to {guide.triggers::%{_p}'s uuid%} + {_increaseValue}
+    if {_afterTrigger} >= {_completeTrigger}:
+        guideComplete({_p})
+    else:
+        add 1 to {guide.triggers::%{_p}'s uuid%}   
+        set bar progress of {_bar} to floor( 100 * ({_afterTrigger} / {_completeTrigger}) )
+
+local function guideComplete(p: player):
+    #ガイドが進行中かどうか
+    set {_currentGuideId} to {guide.currentGuide::%{_p}'s uuid%}
+    exit if {_currentGuideId} is not set
+    #ボスバーが存在するか
+    set {_bar} to {guide.bar::%{_p}'s uuid%}
+    exit if {_bar} is not set
+
+    set {_title} to getDefine("LANG::GUIDE_COMPLETE")
+    set {_title} to substitution({_title}, getDefine("GUIDE_TITLE::%{_currentGuideId}%"))
+    set {_hint} to getDefine("GUIDE_HINT::%{_currentGuideId}%")
+    if {_hint} is set:
+        set {_title} to substitution({_title}, {_hint})
+    else:
+        set {_title} to substitution({_title}, "")
+    set bar title of {_bar} to {_title}
+    set bar progress of {_bar} to 100
+
+    #達成演出中にガイド完了させないように、演出前にクリアする
+    clear {guide.currentGuide::%{_p}'s uuid%}
+
+    loop 6 times:
+        set bar color of {_bar} to green
+        wait 5 tick
+        set bar color of {_bar} to yellow
+        wait 5 tick
+    
+    set {_nextGuideId} to getDefine("GUIDE_NEXT::%{_currentGuideId}%")
+    remove {_p} from bar players of {_bar}
+    if {_nextGuideId} is set: #次のガイドがある場合は、そのガイドを開始させる
+        guideStart({_p}, {_nextGuideId})

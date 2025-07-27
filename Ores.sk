@@ -51,6 +51,9 @@ function onBreakOreHandle(p: player, centerBlock: block) :: boolean:
     #統計データの反映
     profileStatisticsIncrease({_p}, "mineQuantity", size of {_processBlocks::*})
 
+    #ガイド MINE_ORE_10
+    guideTriggerIncreaseHandle({_p}, "MINE_ORE_10", size of {_processBlocks::*})
+
     return true
 
 function isOreBreakable(tool: item, block: block) :: boolean:

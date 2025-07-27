@@ -12,6 +12,10 @@ function onFirstJoinHandle(p: player):
     teleport {_p} to getDefine("LOCATION::LOBBY")
     give getItemData("FIRST_PICKAXE") to {_p}
 
+    #最初のチュートリアルガイドをスタートさせる
+    wait 5 tick #guideBossBarInitが完了するのを待つ
+    guideStart({_p}, "GO_MINE_01")
+
 function sendJoinMessage(p: player):
     wait 5 tick
     set {_msg::*} to getDefineList("LANG::JOIN_MESSAGES")

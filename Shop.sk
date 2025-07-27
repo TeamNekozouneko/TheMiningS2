@@ -94,8 +94,10 @@ function onInventoryCloseShopHandle(p: player):
         send substitution(getDefine("LANG::SUCCESS_SHOP_SOLD"), formatNumber({_totalSellPrice})) to {_p}
         profileMoneyIncrease({_p}, {_totalSellPrice}, "SHOP_SELL")
 
-        #以下、クエスト用処理
+        #クエスト SELL_ITEM_100
         questTriggerIncreaseHandle({_p}, "SELL_ITEM_100", {_totalAmount})
+        #ガイド SELL_ITEM
+        guideTriggerIncreaseHandle({_p}, "SELL_ITEM")
     give {_unSellableItems::*} to {_p}
 
 #Interface

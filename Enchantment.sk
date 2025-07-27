@@ -97,7 +97,8 @@ local function giveEnchantmentProcessHandle(p: player, clickedItem: item, item: 
 
     #クエスト ENCHANT_PICKAXE_ONCE
     questTriggerIncreaseHandle({_p}, "ENCHANT_PICKAXE_ONCE")
-    
+    #ガイド ENCHANT_PICKAXE
+    guideTriggerIncreaseHandle({_p}, "ENCHANT_PICKAXE")
 
 #レンダリング
 function enchantmentGuiAsyncHandler():
