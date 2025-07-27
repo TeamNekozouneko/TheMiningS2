@@ -20,6 +20,8 @@ function playSound(p: objects, soundId: string):
     soundHandle_JumpPad({_p::*}) if {_soundId} is "JumpPad"
     soundHandle_TeleportStart({_p::*}) if {_soundId} is "TeleportStart"
     soundHandle_Teleported({_p::*}) if {_soundId} is "Teleported"
+    soundHandle_OpenEnchantmentTable({_p::*}) if {_soundId} is "OpenEnchantmentTable"
+    soundHandle_UseEnchantmentTable({_p::*}) if {_soundId} is "UseEnchantmentTable"
 
 local function soundHandle_Error(p: objects):
     play sound "minecraft:block.note_block.bass" with pitch 1 to {_p::*}
@@ -71,3 +73,9 @@ local function soundHandle_TeleportStart(p: objects):
 
 local function soundHandle_Teleported(p: objects):
     play sound "minecraft:entity.generic.explode" with pitch 1 to {_p::*}
+
+local function soundHandle_OpenEnchantmentTable(p: objects):
+    play sound "minecraft:block.brewing_stand.brew" with pitch 1 to {_p::*}
+
+local function soundHandle_UseEnchantmentTable(p: objects):
+    play sound "minecraft:block.enchantment_table.use" with pitch 1 to {_p::*}

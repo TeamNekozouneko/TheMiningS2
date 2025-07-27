@@ -38,6 +38,7 @@ function onRightClickEnchantmentHandle(p: player, b: block) :: boolean:
 #}
 local function openGui(p: player, guiType: string):
     if {_guiType} is "ENCHANTMENT_MAIN":
+        playSound(getObjects({_p}), "OpenEnchantmentTable")
         open chest inventory with 6 row named {@MAIN_TITLE_NAME} to {_p}
         loop 54 times:
             set slot (loop-number)-1 of {_p}'s current inventory to {@MAIN_BACKGROUND_ICON}
@@ -92,6 +93,7 @@ local function giveEnchantmentProcessHandle(p: player, clickedItem: item, item: 
     profileExpDecrease({_p}, {_currentCost}, "ENCHANTMENT")
     logInfo("ENCHANT_GIVE", getEnchantmentLogParameters({_p}'s uuid, {_itemId}, {_enchantment}, {_currentEnchantmentLevel}+1))
     send getDefine("LANG::SUCCESS_ENCHANTMENT") to {_p}
+    playSound(getObjects({_p}), "UseEnchantmentTable")
 
     #クエスト ENCHANT_PICKAXE_ONCE
     questTriggerIncreaseHandle({_p}, "ENCHANT_PICKAXE_ONCE")
