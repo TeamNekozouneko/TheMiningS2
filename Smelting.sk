@@ -132,6 +132,7 @@ function smeltingSmeltOnBackGroundHandler():
             #製錬処理
             remove 1 from {smelting.savedInputItems::%loop-player's uuid%::%{_itemId}%} 
             add 1 to {smelting.savedOutputItems::%loop-player's uuid%::%{_smelledItem}%} 
+            add {_smelledItem} to {smelting.savedOutputIndexes::%loop-player's uuid%::*} if {smelting.savedOutputIndexes::%loop-player's uuid%::*} doesn't contain {_smelledItem}
 
 function onInventoryCloseSmeltingHandle(p: player):
     exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
