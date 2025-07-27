@@ -144,6 +144,7 @@ function enchantmentGuiAsyncHandler():
                 set {_enchantment} to {_enchantments::%loop-number%}
                 set {_langEnchantment} to getDefine("LANG_ENCHANTMENTS::%{_enchantment}%")
                 set {_currentEnchantmentLevel} to getItemEnchantmentLevel({_item}, {_enchantment})
+                set {_currentEnchantmentLevel} to 0 if {_currentEnchantmentLevel} is not set
                 set {_initialTerm} to getDefine("ENCHANTMENT::INITIAL_TERM::%{_enchantment}%")
                 set {_commonRatio} to getDefine("ENCHANTMENT::COMMON_RATIO::%{_enchantment}%")
                 set {_currentCost} to getEqualRatio({_currentEnchantmentLevel}, {_initialTerm}, {_commonRatio})
@@ -192,7 +193,7 @@ function onInventoryCloseEnchantmentHandle(p: player):
         set {enchantment.saveTableItem::%{_p}'s uuid%} to {_item}
 
 local function getEqualRatio(n: number, initialTerm: number, commonRatio: number) :: number:
-    return {_initialTerm} * {_commonRatio} ^ ({_n}-1)
+    return {_initialTerm} * {_commonRatio} ^ {_n}
 
 function getItemEnchantmentLevel(itemData: item, enchantmentName: string) :: integer:
     set {_level} to int tag "TheMining;Enchantments;%{_enchantmentName}%" of custom nbt of {_itemData}
