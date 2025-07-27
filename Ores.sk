@@ -9,103 +9,6 @@ Options:
     DO_NOT_REVIVE_AROUND_BLOCKS: 3
     CANNOT_BREAK_LESS_THAN_SUNLIGHT: 10
 
-# function onBreakOresSingleHandle(p: player, block: block) :: boolean:
-#     set {_item} to {_p}'s tool
-#     set {_itemId} to getItemId({_item})
-#     set {_blockType} to type of {_block}
-#     set {_blockLocation} to location of {_block}
-
-#     return false if {_itemId} is not set
-#     return false if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}
-#     set {_dropItem} to getDefine("DROP_ITEMS::%{_blockType}%")
-
-#     #地表チェック
-#     # if block above {_block} is not air:
-#     #     send action bar getDefine("LANG::ERROR_BREAK_FROM_SURFACE") to {_p}
-#     #     return false
-
-#     set {_fortuneLevel} to getItemEnchantmentLevel({_item}, "fortune")
-#     set {_autoCollectLevel} to getItemEnchantmentLevel({_item}, "auto_collect")
-#     set {_autoSellLevel} to getItemEnchantmentLevel({_item}, "auto_sell")
-#     set {_rangeMiningLevel} to getItemEnchantmentLevel({_item}, "range_mining")
-    
-#     #Range MiningレベルがあればMultipleHandleに飛ばす
-#     if {_rangeMiningLevel} > 0:
-#         return false if {ores.rangeMiningCooldown::%{_p}'s uuid%} is set
-#         enchantmentRangeMiningHandle({_p}, {_block}, {_rangeMiningLevel})
-#         return true
-
-#     #エンチャントの処理
-#     #| Fortune
-#     set {_dropItem} to enchantmentFortuneDropItemHandle({_dropItem}, {_fortuneLevel})
-#     #| AutoSell
-#     set {_isAutoSold} to true if enchantmentAutoSellSingleHandle({_p}, {_dropItem}, {_autoSellLevel}) is true
-#     #| AutoCollect
-#     if {_isAutoSold} is not true:
-#         set {_isDropCancelled} to true if enchantmentAutoCollectSingleHandle({_p}, {_dropItem}, {_autoCollectLevel}) is true
-
-#     #ドロップの処理
-#     if {_isDropCancelled} is not true:
-#         if {_isAutoSold} is not true:
-#             drop {_dropItem} at {_blockLocation}
-
-#     #EXPの獲得処理
-#     profileExpIncrease({_p}, getDefine("EARN_EXP::%{_blockType}%"), "ORES_BREAK")
-
-#     #Statistics
-#     profileStatisticsIncrease({_p}, "mineQuantity", 1)
-
-#     return true
-
-# function onBreakOresMultipleHandle(p: player, originalBlocks: objects) :: objects: #return キャンセルするブロックリスト
-#     set {_item} to {_p}'s tool
-#     set {_itemId} to getItemId({_item})
-#     exit if {_itemId} is not set
-
-#     #それぞれの情報をリスト型でまとめる
-#     loop {_originalBlocks::*}:
-#         set {_blockType} to type of loop-value
-#         if getDefineList("BREAKABLE_ORES::%{_itemId}%") doesn't contain {_blockType}:
-#             add loop-value to {_cancelledBlock::*}
-#             continue
-#         # if block above loop-value is not air: #地表チェック
-#         #     add loop-value to {_cancelledBlock::*}
-#         #     continue
-
-#         add loop-value to {_blocks::*}
-#         add {_blockType} to {_blockTypes::*}
-#         add getDefine("DROP_ITEMS::%{_blockType}%") to {_dropItems::*}
-#         add getDefine("EARN_EXP::%{_blockType}%") to {_earnExp}
-    
-#     set {_fortuneLevel} to getItemEnchantmentLevel({_item}, "fortune")
-#     set {_autoCollectLevel} to getItemEnchantmentLevel({_item}, "auto_collect")
-#     set {_autoSellLevel} to getItemEnchantmentLevel({_item}, "auto_sell")
-#     set {_rangeMiningLevel} to getItemEnchantmentLevel({_item}, "range_mining")
-#     #エンチャントの処理
-#     #| Fortune（1個のアイテムを入れて帰ってきた個数＝幸運の有効率）
-#     set {_fortuneAmount} to item amount of enchantmentFortuneDropItemHandle(stone, {_fortuneLevel})
-#     loop {_dropItems::*}:
-#         set item amount of loop-value to (item amount of loop-value) * {_fortuneAmount}
-#     #| AutoSell
-#     set {_sellableItems::*} to enchantmentAutoSellMultipleHandle({_p}, {_dropItems::*}, {_autoSellLevel})
-#     remove {_sellableItems::*} from {_dropItems::*}
-#     #| AutoCollect
-#     set {_isAutoCollected} to false
-#     set {_isAutoCollected} to true if enchantmentAutoCollectMultipleHandle({_p}, {_dropItems::*}, {_autoCollectLevel}) is true
-
-#     #ドロップの処理
-#     if {_isAutoCollected} is false:
-#         drop getMergedDropItems({_dropItems::*}) at location of (random element out of {_blocks::*})
-    
-#     #EXPの獲得処理
-#     profileExpIncrease({_p}, {_earnExp}, "ORES_BREAK_MULTIPLE")
-
-#     #Statistics
-#     profileStatisticsIncrease({_p}, "mineQuantity", size of {_blocks::*})
-    
-#     clear {ores.rangeMiningCooldown::%{_p}'s uuid%}
-#     return {_cancelledBlock::*}
-
 function onBreakOreHandle(p: player, centerBlock: block) :: boolean:
     #初期化
     add {_centerBlock} to {_processBlocks::*}
@@ -146,7 +49,7 @@ function onBreakOreHandle(p: player, centerBlock: block) :: boolean:
     profileExpIncrease({_p}, {_earnExp}, "ORES_BREAK")
 
     #統計データの反映
-    profileStatisticsIncrease({_p}, "mineQuantity", size of {_blocks::*})
+    profileStatisticsIncrease({_p}, "mineQuantity", size of {_processBlocks::*})
 
     return true
 
