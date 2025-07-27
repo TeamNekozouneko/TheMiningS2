@@ -9,12 +9,19 @@ function handleDefine():
     set {define::DEVELOPMENT_MODE} to true
 
     #言語定義
+    
     set {define::LANG::ERROR_INVALID_PARAMETER} to "&cパラメーターが不正です。"
     set {define::LANG::SUCCESS_COMMAND_GET_ITME} to "&aアイテムを付与しました。"
 
     set {define::LANG::ERROR_NOT_ENOUGH_MONEY} to "&cゴールドが足りません。"
 
     set {define::LANG::ERROR_BREAK_FROM_SURFACE} to "&cもっと地表に近いところから採掘してください！"
+
+    add "&8========================================" to {define::LANG::JOIN_MESSAGES::*}
+    add "&c&lWelcome to The Mining" to {define::LANG::JOIN_MESSAGES::*}
+    add "&3崖下に消える希望" to {define::LANG::JOIN_MESSAGES::*}
+    add "&3僕は、見逃さなかった。" to {define::LANG::JOIN_MESSAGES::*}
+    add "&8========================================" to {define::LANG::JOIN_MESSAGES::*}
 
     set {define::LANG::SUCCESS_LEVELUP} to "&6&l修行屋 &8» &a&lLEVELUP!&8: &c${} &f→ &a${}"
     

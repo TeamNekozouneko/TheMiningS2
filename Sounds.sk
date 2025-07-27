@@ -8,6 +8,7 @@
 function playSound(p: objects, soundId: string):
     soundHandle_Error({_p::*}) if {_soundId} is "Error"
     soundHandle_Click({_p::*}) if {_soundId} is "Click"
+    soundHandle_JoinMessage({_p::*}) if {_soundId} is "JoinMessage"
     soundHandle_OreReviveStart({_p::*}) if {_soundId} is "OreReviveStart"
     soundHandle_OreRevived({_p::*}) if {_soundId} is "OreRevived"
     soundHandle_QuestOrdered({_p::*}) if {_soundId} is "QuestOrdered"
@@ -28,6 +29,9 @@ local function soundHandle_Error(p: objects):
 
 local function soundHandle_Click(p: objects):
     play sound "minecraft:ui.button.click" with pitch 1 to {_p::*}
+
+local function soundHandle_JoinMessage(p: objects):
+    play sound "minecraft:block.note_block.xylophone" with pitch 1 to {_p::*}
 
 local function soundHandle_OreReviveStart(p: objects):
     play sound "minecraft:block.note_block.bell" with pitch 1 to {_p::*}
