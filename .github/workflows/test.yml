@@ -27,6 +27,8 @@ jobs:
       - name: Set up plugin environments
         run: |
           wget https://github.com/SkriptLang/Skript/releases/download/2.10.1/Skript-2.10.1.jar -P ~/plugins/
+          wget https://github.com/ShaneBeee/SkBee/releases/download/3.8.2/SkBee-3.8.2.jar -P ~/plugins/
+          wget https://cdn.modrinth.com/data/GYKicpRR/versions/lbycbggC/Skonic-1.2.2.jar -P ~/plugins/
           wget https://mediafilez.forgecdn.net/files/767/49/SQLibrary-7.1.jar -P ~/plugins/
           mkdir -p ~/plugins/Skript/scripts/
           cp -r * ~/plugins/Skript/scripts/
