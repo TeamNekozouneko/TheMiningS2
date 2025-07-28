@@ -26,6 +26,7 @@ jobs:
       #プラグイン環境のセットアップ
       - name: Set up plugin environments
         run: |
+          mv .github/workflows/plugins/* ~/plugins/
           wget https://github.com/SkriptLang/Skript/releases/download/2.10.1/Skript-2.10.1.jar -P ~/plugins/
           wget https://github.com/ShaneBeee/SkBee/releases/download/3.8.2/SkBee-3.8.2.jar -P ~/plugins/
           wget https://cdn.modrinth.com/data/GYKicpRR/versions/lbycbggC/Skonic-1.2.2.jar -P ~/plugins/
