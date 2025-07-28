@@ -24,6 +24,8 @@ function handleDefine():
     add "&8========================================" to {define::LANG::JOIN_MESSAGES::*}
 
     set {define::LANG::SUCCESS_LEVELUP} to "&6&l修行屋 &8» &a&lLEVELUP!&8: &c${} &f→ &a${}"
+
+    set {define::LANG::TAB_LIST_NAME} to "&8[&a${}&8] &f${}"
     
     set {define::LANG::PORTAL_TELEPORTING} to "&a&lエリアを移動しています..."
     set {define::LANG::PORTAL_TELEPORTED} to "&6&l移動しました！"

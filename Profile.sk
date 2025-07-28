@@ -81,6 +81,15 @@ local function getProfileLogParameters(uuid: string, cause: string, before: numb
     add String({_after}) to {_res::*}
     return {_res::*}
 
+#TabHandler
+function profileTabListNameHandler():
+    run 0 ticks later repeating every 3 second:
+        loop all players:
+            set {_name} to getDefine("LANG::TAB_LIST_NAME")
+            set {_name} to substitution({_name}, String(profileLevelGet(loop-player)))
+            set {_name} to substitution({_name}, String(loop-player))
+            set loop-player's tab list name to {_name}
+
 function profileStatisticsIncrease(p: player, statType: string, value: number):
     add {_value} to {profile.statistics::%{_p}'s uuid%::%{_statType}%}
 function profileStatisticsDecrease(p: player, statType: string, value: number):
