@@ -31,6 +31,7 @@ jobs:
           wget https://cdn.modrinth.com/data/GYKicpRR/versions/lbycbggC/Skonic-1.2.2.jar -P ~/plugins/
           wget https://mediafilez.forgecdn.net/files/767/49/SQLibrary-7.1.jar -P ~/plugins/
           wget https://ci.citizensnpcs.co/job/Citizens2/3644/artifact/dist/target/Citizens-2.0.36-b3644.jar -P ~/plugins/
+          wget https://ci.athion.net/job/FastAsyncWorldEdit/983/artifact/artifacts/FastAsyncWorldEdit-Bukkit-2.12.2.jar -P ~/plugins/
           mkdir -p ~/plugins/Skript/scripts/
           cp -r * ~/plugins/Skript/scripts/
           cp -r .github/workflows/testCase/* ~/plugins/Skript/scripts/
