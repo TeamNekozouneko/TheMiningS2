@@ -76,3 +76,6 @@ on right click:
     exit if event-block is ender chest
     cancel event
     onRightClickEnchantmentHandle(player, event-block)
+
+on drop:
+    cancel event
