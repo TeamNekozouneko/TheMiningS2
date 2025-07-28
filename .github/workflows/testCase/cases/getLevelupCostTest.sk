@@ -9,8 +9,8 @@ function getLevelupCostTestHandler(amountOfTerm: integer = 20) :: boolean:
     testLog("getLevelupCostTestHandler", "Amount of Term = %{_amountOfTerm}%")
 
     #テストケースの定義
-    set {_initial_term} to 2000
-    set {_common_ratio} to 2
+    set {_initial_term} to getDefine("LEVELUP_INITIAL_TERM")
+    set {_common_ratio} to getDefine("LEVELUP_COMMON_RATIO")
     set {_case::1} to {_initial_term}
     set {_case::2} to {_case::1}*{_common_ratio}
     set {_case::3} to {_case::2}*{_common_ratio}
