@@ -15,7 +15,7 @@ function teleportDestination(p: player, destiName: string) :: boolean:
     #クエスト VISIT_ANY_MINE
     questTriggerIncreaseHandle({_p}, "VISIT_ANY_MINE")
     #ガイド GO_MINE_01
-    guideTriggerIncreaseHandle({_p}, "GO_MINE_01")
+    guideTriggerIncreaseHandle({_p}, "GO_MINE_01") if {_destiName} is "MINING_1"
     
     return true
 
