@@ -191,7 +191,7 @@ local function getRewardLores(questId: string) :: objects:
     set {_exp} to getDefine("QUEST_REWARD::%{_questId}%::EXP")
     set {_money} to getDefine("QUEST_REWARD::%{_questId}%::MONEY")
     add "&b 🔨 &3%formatNumber({_exp})% EXP" to {_results::*} if {_exp} is set
-    add "&e 💰 &6%formatNumber({_money})% 円" to {_results::*} if {_money} is set
+    add "&e 💰 &6%formatNumber({_money})%G" to {_results::*} if {_money} is set
     return {_results::*}
 
 #数字からバナーパターンの種類を一意に決定する関数
