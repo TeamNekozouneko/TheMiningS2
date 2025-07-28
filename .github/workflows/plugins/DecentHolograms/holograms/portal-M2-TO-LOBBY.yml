@@ -1,0 +1,12 @@
+location: world:89.409:114.794:292.407
+enabled: true
+display-range: 48
+update-range: 48
+update-interval: 20
+facing: 0.0
+down-origin: false
+pages:
+- lines:
+  - content: '&6広場に戻る'
+    height: 0.3
+  actions: {}

@@ -1,0 +1,20 @@
+location: world:-71.862:72.243:-75.518
+enabled: true
+display-range: 48
+update-range: 48
+update-interval: 20
+facing: 0.0
+down-origin: false
+pages:
+- lines:
+  - content: '&8[&6エリア&8] &e採掘所2'
+    height: 0.3
+  - content: '&8[&6出現鉱石&8]'
+    height: 0.3
+  - content: '&8» &a石'
+    height: 0.3
+  - content: '&8» &a鉄鉱石'
+    height: 0.3
+  - content: '&8» &aラピスラズリ'
+    height: 0.3
+  actions: {}
