@@ -43,7 +43,7 @@ function onBreakOreHandle(p: player, centerBlock: block) :: boolean:
 
     #ドロップ処理
     if {_isAutoCollected} is false:
-        drop getMergedDropItems({_dropItems::*}) at location of {_centerBlock}
+        drop getMergedDropItems({_dropItems::*}) at location of {_centerBlock} without velocity
     
     #EXPの付与
     profileExpIncrease({_p}, {_earnExp}, "ORES_BREAK")
