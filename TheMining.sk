@@ -25,7 +25,7 @@ function sendJoinMessage(p: player):
 
 function checkInstanceEnvironment():
     set {_timezone} to now formatted as "z"
-    exit if {_timezone} is "GMT+09:00"
+    exit if {_timezone} is "GMT+09:00" or "JST"
     send "&c=======================================" to console
     send "&c[The Mining] InstanceEnvironmentChecker" to console
     send "&cタイムゾーンが不正です。" to console
