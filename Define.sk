@@ -135,17 +135,17 @@ function handleDefine():
 
     #エンチャント初期EXPコスト（初項）の定義
     set {define::ENCHANTMENT::INITIAL_TERM::efficiency} to 20
-    set {define::ENCHANTMENT::INITIAL_TERM::fortune} to 50
-    set {define::ENCHANTMENT::INITIAL_TERM::auto_collect} to 20
-    set {define::ENCHANTMENT::INITIAL_TERM::auto_sell} to 50
-    set {define::ENCHANTMENT::INITIAL_TERM::range_mining} to 200
+    set {define::ENCHANTMENT::INITIAL_TERM::fortune} to 40
+    set {define::ENCHANTMENT::INITIAL_TERM::auto_collect} to 500
+    set {define::ENCHANTMENT::INITIAL_TERM::auto_sell} to 100
+    set {define::ENCHANTMENT::INITIAL_TERM::range_mining} to 1000
 
     #エンチャントコスト増加量（公比）の定義
-    set {define::ENCHANTMENT::COMMON_RATIO::efficiency} to 2
-    set {define::ENCHANTMENT::COMMON_RATIO::fortune} to 2
+    set {define::ENCHANTMENT::COMMON_RATIO::efficiency} to 1.5
+    set {define::ENCHANTMENT::COMMON_RATIO::fortune} to 1.5
     set {define::ENCHANTMENT::COMMON_RATIO::auto_collect} to 2
     set {define::ENCHANTMENT::COMMON_RATIO::auto_sell} to 2
-    set {define::ENCHANTMENT::COMMON_RATIO::range_mining} to 2
+    set {define::ENCHANTMENT::COMMON_RATIO::range_mining} to 4
 
     #ピッケルのエンチャント定義（Items.sk）
     set int tag "TheMining;Enchantments;efficiency" of custom nbt of {define::ITEMS::FIRST_PICKAXE} to 1
@@ -205,8 +205,8 @@ function handleDefine():
     set {define::NPC::YEAHN::LOCATION} to location(-142.5, 78.5, 5.5, world "world", -125, 0)
 
     #レベルアップのコスト計算（profile.sk）
-    set {define::LEVELUP_INITIAL_TERM} to 2000 #初項
-    set {define::LEVELUP_COMMON_RATIO} to 2 #公比
+    set {define::LEVELUP_INITIAL_TERM} to 500 #初項
+    set {define::LEVELUP_COMMON_RATIO} to 1.25 #公比
 
     #Destination定義（Map.sk）
     set {define::LOCATION::LOBBY} to location(-83.5, 67.6, 4.5, world "world", 140, 0)
@@ -254,10 +254,10 @@ function handleDefine():
     set {define::REGION_NAME::M2} to "採掘所2"
 
     #売店の売却価格の定義（Shop.sk）
-    set {define::SELL_PRICE::COBBLESTONE} to 0.5
-    set {define::SELL_PRICE::COAL} to 1.0
+    set {define::SELL_PRICE::COBBLESTONE} to 0.25
+    set {define::SELL_PRICE::COAL} to 0.5
     set {define::SELL_PRICE::IRON_INGOT} to 1.5
-    set {define::SELL_PRICE::LAPIS_LAZULI} to 3.0
+    set {define::SELL_PRICE::LAPIS_LAZULI} to 1.5
 
     #製錬アイテムの紐付け（Smelting.sk）
     set {define::SMELTING_ITEM::RAW_IRON} to "IRON_INGOT"

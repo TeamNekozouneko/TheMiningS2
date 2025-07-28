@@ -11,7 +11,7 @@ function String(value: object) :: string:
 function getLevelupCost(currentLevel: integer) :: number:
     set {_initial_term} to getDefine("LEVELUP_INITIAL_TERM")
     set {_common_ratio} to getDefine("LEVELUP_COMMON_RATIO")
-    return {_initial_term} * {_common_ratio} ^ ({_currentLevel}-1)
+    return ceil({_initial_term} * {_common_ratio} ^ ({_currentLevel}-1))
 
 #Numberの指定桁目を取得する関数
 function getDigit(value: number, digit: integer) :: integer:
