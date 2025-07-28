@@ -60,7 +60,7 @@ function portalStartTeleportation(p: player, portalName: string):
 
 #ポータル範囲内かを定期検査するAsyncHandler
 function portalConditionAsyncHandler():
-    async run 0 ticks later repeating every second:
+    run 0 ticks later repeating every second:
         set {_players::*} to all players where [metadata value "isPortalTeleporting" of input is false]
         loop getDefineList("PORTALS"):
             set {_pos1} to getDefine("PORTAL::%loop-value%::1")
