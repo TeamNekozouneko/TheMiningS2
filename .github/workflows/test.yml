@@ -29,6 +29,7 @@ jobs:
           wget https://github.com/SkriptLang/Skript/releases/download/2.10.1/Skript-2.10.1.jar -P ~/plugins/
           wget https://github.com/ShaneBeee/SkBee/releases/download/3.8.2/SkBee-3.8.2.jar -P ~/plugins/
           wget https://cdn.modrinth.com/data/GYKicpRR/versions/lbycbggC/Skonic-1.2.2.jar -P ~/plugins/
+          wget https://github.com/cheeezburga/SkWE/releases/download/1.1.2/skript-worldedit-1.1.2.jar -P ~/plugins/
           wget https://mediafilez.forgecdn.net/files/767/49/SQLibrary-7.1.jar -P ~/plugins/
           wget https://ci.citizensnpcs.co/job/Citizens2/3644/artifact/dist/target/Citizens-2.0.36-b3644.jar -P ~/plugins/
           wget https://ci.athion.net/job/FastAsyncWorldEdit/983/artifact/artifacts/FastAsyncWorldEdit-Bukkit-2.12.2.jar -P ~/plugins/
