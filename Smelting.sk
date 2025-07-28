@@ -117,6 +117,7 @@ function smeltingSmeltOnGuiHandler():
 function smeltingSmeltOnBackGroundHandler():
     run 0 ticks later repeating every second:
         loop all players:
+            clear {_smelledItem}
             #製錬候補の算出
             loop {smelting.savedInputIndexes::%loop-player's uuid%::*}:
                 #精錬済みの入力スロットの削除処理
