@@ -26,7 +26,8 @@ jobs:
       #プラグイン環境のセットアップ
       - name: Set up plugin environments
         run: |
-          mv .github/workflows/plugins/* ~/plugins/
+          wget https://github.com/SkriptLang/Skript/releases/download/2.10.1/Skript-2.10.1.jar -P ~/plugins/
+          wget https://mediafilez.forgecdn.net/files/767/49/SQLibrary-7.1.jar -P ~/plugins/
           mkdir -p ~/plugins/Skript/scripts/
           cp -r * ~/plugins/Skript/scripts/
           cp -r .github/workflows/testCase/* ~/plugins/Skript/scripts/
