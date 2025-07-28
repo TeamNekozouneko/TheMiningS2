@@ -12,25 +12,25 @@ function getLevelupCostTestHandler(amountOfTerm: integer = 20) :: boolean:
     set {_initial_term} to getDefine("LEVELUP_INITIAL_TERM")
     set {_common_ratio} to getDefine("LEVELUP_COMMON_RATIO")
     set {_case::1} to {_initial_term}
-    set {_case::2} to ceil({_case::1}*{_common_ratio})
-    set {_case::3} to ceil({_case::2}*{_common_ratio})
-    set {_case::4} to ceil({_case::3}*{_common_ratio})
-    set {_case::5} to ceil({_case::4}*{_common_ratio})
-    set {_case::6} to ceil({_case::5}*{_common_ratio})
-    set {_case::7} to ceil({_case::6}*{_common_ratio})
-    set {_case::8} to ceil({_case::7}*{_common_ratio})
-    set {_case::9} to ceil({_case::8}*{_common_ratio})
-    set {_case::10} to ceil({_case::9}*{_common_ratio})
-    set {_case::11} to ceil({_case::10}*{_common_ratio})
-    set {_case::12} to ceil({_case::11}*{_common_ratio})
-    set {_case::13} to ceil({_case::12}*{_common_ratio})
-    set {_case::14} to ceil({_case::13}*{_common_ratio})
-    set {_case::15} to ceil({_case::14}*{_common_ratio})
-    set {_case::16} to ceil({_case::15}*{_common_ratio})
-    set {_case::17} to ceil({_case::16}*{_common_ratio})
-    set {_case::18} to ceil({_case::17}*{_common_ratio})
-    set {_case::19} to ceil({_case::18}*{_common_ratio})
-    set {_case::20} to ceil({_case::19}*{_common_ratio})
+    set {_case::2} to {_case::1}*{_common_ratio}
+    set {_case::3} to {_case::2}*{_common_ratio}
+    set {_case::4} to {_case::3}*{_common_ratio}
+    set {_case::5} to {_case::4}*{_common_ratio}
+    set {_case::6} to {_case::5}*{_common_ratio}
+    set {_case::7} to {_case::6}*{_common_ratio}
+    set {_case::8} to {_case::7}*{_common_ratio}
+    set {_case::9} to {_case::8}*{_common_ratio}
+    set {_case::10} to {_case::9}*{_common_ratio}
+    set {_case::11} to {_case::10}*{_common_ratio}
+    set {_case::12} to {_case::11}*{_common_ratio}
+    set {_case::13} to {_case::12}*{_common_ratio}
+    set {_case::14} to {_case::13}*{_common_ratio}
+    set {_case::15} to {_case::14}*{_common_ratio}
+    set {_case::16} to {_case::15}*{_common_ratio}
+    set {_case::17} to {_case::16}*{_common_ratio}
+    set {_case::18} to {_case::17}*{_common_ratio}
+    set {_case::19} to {_case::18}*{_common_ratio}
+    set {_case::20} to {_case::19}*{_common_ratio}
 
     #テストデータの準備
     loop {_amountOfTerm} times:
@@ -38,8 +38,8 @@ function getLevelupCostTestHandler(amountOfTerm: integer = 20) :: boolean:
     
     #Test 1-ResultMisMatchingCheck
     loop {_runtimeData::*}:
-        testLog("getLevelupCostTestHandler", "[1-ResultMisMatchingCheck] %loop-index%/%{_amountOfTerm}% Testing... (Sample: %{_case::%loop-index%}%, Runtime: %loop-value%)")
-        return false if {_case::%loop-index%} is not loop-value
+        testLog("getLevelupCostTestHandler", "[1-ResultMisMatchingCheck] %loop-index%/%{_amountOfTerm}% Testing... (Sample: %ceil({_case::%loop-index%})%, Runtime: %loop-value%)")
+        return false if ceil({_case::%loop-index%}) is not loop-value
     testLog("getLevelupCostTestHandler", "[1-ResultMisMatchingCheck] Passed.")
 
     return true
