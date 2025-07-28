@@ -58,9 +58,11 @@ func runtimeCheck(logContent string) bool {
 	}
 
 	if !LogQuantityModuloCheck(logContent) {
+		log("2-LogQuantityModuloCheck", "failed.")
 		os.Exit(1)
 	}
 	if !SQLiteAvailableCheck() {
+		log("3-SQLiteAvailableCheck", "failed.")
 		os.Exit(1)
 	}
 
