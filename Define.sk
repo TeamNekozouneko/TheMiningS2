@@ -169,8 +169,8 @@ function handleDefine():
     #採掘時の獲得経験値の定義（Ores.sk）
     set {define::EARN_EXP::stone} to 0.1
     set {define::EARN_EXP::coal ore} to 0.2
-    set {define::EARN_EXP::iron ore} to 0.2
-    set {define::EARN_EXP::lapis ore} to 0.3
+    set {define::EARN_EXP::iron ore} to 0.4
+    set {define::EARN_EXP::lapis ore} to 0.6
 
     #5Tickあたりに処理する鉱石復活数（Ores.sk
     set {define::REVIVE_ORE_PER_INTERVAL} to 200
