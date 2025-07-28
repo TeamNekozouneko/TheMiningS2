@@ -20,10 +20,12 @@ function levelupGuiHandle(p: player):
 
 function onInventoryClickLevelupHandle(p: player, item: itemtype) :: boolean:
     set {_invName} to name of {_p}'s current inventory
-    if isIconItem({_item}) is true:
-        levelupHandle({_p})
-        refancyGui({_p})
-    return true
+    if name of {_p}'s current inventory is {@TITLE_NAME}:
+        if isIconItem({_item}) is true:
+            levelupHandle({_p})
+            refancyGui({_p})
+        return true
+    return false
 
 local function refancyGui(p: player):
     exit if name of {_p}'s current inventory is not {@TITLE_NAME}
