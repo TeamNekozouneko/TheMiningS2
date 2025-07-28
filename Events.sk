@@ -72,4 +72,7 @@ on inventory close:
     onInventoryCloseSmeltingHandle(player)
 
 on right click:
-    cancel event if onRightClickEnchantmentHandle(player, event-block) is true
+    exit if event-block is not set
+    exit if event-block is ender chest
+    cancel event
+    onRightClickEnchantmentHandle(player, event-block)
