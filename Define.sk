@@ -224,7 +224,7 @@ function handleDefine():
 
     #レベルアップのコスト計算（profile.sk）
     set {define::LEVELUP_INITIAL_TERM} to 500 #初項
-    set {define::LEVELUP_COMMON_RATIO} to 1.25 #公比
+    set {define::LEVELUP_COMMON_RATIO} to 1.5 #公比
 
     #Destination定義（Map.sk）
     set {define::LOCATION::LOBBY} to location(-83.5, 67.6, 4.5, world "world", 140, 0)
