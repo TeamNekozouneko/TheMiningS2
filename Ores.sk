@@ -63,6 +63,12 @@ function isOreBreakable(tool: item, block: block) :: boolean:
     set {_type} to type of {_block}
     if getDefineList("BREAKABLE_ORES::%{_toolId}%") doesn't contain {_type}:
         return false
+    
+    set {_falseFlag} to 0
+    set {_breakableRegions::*} to getDefineList("BREAKABLE_REGIONS")
+    set {_falseFlag} to size of ({_breakableRegions::*} where [isInWGRegion({_block}, input) is false])
+    return false if size of {_breakableRegions::*} is {_falseFlag}
+
     return true
 
 #鉱石復活の定期処理
@@ -99,3 +105,7 @@ local function getMergedDropItems(dropItems: objects) :: objects:
         add {_amount} of {_first} to {_results::*}
         remove all {_first} from {_flatted::*}
     return {_results::*}
+
+local function isInWGRegion(b: block, region: string) :: boolean:
+    return true if region at {_b} contains {_region}
+    return false
