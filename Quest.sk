@@ -112,6 +112,7 @@ function questResetAssignHandler():
                     clear {quest.rewarded::%loop-value's uuid%::*}
                     loop getDefineList("QUESTS"):
                         questTriggerStatisticsCompleteInit(loop-value-1, loop-value-2)
+                        clear {quest.triggers::%loop-value-1's uuid%::%loop-value-2%}
                 
         set {quest.lastFlaggedDay} to {_day}
 
