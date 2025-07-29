@@ -32,11 +32,11 @@ function onBreakOreHandle(p: player, centerBlock: block) :: boolean:
     if {_fortuneMultiplier} != 1:
         loop {_dropItems::*}:
             set item amount of loop-value to (item amount of loop-value) * {_fortuneMultiplier}
-    #[AutoSell]
-    set {_soldItems::*} to enchantmentAutoSellHandle({_p}, {_dropItems::*}, {_autoSellLevel})
-    remove {_soldItems::*} from {_dropItems::*}
     #[AutoCollect]
     set {_remainDrops::*} to enchantmentAutoCollectHandle({_p}, {_dropItems::*}, {_autoCollectLevel})
+    #[AutoSell]
+    set {_soldItems::*} to enchantmentAutoSellHandle({_p}, {_remainDrops::*}, {_autoSellLevel})
+    remove {_soldItems::*} from {_remainDrops::*}
 
     #ブロック破壊処理
     update {_processBlocks::*} as air without neighbouring updates
