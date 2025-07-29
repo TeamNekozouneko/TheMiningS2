@@ -80,3 +80,8 @@ on right click:
 
 on drop:
     cancel event
+
+on player interact:
+    if event-blockaction is physical:
+        if event-block is farmland:
+            cancel event
