@@ -274,6 +274,7 @@ function handleDefine():
     #売店の売却価格の定義（Shop.sk）
     set {define::SELL_PRICE::COBBLESTONE} to 0.25
     set {define::SELL_PRICE::COAL} to 0.5
+    set {define::SELL_PRICE::RAW_IRON} to 0.1
     set {define::SELL_PRICE::IRON_INGOT} to 1.5
     set {define::SELL_PRICE::LAPIS_LAZULI} to 1.5
 
