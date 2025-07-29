@@ -110,6 +110,8 @@ function questResetAssignHandler():
                     clear {quest.ordering::%loop-value's uuid%::*}
                     clear {quest.complete::%loop-value's uuid%::*}
                     clear {quest.rewarded::%loop-value's uuid%::*}
+                    loop getDefineList("QUESTS"):
+                        questTriggerStatisticsCompleteInit(loop-value-1, loop-value-2)
                 
         set {quest.lastFlaggedDay} to {_day}
 
@@ -279,7 +281,7 @@ local function questTriggerStatisticsOrderInit(p: player, questId: string):
     profileStatisticsSet({_p}, "_questTrigger_savingMoney1000_currentMoney", 0) if {_questId} is "SAVING_MONEY_1000"
     profileStatisticsSet({_p}, "_questTrigger_savingMoney5000_currentMoney", 0) if {_questId} is "SAVING_MONEY_5000"
 
-local function questTriggerStatisticsCompleteInit(p: player, questId: string):
+local function questTriggerStatisticsCompleteInit(p: offline player, questId: string):
     profileStatisticsClear({_p}, "_questTrigger_savingMoney500_currentMoney") if {_questId} is "SAVING_MONEY_500"
     profileStatisticsClear({_p}, "_questTrigger_savingMoney1000_currentMoney") if {_questId} is "SAVING_MONEY_1000"
     profileStatisticsClear({_p}, "_questTrigger_savingMoney5000_currentMoney") if {_questId} is "SAVING_MONEY_5000"
