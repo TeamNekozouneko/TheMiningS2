@@ -15,9 +15,9 @@ function questCompleteCheckHandler_SavingMoney():
     set {_players_5000::*} to all players where [isQuestInProgress(input, {_questId_5000}) is true]
 
     #Checking
-    loop {_players_500::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 500]:
+    loop {_players_500::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_savingMoney500_currentMoney") >= 500]:
         questTriggerIncreaseHandle(loop-value, {_questId_500})
-    loop {_players_1000::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 1000]:
+    loop {_players_1000::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_savingMoney1000_currentMoney") >= 1000]:
         questTriggerIncreaseHandle(loop-value, {_questId_1000})
-    loop {_players_5000::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_currentMoney") >= 5000]:
+    loop {_players_5000::*} where [profileMoneyGet(input) - profileStatisticsGet(input, "_questTrigger_savingMoney5000_currentMoney") >= 5000]:
         questTriggerIncreaseHandle(loop-value, {_questId_5000})
