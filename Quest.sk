@@ -278,9 +278,9 @@ function questTriggerIncreaseHandle(p: player, questId: string, increaseValue: i
         add {_increaseValue} to {quest.triggers::%{_p}'s uuid%::%{_questId}%}
 
 local function questTriggerStatisticsOrderInit(p: player, questId: string):
-    profileStatisticsSet({_p}, "_questTrigger_savingMoney500_currentMoney", 0) if {_questId} is "SAVING_MONEY_500"
-    profileStatisticsSet({_p}, "_questTrigger_savingMoney1000_currentMoney", 0) if {_questId} is "SAVING_MONEY_1000"
-    profileStatisticsSet({_p}, "_questTrigger_savingMoney5000_currentMoney", 0) if {_questId} is "SAVING_MONEY_5000"
+    profileStatisticsSet({_p}, "_questTrigger_savingMoney500_currentMoney", profileMoneyGet({_p})) if {_questId} is "SAVING_MONEY_500"
+    profileStatisticsSet({_p}, "_questTrigger_savingMoney1000_currentMoney", profileMoneyGet({_p})) if {_questId} is "SAVING_MONEY_1000"
+    profileStatisticsSet({_p}, "_questTrigger_savingMoney5000_currentMoney", profileMoneyGet({_p})) if {_questId} is "SAVING_MONEY_5000"
 
 local function questTriggerStatisticsCompleteInit(p: offline player, questId: string):
     profileStatisticsClear({_p}, "_questTrigger_savingMoney500_currentMoney") if {_questId} is "SAVING_MONEY_500"
