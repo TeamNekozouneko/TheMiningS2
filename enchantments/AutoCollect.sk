@@ -5,9 +5,60 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function enchantmentAutoCollectHandle(p: player, items: objects, autoCollectLevel: integer) :: boolean:
-    return false if {_autoCollectLevel} is not set
-    return false if isInventoryFreeSpaceAvailable({_p}) is false
-    async run 0 ticks later:
-        give {_items::*} to {_p}
-    return true
+function enchantmentAutoCollectHandle(p: player, items: objects, autoCollectLevel: integer) :: objects:
+    #レベルが0の時は、そのまま返却する
+    return {_items} if {_autoCollectLevel} is not set
+
+    #集計処理
+    loop {_items::*}:
+        set {_itemId} to getItemId(loop-value)
+        continue if {_itemId} is not set
+        add item amount of loop-value to {_calc::%{_itemId}%}
+
+    #付与処理
+    loop 36 times:
+        set {_slot} to (loop-number) - 1
+        set {_slotItem} to slot {_slot} of {_p}'s inventory
+        set {_slotItemId} to getItemId({_slotItem})
+        set {_slotAmount} to item amount of {_slotItem}
+        set {_maxStackSize} to maximum stack size of {_slotItem}
+        continue if {_slotAmount} is {_maxStackSize}
+
+        if {_slotItem} is air: #空きスロットが来た時は、先頭のスタックを反映させる
+            set {_candidate} to first element out of (indices of {_calc::*})
+            set {_candidateItemData} to getItemData({_candidate})
+            set {_candidateMaxStackSize} to maximum stack size of {_candidateItemData}
+
+            #スタック分の計算
+            if {_calc::%{_candidate}%} - {_candidateMaxStackSize} >= 0: #最大数までスタックしてもOK
+                set {_candidateStackAmount} to 64
+            else: #{_calc::%{_candidate}%}分まで全てスタックさせてOK
+                set {_candidateStackAmount} to {_calc::%{_candidate}%}
+
+            remove {_candidateStackAmount} from {_calc::%{_candidate}%}
+            set slot {_slot} of {_p}'s inventory to {_candidateStackAmount} of {_candidateItemData}
+
+            #残りスタック数が0以下になった場合は、配列から削除
+            if {_calc::%{_candidate}%} <= 0:
+                clear {_calc::%{_candidate}%}
+        else if {_calc::%{_slotItemId}%} is set: #同じItemIDの場合は、スタックできる分だけスタックさせる
+            set {_stackableAmount} to {_maxStackSize} - {_slotAmount}
+
+            #スタック分の計算
+            if {_calc::%{_slotItemId}%} - {_stackableAmount} >= 0: #最大数までスタックしてもOK
+                set {_stackAmount} to {_maxStackSize}
+            else: #{_calc::%{_slotItemId}%}分まで全てスタックさせてOK
+                set {_stackAmount} to {_calc::%{_slotItemId}%} + {_slotAmount}
+
+            remove {_stackAmount} from {_calc::%{_slotItemId}%}
+            set item amount of (slot {_slot} of {_p}'s inventory) to {_stackAmount}
+
+            #残りスタック数が0以下になった場合は、配列から削除
+            if {_calc::%{_slotItemId}%} <= 0:
+                clear {_calc::%{_slotItemId}%}
+
+    #アイテムデータへの加工
+    loop {_calc::*}:
+        add (loop-value) of getItemData(loop-index) to {_returns::*}   
+
+    return {_returns::*}
