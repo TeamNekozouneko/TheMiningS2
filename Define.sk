@@ -133,20 +133,20 @@ function handleDefine():
     set {define::ENCHANTMENT::MAX_LEVEL::fortune} to 20
     set {define::ENCHANTMENT::MAX_LEVEL::auto_collect} to 1
     set {define::ENCHANTMENT::MAX_LEVEL::auto_sell} to 10
-    set {define::ENCHANTMENT::MAX_LEVEL::range_mining} to 3
+    set {define::ENCHANTMENT::MAX_LEVEL::range_mining} to 5
 
     #エンチャント初期EXPコスト（初項）の定義
     set {define::ENCHANTMENT::INITIAL_TERM::efficiency} to 20
     set {define::ENCHANTMENT::INITIAL_TERM::fortune} to 40
     set {define::ENCHANTMENT::INITIAL_TERM::auto_collect} to 500
-    set {define::ENCHANTMENT::INITIAL_TERM::auto_sell} to 100
+    set {define::ENCHANTMENT::INITIAL_TERM::auto_sell} to 400
     set {define::ENCHANTMENT::INITIAL_TERM::range_mining} to 1000
 
     #エンチャントコスト増加量（公比）の定義
     set {define::ENCHANTMENT::COMMON_RATIO::efficiency} to 1.5
     set {define::ENCHANTMENT::COMMON_RATIO::fortune} to 1.5
     set {define::ENCHANTMENT::COMMON_RATIO::auto_collect} to 2
-    set {define::ENCHANTMENT::COMMON_RATIO::auto_sell} to 2
+    set {define::ENCHANTMENT::COMMON_RATIO::auto_sell} to 1.75
     set {define::ENCHANTMENT::COMMON_RATIO::range_mining} to 4
 
     #ピッケルのエンチャント定義（Items.sk）

@@ -9,11 +9,37 @@ function enchantmentRangeMiningHandle(p: player, tool: item, block: block, range
     #エンチャントがついていない時は、そのまま変更なしで返却する
     return getObjects({_block}) if {_rangeMiningLevel} is not set
 
-    #Cuboid生成
-    set {_pos1} to block {_rangeMiningLevel} east {_rangeMiningLevel} north ({_rangeMiningLevel}*2)-1 above {_block}
-    set {_pos2} to block {_rangeMiningLevel} west {_rangeMiningLevel} south 1 under {_block}
+    if {_rangeMiningLevel} is 1:
+        clear {_candidate::*}
+        add {_block} to {_candidate::*}
+        add block under {_block} to {_candidate::*}
+        return {_candidate::*} where [isOreBreakable({_tool}, input) is true]
+    else if {_rangeMiningLevel} is 2:
+        clear {_candidate::*}
+        add {_block} to {_candidate::*}
+        add block under {_block} to {_candidate::*}
+        add block above {_block} to {_candidate::*}
+        return {_candidate::*} where [isOreBreakable({_tool}, input) is true]
+    else if {_rangeMiningLevel} is 3:
+        set {_yaw} to {_p}'s yaw
+        set {_type} to 1
+        set {_type} to 2 if {_yaw} is between -45 and -135
+        set {_type} to 2 if {_yaw} is between 45 and 135
+        if {_type} is 1:
+            set {_pos1} to block 1 west {_block}
+            set {_pos2} to block 1 east 1 under {_block}
+        else if {_type} is 2:
+            set {_pos1} to block 1 north {_block}
+            set {_pos2} to block 1 south 1 under {_block}
+        set {_allBlocks::*} to all blocks within {_pos1} and {_pos2} where [input is not air]
+        set {_breakableBlocks::*} to {_allBlocks::*} where [isOreBreakable({_tool}, input) is true]
+        return {_breakableBlocks::*}
+    else if {_rangeMiningLevel} is 4 or 5:
+        #Cuboid生成
+        set {_range} to {_rangeMiningLevel} - 3
+        set {_pos1} to block {_range} east {_range} north ({_range}*2)-1 above {_block}
+        set {_pos2} to block {_range} west {_range} south 1 under {_block}
 
-    set {_allBlocks::*} to all blocks within {_pos1} and {_pos2} where [input is not air]
-    set {_breakableBlocks::*} to {_allBlocks::*} where [isOreBreakable({_tool}, input) is true]
-    remove {_block} from {_breakableBlocks::*}
-    return {_breakableBlocks::*}
+        set {_allBlocks::*} to all blocks within {_pos1} and {_pos2} where [input is not air]
+        set {_breakableBlocks::*} to {_allBlocks::*} where [isOreBreakable({_tool}, input) is true]
+        return {_breakableBlocks::*}
