@@ -128,6 +128,13 @@ function handleDefine():
     add "auto_sell" to {define::ENCHANTMENT_TYPES::*}
     add "range_mining" to {define::ENCHANTMENT_TYPES::*}
 
+    #エンチャント説明の定義(Enchantment.sk)
+    set {define::ENCHANTMENT_DESCRIPTION::efficiency} to "&7掘る速度が速くなる"
+    set {define::ENCHANTMENT_DESCRIPTION::fortune} to "&7レベルあたり5%%の確率で、%nl%&7ドロップ品が2〜3倍になる"
+    set {define::ENCHANTMENT_DESCRIPTION::auto_collect} to "&7掘った鉱石がドロップせず、%nl%&7直接インベントリーに入る"
+    set {define::ENCHANTMENT_DESCRIPTION::auto_sell} to "&7インベントリーに入りきらなくなったドロップ品が、%nl%&7レベルあたり10%%の価格で自動的に売却される"
+    set {define::ENCHANTMENT_DESCRIPTION::range_mining} to "&7周囲のブロックを同時に破壊する"
+
     #エンチャント最大レベルの定義
     set {define::ENCHANTMENT::MAX_LEVEL::efficiency} to 20
     set {define::ENCHANTMENT::MAX_LEVEL::fortune} to 20

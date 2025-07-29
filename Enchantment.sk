@@ -157,6 +157,10 @@ function enchantmentGuiAsyncHandler():
 
                 clear {_iconLores::*} #次のイテレータ用の初期化
                 set {_iconName} to "&6%{_langEnchantment}% &eLv.%{_currentEnchantmentLevel}+1%"
+
+                #説明の追加
+                add getDefine("ENCHANTMENT_DESCRIPTION::%{_enchantment}%") to {_iconLores::*}
+                add "&r" to {_iconLores::*}
                 
                 if {_isCostEnough} is true:
                     add "&aエンチャント可能" to {_iconLores::*}
@@ -167,7 +171,7 @@ function enchantmentGuiAsyncHandler():
                     set {_icon} to book
 
                 add "&r" to {_iconLores::*}
-                add "&f必要EXP&7: &b%{_currentCost}% EXP" to {_iconLores::*}
+                add "&f必要EXP&8: &b%{_currentCost}% EXP" to {_iconLores::*}
 
                 #最大レベルの時は表記を上書きする
                 if {_currentEnchantmentLevel} >= {_maxLevel}:
