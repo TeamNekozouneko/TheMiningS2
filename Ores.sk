@@ -83,6 +83,12 @@ function oreReviveAsyncHandler():
             wait 10 tick
 
         #Revive Processing
+        set {_breakableRegions::*} to getDefineList("BREAKABLE_REGIONS")
+        loop {_breakableRegions::*}:
+            set {_regionPlayers::*} to getAllPlayersInWGRegion(loop-value)
+            set {_destination} to getDefine("REVIVE_ORE_DESTINATION::%loop-value%")
+            teleport {_regionPlayers::*} to getDefine("LOCATION::%{_destination}%")
+        
         loop getDefineList("REVIVE_ORE_SCHEMATICS"):
             paste schematic loop-value at location(0, 0, 0, world "world", 0, 0)
         
@@ -109,3 +115,6 @@ local function getMergedDropItems(dropItems: objects) :: objects:
 local function isInWGRegion(b: block, region: string) :: boolean:
     return true if region at {_b} contains {_region}
     return false
+
+local function getAllPlayersInWGRegion(region: string) :: objects:
+    return all players where [region at input contains {_region}]

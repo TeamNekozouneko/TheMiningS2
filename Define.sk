@@ -186,6 +186,11 @@ function handleDefine():
     add "breakable_mine01" to {define::BREAKABLE_REGIONS::*}
     add "breakable_mine02" to {define::BREAKABLE_REGIONS::*}
 
+    #鉱石復活時のテレポート先の紐付け（Ores.sk）
+    #WG-Region:Destination
+    set {define::REVIVE_ORE_DESTINATION::breakable_mine01} to "MINING_1"
+    set {define::REVIVE_ORE_DESTINATION::breakable_mine02} to "MINING_2"
+
     #NPC種類の定義（NPCs.sk）
     add "LEVELUP" to {define::NPCS::*}
     add "SHOP" to {define::NPCS::*}
