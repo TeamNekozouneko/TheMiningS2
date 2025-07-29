@@ -8,6 +8,8 @@
 function enchantmentRangeMiningHandle(p: player, tool: item, block: block, rangeMiningLevel: integer) :: objects:
     #エンチャントがついていない時は、そのまま変更なしで返却する
     return getObjects({_block}) if {_rangeMiningLevel} is not set
+    #スニークしている間は、そのまま変更なしで返却する
+    return getObjects({_block}) if {_p} is sneaking
 
     if {_rangeMiningLevel} is 1:
         clear {_candidate::*}
