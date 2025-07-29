@@ -335,6 +335,10 @@ function isQuestAssigned(p: player, questId: string) :: boolean:
 
 local function questOrder(p: player, questId: string) :: boolean:
     if isQuestOrderable({_p}, {_questId}) is true:
+        #残っているトリガーをリセット（questComplete時に削除するが念のため）
+        clear {quest.triggers::%{_p}'s uuid%::%{_questId}%}
+
+        #クエストの変数データ適用
         remove {_questId} from {quest.has::%{_p}'s uuid%::*}
         add {_questId} to {quest.ordering::%{_p}'s uuid%::*}
 
@@ -360,6 +364,10 @@ local function questComplete(p: player, questId: string, isSkipCondition: boolea
     set {_flag} to true if isQuestCompletable({_p}, {_questId}) is true
 
     if {_flag} is true:
+        #トリガーの削除
+        clear {quest.triggers::%{_p}'s uuid%::%{_questId}%}
+
+        #クエストの変数データ適用
         remove {_questId} from {quest.ordering::%{_p}'s uuid%::*}
         add {_questId} to {quest.complete::%{_p}'s uuid%::*}
 
