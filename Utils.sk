@@ -83,3 +83,20 @@ function getAllBannerPatternItems() :: objects:
 function getObjects(obj: object) :: objects:
     add {_obj} to {_obj::*}
     return {_obj::*}
+
+#パラボラ近似 deg → cos(deg)
+function Pr_A_cos(deg: number) :: number:
+    #ラジアン変換
+    set {_rad} to {_deg} * (pi / 180)
+
+    #正規化 (-pi < x < pi)
+    set {_nor} to mod({_rad} + pi, 2 * pi) - pi
+
+    #パラボラ近似
+    set {_p} to 0.225 #補正用パラメータ
+    set {_k1} to 4 / pi
+    set {_k2} to -4 / (pi^2)
+
+    set {_cos} to {_k1}*{_nor} + {_k2}*{_nor}*abs({_nor})
+    set {_cos} to {_p} * ({_cos} * abs({_cos}) - {_cos}) + {_cos} #誤差補正
+    return {_cos}
