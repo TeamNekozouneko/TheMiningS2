@@ -37,6 +37,7 @@ on join:
     profileJoinInit(player)
     sendJoinMessage(player)
     guideBossBarInit(player)
+    mapTeleportSafeHandle(player)
 
 on quit:
     guideBossBarClear(player)

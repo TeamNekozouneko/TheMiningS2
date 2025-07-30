@@ -85,6 +85,14 @@ function onJumpPadHandle(p: player, block: block):
 
     playSound(getObjects({_p}), "JumpPad")
 
+function mapTeleportSafeHandle(p: player):
+    set {_breakableRegions::*} to getDefineList("BREAKABLE_REGIONS")
+    loop {_breakableRegions::*}:
+        if isInWGRegion(location of {_p}, loop-value) is true:
+            set {_destination} to getDefine("REVIVE_ORE_DESTINATION::%loop-value%")
+            teleport {_p} to getDefine("LOCATION::%{_destination}%")
+            exit loop
+
 function isInRegion(p: player, region: string) :: boolean:
     set {_target} to {_p}'s location
     loop getDefineList("REGIONS"):
@@ -108,8 +116,8 @@ function getAllPlayersInMine() :: objects:
     add getAllPlayersInRegion("M2") where [{_obj::*} doesn't contain input] to {_obj::*}
     return {_obj::*}
 
-function isInWGRegion(b: block, region: string) :: boolean:
-    return true if region at {_b} contains {_region}
+function isInWGRegion(loc: location, region: string) :: boolean:
+    return true if region at {_loc} contains {_region}
     return false
 
 function getAllPlayersInWGRegion(region: string) :: objects:

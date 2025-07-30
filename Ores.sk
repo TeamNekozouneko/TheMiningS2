@@ -65,8 +65,9 @@ function isOreBreakable(tool: item, block: block) :: boolean:
         return false
     
     set {_falseFlag} to 0
+    set {_blockLoc} to location of {_block}
     set {_breakableRegions::*} to getDefineList("BREAKABLE_REGIONS")
-    set {_falseFlag} to size of ({_breakableRegions::*} where [isInWGRegion({_block}, input) is false])
+    set {_falseFlag} to size of ({_breakableRegions::*} where [isInWGRegion({_blockLoc}, input) is false])
     return false if size of {_breakableRegions::*} is {_falseFlag}
 
     return true
