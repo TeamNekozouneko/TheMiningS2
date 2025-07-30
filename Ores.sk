@@ -111,10 +111,3 @@ local function getMergedDropItems(dropItems: objects) :: objects:
         add {_amount} of {_first} to {_results::*}
         remove all {_first} from {_flatted::*}
     return {_results::*}
-
-local function isInWGRegion(b: block, region: string) :: boolean:
-    return true if region at {_b} contains {_region}
-    return false
-
-local function getAllPlayersInWGRegion(region: string) :: objects:
-    return all players where [region at input contains {_region}]

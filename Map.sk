@@ -107,3 +107,10 @@ function getAllPlayersInMine() :: objects:
     add getAllPlayersInRegion("M1") where [{_obj::*} doesn't contain input] to {_obj::*}
     add getAllPlayersInRegion("M2") where [{_obj::*} doesn't contain input] to {_obj::*}
     return {_obj::*}
+
+function isInWGRegion(b: block, region: string) :: boolean:
+    return true if region at {_b} contains {_region}
+    return false
+
+function getAllPlayersInWGRegion(region: string) :: objects:
+    return all players where [region at input contains {_region}]
