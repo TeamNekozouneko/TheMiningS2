@@ -11,6 +11,7 @@ on load:
 
     initDefine()
     initMap()
+    initTeam()
     oreReviveAsyncHandler()
     initNPCs()
     portalConditionAsyncHandler()
@@ -39,8 +40,12 @@ on join:
     guideBossBarInit(player)
     mapTeleportSafeHandle(player)
 
+    add player to {themining.team::nocol}
+
 on quit:
     guideBossBarClear(player)
+
+    remove player from {themining.team::nocol}
 
 on break:
     cancel drops
