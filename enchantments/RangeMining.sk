@@ -24,15 +24,20 @@ function enchantmentRangeMiningHandle(p: player, tool: item, block: block, range
         return {_candidate::*} where [isOreBreakable({_tool}, input) is true]
     else if {_rangeMiningLevel} is 3:
         set {_yaw} to {_p}'s yaw
+        set {_cos} to Pr_A_cos({_yaw})
+        set {_threshold} to sqrt(2) / 2 #cos(45°)の近似値
+
         set {_type} to 1
-        set {_type} to 2 if {_yaw} is between -45 and -135
-        set {_type} to 2 if {_yaw} is between 45 and 135
+        if {_cos} > -1 * {_threshold}: #-pi/4 < rad(yaw) < pi/4
+            if {_cos} < {_threshold}:
+                set {_type} to 2
+
         if {_type} is 1:
-            set {_pos1} to block 1 west {_block}
-            set {_pos2} to block 1 east 1 under {_block}
-        else if {_type} is 2:
             set {_pos1} to block 1 north {_block}
             set {_pos2} to block 1 south 1 under {_block}
+        else if {_type} is 2:
+            set {_pos1} to block 1 west {_block}
+            set {_pos2} to block 1 east 1 under {_block}
         set {_allBlocks::*} to all blocks within {_pos1} and {_pos2} where [input is not air]
         set {_breakableBlocks::*} to {_allBlocks::*} where [isOreBreakable({_tool}, input) is true]
         return {_breakableBlocks::*}
