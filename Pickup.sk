@@ -1,0 +1,57 @@
+#==================================================
+#| #Pickup.sk
+#| ピックアップインベントリーの実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+#{pickup.items::<UUID>::*}
+Options:
+    PICKUP_PURGE_CHECK_INTERVAL: 10 second #0:00を回ったかをチェックする間隔
+    PICKUP_ANNOUNCE_INTERVAL: 300 second #ピックアップインベントリーにアイテムがあることを通知する間隔
+
+function pickupPeriodicCheckHandlerInit():
+    run 0 ticks later repeating every {@PICKUP_PURGE_CHECK_INTERVAL}:
+        set {_now} to now
+        set {_day} to ({_now} formatted as "dd") parsed as integer
+
+        if {pickup.lastFlaggedDay} and {_day} is set:
+            if {pickup.lastFlaggedDay} is not {_day}:
+                #リセット
+                loop all offline players:
+                    clear {pickup.items::%loop-value's uuid%::*}
+        set {pickup.lastFlaggedDay} to {_day}
+
+function pickupPeriodicAnnounceHandlerInit():
+    run 0 ticks later repeating every {@PICKUP_ANNOUNCE_INTERVAL}:
+        set {_players::*} to all players where [size of {pickup.items::%input's uuid%::*} > 0]
+        send getDefine("LANG::PICKUP_ANNOUNCE") to {_players::*}
+
+function pickupAddItem(p: player, item: item):
+    add {_item} to {pickup.items::%{_p}'s uuid%::*}
+
+function pickupItems(p: player):
+    set {_itemCount} to 0
+    loop 36 times:
+        exit loop if size of {pickup.items::%{_p}'s uuid%::*} <= 0
+        exit loop if isInventoryFreeSpaceAvailable({_p}) is false
+
+        set {_slot} to (loop-number) - 1
+        set {_slotItem} to slot {_slot} of {_p}'s inventory
+        continue if {_slotItem} is not air
+
+        set {_candidate} to first element out of {pickup.items::%{_p}'s uuid%::*}
+        set slot {_slot} of {_p}'s inventory to {_candidate}
+
+        remove {_candidate} from {pickup.items::%{_p}'s uuid%::*}
+        add 1 to {_itemCount}
+    
+    if {_itemCount} is 0:
+        send getDefine("LANG::PICKUP_ERROR_NOTHING_TO_DO") to {_p}
+    else if size of {pickup.items::%{_p}'s uuid%::*} > 0:
+        set {_msg} to getDefine("LANG::PICKUP_SUCCESS_REMAIN")
+        set {_msg} to substitution({_msg}, {_itemCount})
+        set {_msg} to substitution({_msg}, String(size of {pickup.items::%{_p}'s uuid%::*}))
+        send {_msg} to {_p}
+    else:
+        send getDefine("LANG::PICKUP_SUCCESS_ALL") to {_p}

@@ -22,6 +22,8 @@ on load:
     questPeriodicCheckHandlerInit()
     questResetAssignHandler()
     profileTabListNameHandler()
+    pickupPeriodicCheckHandlerInit()
+    pickupPeriodicAnnounceHandlerInit()
 
 every second:
     loop all players:

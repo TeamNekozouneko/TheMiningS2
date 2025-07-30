@@ -144,7 +144,8 @@ function onInventoryCloseSmeltingHandle(p: player):
         set {_slotItem} to slot (loop-value) of {_p}'s current inventory
         set {_slotItemId} to getItemId({_slotItem})
         if getDefine("SMELTING_ITEM::%{_slotItemId}%") is not set:
-            give {_slotItem} to {_p}
+            if giveSafe({_p}, {_slotItem}) is true:
+                set {_storedPickup} to true
             clear slot (loop-value) of {_p}'s current inventory
 
     #出力スロットの精錬してできないアイテムを返却
@@ -154,7 +155,8 @@ function onInventoryCloseSmeltingHandle(p: player):
         set {_slotItem} to slot (loop-value) of {_p}'s current inventory
         set {_slotItemId} to getItemId({_slotItem})
         if {_smeltableItems::*} doesn't contain {_slotItemId}:
-            give {_slotItem} to {_p}
+            if giveSafe({_p}, {_slotItem}) is true:
+                set {_storedPickup} to true
             clear slot (loop-value) of {_p}'s current inventory
 
     clear {smelting.savedInputIndexes::%{_p}'s uuid%::*}
@@ -180,6 +182,19 @@ function onInventoryCloseSmeltingHandle(p: player):
 
         add {_itemId} to {smelting.savedOutputIndexes::%{_p}'s uuid%::*} if {smelting.savedOutputIndexes::%{_p}'s uuid%::*} doesn't contain {_itemId}
         add item amount of {_item} to {smelting.savedOutputItems::%{_p}'s uuid%::%{_itemId}%}
+
+    if {_storedPickup} is true:
+        send getDefine("LANG::SMELTING_NOT_ENOUGH_SPACE") to {_p}
+
+#pickupに入った場合、trueが返却
+local function giveSafe(p: player, item: item) :: boolean:
+    return false if {_item} is air
+    if isInventoryFreeSpaceAvailable({_p}) is true:
+        give {_item} to {_p}
+        return false
+    else:
+        pickupAddItem({_p}, {_item})
+        return true
 
 local function getBackGroundSlots() :: objects:
     loop 6*9 times:
