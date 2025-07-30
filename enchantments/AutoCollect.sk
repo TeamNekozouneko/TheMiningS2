@@ -7,7 +7,7 @@
 
 function enchantmentAutoCollectHandle(p: player, items: objects, autoCollectLevel: integer) :: objects:
     #レベルが0の時は、そのまま返却する
-    return {_items} if {_autoCollectLevel} is not set
+    return {_items::*} if {_autoCollectLevel} is not set
 
     #集計処理
     loop {_items::*}:
