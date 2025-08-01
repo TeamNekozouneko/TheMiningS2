@@ -45,10 +45,10 @@ function criticalErrorDetectionHandler():
     clear {themining.crd::*}
 
     #Database Writing Error
-    run 0 ticks later repeating every 30 tick:
+    run 0 ticks later repeating every 5 second:
         set {_randomId} to random integer between -999999999 and 999999999
         set {themining.crd::dwe} to {_randomId}
-        wait a second #DBレスポンスが1000ms以上だと書き込まれない=不整合が起きる可能性が高い
+        wait 3 second #DBレスポンスが2000ms以上だと書き込まれない=不整合が起きる可能性が高い
         if {themining.crd::dwe} is not {_randomId}:
             logError("ERR_CRITICAL_SYSTEM_ERROR", getLogParameters("Database Writing Error > Expected: %{_randomId}%, Actual: %{themining.crd::dwe}%"))
             switchSafeMode()
