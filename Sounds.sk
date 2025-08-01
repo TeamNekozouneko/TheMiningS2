@@ -23,6 +23,8 @@ function playSound(p: objects, soundId: string):
     soundHandle_Teleported({_p::*}) if {_soundId} is "Teleported"
     soundHandle_OpenEnchantmentTable({_p::*}) if {_soundId} is "OpenEnchantmentTable"
     soundHandle_UseEnchantmentTable({_p::*}) if {_soundId} is "UseEnchantmentTable"
+    soundHandle_PickupAll({_p::*}) if {_soundId} is "PickupAll"
+    soundHandle_PickupRemain({_p::*}) if {_soundId} is "PickupRemain"
 
 local function soundHandle_Error(p: objects):
     play sound "minecraft:block.note_block.bass" with pitch 1 to {_p::*}
@@ -83,3 +85,11 @@ local function soundHandle_OpenEnchantmentTable(p: objects):
 
 local function soundHandle_UseEnchantmentTable(p: objects):
     play sound "minecraft:block.enchantment_table.use" with pitch 1 to {_p::*}
+
+local function soundHandle_PickupAll(p: objects):
+    play sound "minecraft:entity.experience_orb.pickup" with pitch 1 to {_p::*}
+
+local function soundHandle_PickupRemain(p: objects):
+    loop 3 times:
+        play sound "minecraft:entity.experience_orb.pickup" with pitch 1 to {_p::*}
+        wait 2 tick

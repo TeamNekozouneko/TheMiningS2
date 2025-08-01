@@ -48,10 +48,13 @@ function pickupItems(p: player):
     
     if {_itemCount} is 0:
         send getDefine("LANG::PICKUP_ERROR_NOTHING_TO_DO") to {_p}
+        playSound(getObjects({_p}), "Error")
     else if size of {pickup.items::%{_p}'s uuid%::*} > 0:
         set {_msg} to getDefine("LANG::PICKUP_SUCCESS_REMAIN")
-        set {_msg} to substitution({_msg}, {_itemCount})
+        set {_msg} to substitution({_msg}, String({_itemCount}))
         set {_msg} to substitution({_msg}, String(size of {pickup.items::%{_p}'s uuid%::*}))
         send {_msg} to {_p}
+        playSound(getObjects({_p}), "PickupRemain")
     else:
-        send getDefine("LANG::PICKUP_SUCCESS_ALL") to {_p}
+        send substitution(getDefine("LANG::PICKUP_SUCCESS_ALL"), String({_itemCount})) to {_p}
+        playSound(getObjects({_p}), "PickupAll")
