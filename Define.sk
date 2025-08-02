@@ -21,6 +21,9 @@ function handleDefine():
     add "&c&lWelcome to The Mining" to {define::LANG::JOIN_MESSAGES::*}
     add "&3崖下に消える希望" to {define::LANG::JOIN_MESSAGES::*}
     add "&3僕は、見逃さなかった。" to {define::LANG::JOIN_MESSAGES::*}
+    add "&r" to {define::LANG::JOIN_MESSAGES::*}
+    add "&b附則と要素内容（※必読）" to {define::LANG::JOIN_MESSAGES::*}
+    add "&8» &7 https://www.nekozouneko.net/rule" to {define::LANG::JOIN_MESSAGES::*}
     add "&8========================================" to {define::LANG::JOIN_MESSAGES::*}
 
     set {define::LANG::SUCCESS_LEVELUP} to "&6&l修行屋 &8» &a&lLEVELUP!&8: &c${} &f→ &a${}"
