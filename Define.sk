@@ -83,8 +83,8 @@ function handleDefine():
     add "&b・&f所持金 &6${}&6G" to {define::SCOREBOARD_CONTENTS::*}
     add "" to {define::SCOREBOARD_CONTENTS::*}
     add "&8» &aSeason-2 公開！" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8» &7アップデート要望は" to {define::SCOREBOARD_CONTENTS::*}
-    add "&8» &7Discordまで！" to {define::SCOREBOARD_CONTENTS::*}
+    add "&8» &7バグ・不具合の発見は" to {define::SCOREBOARD_CONTENTS::*}
+    add "&8» &7Discordまでご報告を！" to {define::SCOREBOARD_CONTENTS::*}
     add "" to {define::SCOREBOARD_CONTENTS::*}
     add "&bwww.nekozouneko.net" to {define::SCOREBOARD_CONTENTS::*}
 
