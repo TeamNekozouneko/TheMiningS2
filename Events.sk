@@ -8,6 +8,7 @@
 on load:
     checkInstanceEnvironment()
     criticalErrorDetectionHandler()
+    stabilizeSaveCurrentTps()
 
     initDefine()
     initMap()

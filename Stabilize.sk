@@ -1,0 +1,11 @@
+Options:
+    KICK_MESSAGE: "&aスタビライズ処理中です...少々待ってからご参加ください。"
+    
+on connect:
+    exit if player is op
+    if floor({stabilize.currentTps}) <= {stabilize.thresholdTps}:
+        kick the player due to {@KICK_MESSAGE}
+
+function stabilizeSaveCurrentTps():
+    run 0 ticks later repeating every 2 tick:
+        set {stabilize.currentTps} to tps from last 1 minute
