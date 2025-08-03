@@ -93,6 +93,8 @@ function oreReviveAsyncHandler():
         loop getDefineList("REVIVE_ORE_SCHEMATICS"):
             paste schematic loop-value at location(0, 0, 0, world "world", 0, 0)
         
+        kill all dropped items
+
         #Revive Processed
         playSound({_players::*} , "OreRevived")
         send action bar getDefine("LANG::ORES_REVIVED") to {_players::*}
