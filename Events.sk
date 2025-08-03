@@ -88,6 +88,11 @@ on right click:
 
 on drop:
     cancel event
+    #インベントリーに余裕がない時、cancel eventでアイテムが消えるため
+    if player doesn't have enough space for event-item:
+        pickupAddItem(player, event-item)
+        send getDefine("LANG::PICKUP_STORED") to player
+        playSound(getObjects(player), "Error")
 
 on player interact:
     if event-blockaction is physical:

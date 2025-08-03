@@ -184,7 +184,7 @@ function onInventoryCloseSmeltingHandle(p: player):
         add item amount of {_item} to {smelting.savedOutputItems::%{_p}'s uuid%::%{_itemId}%}
 
     if {_storedPickup} is true:
-        send getDefine("LANG::SMELTING_NOT_ENOUGH_SPACE") to {_p}
+        send getDefine("LANG::PICKUP_STORED") to {_p}
         playSound(getObjects({_p}), "Error")
 
 #pickupに入った場合、trueが返却
