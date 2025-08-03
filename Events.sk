@@ -21,7 +21,6 @@ on load:
     smeltingSmeltOnGuiHandler()
     smeltingSmeltOnBackGroundHandler()
     questAssignHandler()
-    questPeriodicCheckHandlerInit()
     questResetAssignHandler()
     profileTabListNameHandler()
     pickupPeriodicCheckHandlerInit()

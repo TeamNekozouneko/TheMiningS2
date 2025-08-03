@@ -325,9 +325,9 @@ function handleDefine():
     set {define::QUEST_TITLE::ENCHANT_PICKAXE_ONCE} to "ピッケルにエンチャントする"
 
     #完了トリガー数の紐付け（Quest.sk）
-    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_500} to 1
-    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_1000} to 1
-    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_5000} to 1
+    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_500} to 500
+    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_1000} to 1000
+    set {define::QUEST_COMPLETE_TRIGGER::SAVING_MONEY_5000} to 5000
     set {define::QUEST_COMPLETE_TRIGGER::SELL_ITEM_100} to 100
     set {define::QUEST_COMPLETE_TRIGGER::VISIT_ANY_MINE} to 1
     set {define::QUEST_COMPLETE_TRIGGER::ENCHANT_PICKAXE_ONCE} to 1

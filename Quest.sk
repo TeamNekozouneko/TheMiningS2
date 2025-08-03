@@ -24,12 +24,6 @@ Options:
     MAIN_DAILY_INFO_ICON: trial key named "&6デイリークエスト" with lore "&7毎日0:00（日本標準時）に" and "&7更新されるクエストです。（最大10個）"
     MAIN_WEEKLY_INFO_ICON: ominous trial key named "&6ウィークリークエスト" with lore "&7毎週月曜日0:00（日本標準時）に" and "&7更新されるクエストです。（最大5個）"
 
-function questPeriodicCheckHandlerInit():
-    set {_checkInterval} to getDefine("QUEST_CHECK_INTERVAL")
-    async run 0 ticks later repeating every {_checkInterval}:
-        #Periodic Handler
-        questCompleteCheckHandler_SavingMoney()
-
 function questGuiHandle(p: player):
     openGui({_p}, "QUEST_MAIN")
 
@@ -111,7 +105,6 @@ function questResetAssignHandler():
                     clear {quest.complete::%loop-value's uuid%::*}
                     clear {quest.rewarded::%loop-value's uuid%::*}
                     loop getDefineList("QUESTS"):
-                        questTriggerStatisticsCompleteInit(loop-value-1, loop-value-2)
                         clear {quest.triggers::%loop-value-1's uuid%::%loop-value-2%}
                 
         set {quest.lastFlaggedDay} to {_day}
@@ -272,20 +265,9 @@ function questTriggerIncreaseHandle(p: player, questId: string, increaseValue: i
         #完了処理
         set {quest.triggers::%{_p}'s uuid%::%{_questId}%} to {_maxTrigger}
         questComplete({_p}, {_questId}, true)
-        questTriggerStatisticsCompleteInit({_p}, {_questId})
     else:
         #増加処理
         add {_increaseValue} to {quest.triggers::%{_p}'s uuid%::%{_questId}%}
-
-local function questTriggerStatisticsOrderInit(p: player, questId: string):
-    profileStatisticsSet({_p}, "_questTrigger_savingMoney500_currentMoney", profileMoneyGet({_p})) if {_questId} is "SAVING_MONEY_500"
-    profileStatisticsSet({_p}, "_questTrigger_savingMoney1000_currentMoney", profileMoneyGet({_p})) if {_questId} is "SAVING_MONEY_1000"
-    profileStatisticsSet({_p}, "_questTrigger_savingMoney5000_currentMoney", profileMoneyGet({_p})) if {_questId} is "SAVING_MONEY_5000"
-
-local function questTriggerStatisticsCompleteInit(p: offline player, questId: string):
-    profileStatisticsClear({_p}, "_questTrigger_savingMoney500_currentMoney") if {_questId} is "SAVING_MONEY_500"
-    profileStatisticsClear({_p}, "_questTrigger_savingMoney1000_currentMoney") if {_questId} is "SAVING_MONEY_1000"
-    profileStatisticsClear({_p}, "_questTrigger_savingMoney5000_currentMoney") if {_questId} is "SAVING_MONEY_5000"
 
 local function getQuestIdFromItem(item: item) :: string:
     return string tag "TheMining;quest;id" of custom nbt of {_item}
@@ -351,7 +333,6 @@ local function questOrder(p: player, questId: string) :: boolean:
 
         #データ操作
         logInfo("QUEST_ORDERED", getQuestLogParameters({_p}'s uuid, {_questId}))
-        questTriggerStatisticsOrderInit({_p}, {_questId})
 
         #ガイド ORDER_QUEST
         guideTriggerIncreaseHandle({_p}, "ORDER_QUEST")

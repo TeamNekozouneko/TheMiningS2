@@ -37,6 +37,13 @@ function profileMoneyIncrease(player: offline player, value: number, cause: stri
     add {_value} to {profile.money::%{_player}'s uuid%}
     set {_after} to profileMoneyGet({_player})
     logInfo("PROFILE_MONEY_INCREASE", getProfileLogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+
+    #クエスト SAVING_MONEY_500
+    questTriggerIncreaseHandle({_player}, "SAVING_MONEY_500", {_value}) if {_player} is online
+    #クエスト SAVING_MONEY_1000
+    questTriggerIncreaseHandle({_player}, "SAVING_MONEY_1000", {_value}) if {_player} is online
+    #クエスト SAVING_MONEY_5000
+    questTriggerIncreaseHandle({_player}, "SAVING_MONEY_5000", {_value}) if {_player} is online
 function profileExpIncrease(player: offline player, value: number, cause: string):
     add {_value} to {profile.exp::%{_player}'s uuid%}
 function profileLevelIncrease(player: offline player, value: number, cause: string):
