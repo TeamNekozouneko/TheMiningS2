@@ -15,7 +15,7 @@ function getItemLore(itemId: string) :: objects:
     return lore of getItemData({_itemId})
 
 function getItemId(itemData: itemtype) :: string:
-    return string tag "TheMining;ItemId" of custom nbt of {_itemData}
+    return string tag "TheMining;ItemId" of custom nbt of (1 of {_itemData})
 
 function getItemIdFromDroppedItem(entity: entity) :: string:
     return string tag "Item;components;minecraft:custom_data;TheMining;ItemId" of nbt of {_entity}
