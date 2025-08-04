@@ -23,6 +23,15 @@ function profileInit(player: player, isOverwrite: boolean = false) :: boolean:
 function profileJoinInit(player: player):
     set metadata value "isPortalTeleporting" of {_player} to false
 
+#ItemIDが設定されていないアイテムは、不正なアイテムとして削除
+function profileInventoryFixer(p: player):
+    loop items in {_p}'s inventory:
+        continue if getItemId(loop-item) is set
+        remove loop-item from {_p}'s inventory
+    loop items in {_p}'s ender chest:
+        continue if getItemId(loop-item) is set
+        remove loop-item from {_p}'s ender chest
+
 #Getter
 function profileMoneyGet(player: offline player) :: number:
     return floor({profile.money::%{_player}'s uuid%}*100)/100

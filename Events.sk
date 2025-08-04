@@ -39,6 +39,7 @@ on join:
     sendJoinMessage(player)
     guideBossBarInit(player)
     mapTeleportSafeHandle(player)
+    profileInventoryFixer(player)
 
     add player to {themining.team::nocol}
 
