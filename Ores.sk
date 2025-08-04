@@ -35,15 +35,14 @@ function onBreakOreHandle(p: player, centerBlock: block) :: boolean:
     #[AutoCollect]
     set {_remainDrops::*} to enchantmentAutoCollectHandle({_p}, {_dropItems::*}, {_autoCollectLevel})
     #[AutoSell]
-    set {_soldItems::*} to enchantmentAutoSellHandle({_p}, {_remainDrops::*}, {_autoSellLevel})
-    remove {_soldItems::*} from {_remainDrops::*}
+    set {_remainSoldItems::*} to enchantmentAutoSellHandle({_p}, {_remainDrops::*}, {_autoSellLevel})
 
     #ブロック破壊処理
     update {_processBlocks::*} as air without neighbouring updates
 
     #ドロップ処理
-    if size of {_remainDrops::*} > 0:
-        drop getMergedDropItems({_remainDrops::*}) at location of {_centerBlock} without velocity
+    if size of {_remainSoldItems::*} > 0:
+        drop getMergedDropItems({_remainSoldItems::*}) at location of {_centerBlock} without velocity
     
     #EXPの付与
     profileExpIncrease({_p}, {_earnExp}, "ORES_BREAK")
