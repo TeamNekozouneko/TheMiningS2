@@ -54,6 +54,9 @@ on break:
 on place:
     cancel event
 
+on craft:
+    cancel event
+
 on citizen right click:
     onCitizenRightClickNPCHandle(player, event-npc)
 
