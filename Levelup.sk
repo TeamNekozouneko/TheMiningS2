@@ -58,7 +58,7 @@ local function levelupHandle(p: player):
         playSound(getObjects({_p}), "Levelup")
 
         set {_after} to {_level} + 1
-        logInfo("LEVELUP", getLevelupLogParameters({_p}'s uuid, {_level}, {_after}))
+        logInfo("LEVELUP_LEVELUP", getLevelupLogParameters({_p}'s uuid, {_level}, {_after}))
 
         #ガイド LEVELUP
         guideTriggerIncreaseHandle({_p}, "LEVELUP")
