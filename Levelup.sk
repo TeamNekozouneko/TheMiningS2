@@ -57,6 +57,9 @@ local function levelupHandle(p: player):
         send {_msg} to {_p}
         playSound(getObjects({_p}), "Levelup")
 
+        set {_after} to {_level} + 1
+        logInfo("LEVELUP", getLevelupLogParameters({_p}'s uuid, {_level}, {_after}))
+
         #ガイド LEVELUP
         guideTriggerIncreaseHandle({_p}, "LEVELUP")
 
@@ -89,3 +92,10 @@ local function isIconItem(item: item) :: boolean:
     set {_bool} to boolean tag "TheMining;LevelupGuiIcon" of custom nbt of {_item}
     return true if {_bool} is set
     return false
+
+#Interface
+local function getLevelupLogParameters(uuid: string, before: number, after: number) :: objects:
+    add {_uuid} to {_res::*}
+    add String({_before}) to {_res::*}
+    add String({_after}) to {_res::*}
+    return {_res::*}
