@@ -5,28 +5,10 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-function initMap():
-    set spawn location of world "world" to getDefine("LOCATION::LOBBY")
-
-function onFirstJoinHandle(p: player):
-    teleport {_p} to getDefine("LOCATION::LOBBY")
-    give getItemData("FIRST_PICKAXE") to {_p}
-
-    #最初のチュートリアルガイドをスタートさせる
-    wait 5 tick #guideBossBarInitが完了するのを待つ
-    guideStart({_p}, "GO_MINE_01")
-
 function initTeam():
     delete {themining.team::nocol}
     set {themining.team::nocol} to team with id "noCollision"
     set team option collision rule of {themining.team::nocol} to never
-
-function sendJoinMessage(p: player):
-    wait 5 tick
-    set {_msg::*} to getDefineList("LANG::JOIN_MESSAGES")
-    loop {_msg::*}:
-        send loop-value to {_p}
-    playSound(getObjects({_p}), "JoinMessage")
 
 function checkInstanceEnvironment():
     set {_timezone} to now formatted as "z"

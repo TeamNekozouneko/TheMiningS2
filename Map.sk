@@ -5,6 +5,9 @@
 #| Nekozouneko Group Developer
 #==================================================
 
+function initMap():
+    set spawn location of world "world" to getDefine("LOCATION::LOBBY")
+
 #以下ポータルの実装
 function teleportDestination(p: player, destiName: string) :: boolean:
     set {_location} to getDefine("LOCATION::%{_destiName}%")

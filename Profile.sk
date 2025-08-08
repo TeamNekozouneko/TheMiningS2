@@ -23,6 +23,21 @@ function profileInit(player: player, isOverwrite: boolean = false) :: boolean:
 function profileJoinInit(player: player):
     set metadata value "isPortalTeleporting" of {_player} to false
 
+function profileFirstJoinInit(p: player):
+    teleport {_p} to getDefine("LOCATION::LOBBY")
+    give getItemData("FIRST_PICKAXE") to {_p}
+
+    #最初のチュートリアルガイドをスタートさせる
+    wait 5 tick #guideBossBarInitが完了するのを待つ
+    guideStart({_p}, "GO_MINE_01")
+
+function profileSendJoinMessage(p: player):
+    wait 5 tick
+    set {_msg::*} to getDefineList("LANG::JOIN_MESSAGES")
+    loop {_msg::*}:
+        send loop-value to {_p}
+    playSound(getObjects({_p}), "JoinMessage")
+
 #ItemIDが設定されていないアイテムは、不正なアイテムとして削除
 function profileInventoryFixer(p: player):
     loop items in {_p}'s inventory:

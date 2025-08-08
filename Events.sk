@@ -32,11 +32,11 @@ every second:
 
 on first join:
     profileInit(player)
-    onFirstJoinHandle(player)
+    profileFirstJoinInit(player)
 
 on join:
     profileJoinInit(player)
-    sendJoinMessage(player)
+    profileSendJoinMessage(player)
     guideBossBarInit(player)
     mapTeleportSafeHandle(player)
     profileInventoryFixer(player)
