@@ -97,7 +97,7 @@ function questResetAssignHandler():
                 add {_now} formatted human-readable to {_res::*}
                 add {quest.lastFlaggedDay} to {_res::*}
                 add {_day} to {_res::*}
-                logInfo("QUEST_RESETTED", {_res::*})
+                logInfo("QUEST_RESET_DAILY", {_res::*})
 
                 loop all offline players:
                     clear {quest.has::%loop-value's uuid%::*}
