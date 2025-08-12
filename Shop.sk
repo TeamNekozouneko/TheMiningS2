@@ -98,7 +98,15 @@ function onInventoryCloseShopHandle(p: player):
         questTriggerIncreaseHandle({_p}, "SELL_ITEM_100", {_totalAmount})
         #ガイド SELL_ITEM
         guideTriggerIncreaseHandle({_p}, "SELL_ITEM")
-    give {_unSellableItems::*} to {_p}
+    
+    #売れなかったアイテムの処理
+    set {_storedPickup} to false
+    loop {_unSellableItems::*}:
+        if giveSafe({_p}, loop-value) is true:
+            set {_storedPickup} to true
+    if {_storedPickup} is true:
+        send getDefine("LANG::PICKUP_STORED") to {_p}
+        playSound(getObjects({_p}), "Error")
 
 #Interface
 local function getSellLogParameters(uuid: string, itemId: string, amount: integer) :: objects:

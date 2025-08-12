@@ -187,16 +187,6 @@ function onInventoryCloseSmeltingHandle(p: player):
         send getDefine("LANG::PICKUP_STORED") to {_p}
         playSound(getObjects({_p}), "Error")
 
-#pickupに入った場合、trueが返却
-local function giveSafe(p: player, item: item) :: boolean:
-    return false if {_item} is air
-    if isInventoryFreeSpaceAvailable({_p}) is true:
-        give {_item} to {_p}
-        return false
-    else:
-        pickupAddItem({_p}, {_item})
-        return true
-
 local function getBackGroundSlots() :: objects:
     loop 6*9 times:
         add (loop-number)-1 to {_slots::*}

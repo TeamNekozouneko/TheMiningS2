@@ -100,3 +100,13 @@ function Pr_A_cos(deg: number) :: number:
     set {_cos} to {_k1}*{_nor} + {_k2}*{_nor}*abs({_nor})
     set {_cos} to {_p} * ({_cos} * abs({_cos}) - {_cos}) + {_cos} #誤差補正
     return {_cos}
+
+#pickupに入った場合、trueが返却
+function giveSafe(p: player, item: item) :: boolean:
+    return false if {_item} is air
+    if {_p} has enough space for {_item}:
+        give {_item} to {_p}
+        return false
+    else:
+        pickupAddItem({_p}, {_item})
+        return true
