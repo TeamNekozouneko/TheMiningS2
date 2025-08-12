@@ -15,9 +15,6 @@
 #ended: ループを行わない会話トラックで、会話トラックの再生が終了した状態
 #（ループを行う会話トラックは、会話終了後ステートがnoneに戻る）
 
-Options:
-    TALK_FORMAT: "&6[${}&6/${}&6] &6${}&8: &e${}&e"
-
 function talkHandle(p: player, talkId: string) :: boolean:
     set {_talks::*} to getDefineList("TALKS")
     return false if {_talks::*} doesn't contain {_talkId}
@@ -37,7 +34,7 @@ function talkHandle(p: player, talkId: string) :: boolean:
             loop (loop-value - {_lastIndex}) times:
                 wait a second
 
-            set {_message} to {@TALK_FORMAT}
+            set {_message} to getDefine("LANG::TALK_FORMAT")
             set {_message} to substitution({_message}, String(loop-iteration))
             set {_message} to substitution({_message}, String({_talkCount}))
             set {_message} to substitution({_message}, {_talkSpeaker})

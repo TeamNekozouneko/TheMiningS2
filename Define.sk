@@ -45,6 +45,7 @@ function handleDefine():
     set {define::LANG::ORES_REVIVED} to "&c&l鉱石復活 &4» &fすべての鉱石が復活しました！"
 
     set {define::LANG::TALK_CONTINUE_AGAIN} to "&8» &7もう一度クリックして話しかける..."
+    set {define::LANG::TALK_FORMAT} to "&6[${}&6/${}&6] &6${}&8: &e${}&e"
 
     add "&8========================================" to {define::LANG::QUEST_BASE::*}
     add "&6∵ &6&l${} ${} &6∴" to {define::LANG::QUEST_BASE::*}
