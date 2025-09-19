@@ -6,7 +6,7 @@
 #==================================================
 function handleDefine():
     #定義セクション
-    set {define::DEVELOPMENT_MODE} to true
+    set {define::DEVELOPMENT_MODE} to truekaihatu
 
     #言語定義
     
