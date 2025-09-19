@@ -17,7 +17,7 @@ command /mine [<text>] [<text>] [<text>]:
             set {_amount} to arg-3 parsed as integer
             set {_amount} to 1 if arg-3 is not set
             give {_amount} of getItemData(arg-2) to player
-            send getDefine("LANG::SUCCESS_COMMAND_GET_ITME") to player
+            send getDefine("LANG::SUCCESS_GIVE_ITEM") to player
         else if arg-1 is "setMoney":
             profileMoneySet(player, arg-2 parsed as number, "COMMAND")
         else if arg-1 is "setLevel":
