@@ -25,6 +25,8 @@ function playSound(p: objects, soundId: string):
     soundHandle_UseEnchantmentTable({_p::*}) if {_soundId} is "UseEnchantmentTable"
     soundHandle_PickupAll({_p::*}) if {_soundId} is "PickupAll"
     soundHandle_PickupRemain({_p::*}) if {_soundId} is "PickupRemain"
+    soundHandle_GachaRoulette({_p::*}) if {_soundId} is "GachaRoulette"
+    soundHandle_GachaSelection({_p::*}) if {_soundId} is "GachaSelection"
 
 local function soundHandle_Error(p: objects):
     play sound "minecraft:block.note_block.bass" with pitch 1 to {_p::*}
@@ -93,3 +95,12 @@ local function soundHandle_PickupRemain(p: objects):
     loop 3 times:
         play sound "minecraft:entity.experience_orb.pickup" with pitch 1 to {_p::*}
         wait 2 tick
+
+local function soundHandle_GachaRoulette(p: objects):
+    play sound "block.note_block.xylophone" with pitch 0.7 to {_p::*}
+    play sound "block.note_block.bell" with pitch 0.7 to {_p::*}
+
+local function soundHandle_GachaSelection(p: objects):
+    play sound "minecraft:entity.experience_orb.pickup" with pitch 0.7 to {_p::*}
+    wait 1 ticks
+    play sound "minecraft:entity.experience_orb.pickup" with pitch 0.9 to {_p::*}

@@ -11,11 +11,13 @@ function profileInit(player: player, isOverwrite: boolean = false) :: boolean:
         set {_false} to true if {profile.money::%{_player}'s uuid%} is set
         set {_false} to true if {profile.exp::%{_player}'s uuid%} is set
         set {_false} to true if {profile.level::%{_player}'s uuid%} is set
+        set {_false} to true if {profile.point::%{_player}'s uuid%} is set
     if {_false} is true:
         logError("ERR_PROFILE_INIT", {_parameters::*})
         return false
     set {profile.money::%{_player}'s uuid%} to 0
     set {profile.exp::%{_player}'s uuid%} to 0
+    set {profile.point::%{_player}'s uuid%} to 0
     set {profile.level::%{_player}'s uuid%} to 1
     logInfo("PROFILE_INIT", {_parameters::*})
     return true
@@ -54,6 +56,8 @@ function profileExpGet(player: offline player) :: number:
     return {profile.exp::%{_player}'s uuid%}
 function profileLevelGet(player: offline player) :: number:
     return {profile.level::%{_player}'s uuid%}
+function profilePointGet(player: offline player) :: number:
+    return {profile.point::%{_player}'s uuid%}
 
 #Increase
 function profileMoneyIncrease(player: offline player, value: number, cause: string):
@@ -75,6 +79,11 @@ function profileLevelIncrease(player: offline player, value: number, cause: stri
     add {_value} to {profile.level::%{_player}'s uuid%}
     set {_after} to profileLevelGet({_player})
     logInfo("PROFILE_LEVEL_INCREASE", getProfileLogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+function profilePointIncrease(player: offline player, value: number, cause: string):
+    set {_before} to profilePointGet({_player})
+    add {_value} to {profile.point::%{_player}'s uuid%}
+    set {_after} to profilePointGet({_player})
+    logInfo("PROFILE_POINT_INCREASE", getProfileLogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
 
 #Decrease
 function profileMoneyDecrease(player: offline player, value: number, cause: string):
@@ -89,6 +98,11 @@ function profileLevelDecrease(player: offline player, value: number, cause: stri
     remove {_value} from {profile.level::%{_player}'s uuid%}
     set {_after} to profileLevelGet({_player})
     logInfo("PROFILE_LEVEL_DECREASE", getProfileLogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+function profilePointDecrease(player: offline player, value: number, cause: string):
+    set {_before} to profilePointGet({_player})
+    remove {_value} from {profile.point::%{_player}'s uuid%}
+    set {_after} to profilePointGet({_player})
+    logInfo("PROFILE_POINT_DECREASE", getProfileLogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
 
 #Setter
 function profileMoneySet(player: offline player, value: number, cause: string):
@@ -103,6 +117,11 @@ function profileLevelSet(player: offline player, value: number, cause: string):
     set {profile.level::%{_player}'s uuid%} to {_value}
     set {_after} to profileLevelGet({_player})
     logInfo("PROFILE_LEVEL_SET", getProfileLogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
+function profilePointSet(player: offline player, value: number, cause: string):
+    set {_before} to profilePointGet({_player})
+    set {profile.point::%{_player}'s uuid%} to {_value}
+    set {_after} to profilePointGet({_player})
+    logInfo("PROFILE_POINT_SET", getProfileLogParameters({_player}'s uuid, {_cause}, {_before}, {_after}))
 
 #Interface
 local function getProfileLogParameters(uuid: string, cause: string, before: number, after: number) :: objects:
