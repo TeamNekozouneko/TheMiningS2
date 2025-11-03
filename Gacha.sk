@@ -6,12 +6,16 @@
 #==================================================
 
 Options:
-    MAIN_TITLE_NAME_0: "&7&l鉄ガチャ &8&l》 &0何が出るかな？"
+    MAIN_TITLE_NAME_0: "&f&l鉄ガチャ &8&l》 &0何が出るかな？"
 
     ITEM_ICON_0: iron ingot named "&aアイテムを選出中・・・" with lore "&7演出をスキップする場合" and "&7この画面を閉じてください。"
 
     ITEM_BARRIER: barrier named "&7 "
     ITEM_NETHERSTAR: nether star
+
+#GUIクリック時の処理
+function onInventoryClickGachaHandle(player: player):: boolean:
+    return true if name of {_player}'s current inventory is {@MAIN_TITLE_NAME_0}
 
 #NPCクリック時の処理
 function gachaGuiHandle(player: player, gachaID: text):
