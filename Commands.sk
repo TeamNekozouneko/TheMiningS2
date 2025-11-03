@@ -24,6 +24,7 @@ command /mine [<text>] [<text>] [<text>]:
             profileLevelSet(player, arg-2 parsed as number, "COMMAND")
         else if arg-1 is "setExp":
             profileExpSet(player, arg-2 parsed as number, "COMMAND")
+        else if arg-1 is "setPoint":
             profilePointSet(player, arg-2 parsed as number, "COMMAND")
         else:
             send getDefine("LANG::ERROR_INVALID_PARAMETER") to player
