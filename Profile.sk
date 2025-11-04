@@ -24,6 +24,7 @@ function profileInit(player: player, isOverwrite: boolean = false) :: boolean:
 
 function profileJoinInit(player: player):
     set metadata value "isPortalTeleporting" of {_player} to false
+    profilePointSet({_player},0,"NEW_JOIN_AFTER_UPDATE") if profilePointGet({_player}) is not set
 
 function profileFirstJoinInit(p: player):
     teleport {_p} to getDefine("LOCATION::LOBBY")

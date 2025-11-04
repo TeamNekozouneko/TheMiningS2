@@ -77,7 +77,7 @@ local function gachaGrant(player: offline player, gachaID: text, itemID: text):
     set {_prize} to getItemData("%{_itemID}%")
     if {_prize} is set:
         if giveSafe({_player}, {_prize}) is true:
-            send getDefine("LANG::PICKUP_GACHA") to {_player}
+            send getDefine("LANG::PICKUP_STORED") to {_player}
             playSound(getObjects({_player}), "Error")
 
     else if {_gachaID} is "0":
@@ -95,4 +95,4 @@ local function gachaGrant(player: offline player, gachaID: text, itemID: text):
             set {_n} to {_n} * 100
             profileExpIncrease({_player}, {_n}, "GACHA_USE")
     set {_name} to getDefine("GACHA_PRIZE_ICON::%{_itemID}%")
-    send "&f&l鉄ガチャ &8» %name of {_name}% &aを引き当てた。" to {_player} if {_gachaID} is "0"
+    send substitution(getDefine("LANG::GACHA_GET_0"), name of {_name}) to {_player} if {_gachaID} is "0"

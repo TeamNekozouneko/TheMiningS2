@@ -40,7 +40,6 @@ on join:
     guideBossBarInit(player)
     mapTeleportSafeHandle(player)
     profileInventoryFixer(player)
-    profilePointSet(player,0,"NEW_JOIN_AFTER_UPDATE") if profilePointGet(player) is not set
 
     add player to {themining.team::nocol}
 

@@ -65,7 +65,6 @@ function handleDefine():
     set {define::LANG::GUIDE_COMPLETE} to "&6チュートリアル &8» &a&l達成 &e${} &7${}"
 
     set {define::LANG::PICKUP_STORED} to "&4&l! &cインベントリーに入らなかったアイテムがピックアップに保管されました。%nl%&6/pickupで回収しましょう。"
-    set {define::LANG::PICKUP_GACHA} to "&4&l! &cインベントリーに入らなかったアイテムがピックアップに保管されました。%nl%&6/pickupで回収しましょう。"
     set {define::LANG::PICKUP_ERROR_NOTHING_TO_DO} to "&c回収するアイテムがありません。"
     set {define::LANG::PICKUP_SUCCESS_ALL} to "&f${}件&aのアイテムを回収しました。&7他に回収するものはありません。"
     set {define::LANG::PICKUP_SUCCESS_REMAIN} to "&f${}件&aのアイテムを回収しました。&7まだ&f${}件&7のアイテムが回収されていません。"
@@ -73,6 +72,7 @@ function handleDefine():
 
     set {define::LANG::ERROR_GACHA_POINT_NOTHING} to "&f&l鉄ガチャ &8» &cポイントが足りません。(必要: 100pts)"
     set {define::LANG::GACHA_SKIP} to "&f&l鉄ガチャ &8» &7演出がスキップされました。"
+    set {define::LANG::GACHA_GET_0} to "&f&l鉄ガチャ &8» ${} &aを引き当てた。"
 
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
