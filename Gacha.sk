@@ -74,7 +74,7 @@ local function gachaSelection(player: player, gachaID: text):
 
 #景品の付与に関する処理
 local function gachaGrant(player: offline player, gachaID: text, itemID: text):
-    set {_prize} to getDefine("ITEMS::%{_itemID}%")
+    set {_prize} to getItemData("%{_itemID}%")
     if {_prize} is set:
         if giveSafe({_player}, {_prize}) is true:
             send getDefine("LANG::PICKUP_GACHA") to {_player}
