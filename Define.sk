@@ -117,7 +117,7 @@ function handleDefine():
     set {define::ITEMS::GACHA_HEAD_ZOMBIE} to zombie head item named "&d&lゾンビの被り物" with lore "&6ガチャの景品"
     set {define::ITEMS::GACHA_HEAD_CREEPER} to creeper head item named "&d&lクリーパーの被り物" with lore "&6ガチャの景品"
     set {define::ITEMS::GACHA_HEAD_SKELETON} to skeleton skull item named "&d&lスケルトンの被り物" with lore "&6ガチャの景品"
-    set {define::ITEMS::GACHA_HEAD_WITHER} to wither skeleton skull item named "&d&lウィーザースケルトンの被り物" with lore "&6ガチャの景品"
+    set {define::ITEMS::GACHA_HEAD_WITHER} to wither skeleton skull item named "&d&lウィザースケルトンの被り物" with lore "&6ガチャの景品"
     set {define::ITEMS::GACHA_HEAD_PIGLIN} to piglin head item named "&d&lピグリンの被り物" with lore "&6ガチャの景品"
     set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::COBBLESTONE} to "COBBLESTONE"
     set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::COAL} to "COAL"
