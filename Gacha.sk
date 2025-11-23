@@ -90,12 +90,12 @@ local function gachaGrant(player: offline player, gachaID: text, itemID: text):
             set {_n} to random number between 1 and 10
             set {_n} to {_n} * 100
             profileMoneyIncrease({_player}, {_n}, "GACHA_USE")
-            set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), "&e&l%{_n}%&e&lGOLD付与)
+            set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), "&e&l%{_n}%&e&lGOLD付与")
         else if {_itemID} is "GACHA_EXP":
             set {_n} to random number between 1 and 10
             set {_n} to {_n} * 100
             profileExpIncrease({_player}, {_n}, "GACHA_USE")
-            set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), "&b&l%{_n}%&b&lEXP付与)
+            set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), "&b&l%{_n}%&b&lEXP付与")
         else:
             set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), name of {_name})
     set {_name} to getDefine("GACHA_PRIZE_ICON::%{_itemID}%")
