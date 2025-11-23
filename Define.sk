@@ -498,12 +498,12 @@ function handleDefine():
     set {define::GACHA_PRIZE_ICON::GACHA_JUMP_3M} to potion named "&a&l跳躍力上昇３分" with lore "&73分間、跳躍力が上昇！"
     set {define::GACHA_PRIZE_ICON::GACHA_SLOW_1M} to potion named "&c&l移動速度低下１分" with lore "&71分間、移動速度が低下…"
     set {define::GACHA_PRIZE_ICON::GACHA_FATIGUE_1M} to potion named "&c&l採掘速度低下１分" with lore "&71分間、採掘速度が低下…"
-    set {define::GACHA_PRIZE_ICON::GACHA_GOLD} to gold ingot named "&e&lGOLD付与" with lore "&7少量〜中量のEXPをゲット"
-    set {define::GACHA_PRIZE_ICON::GACHA_EXP} to bottle o' enchanting named "&b&lEXP付与" with lore "&7少量〜中量のお金をゲット"
+    set {define::GACHA_PRIZE_ICON::GACHA_GOLD} to gold ingot named "&e&lGOLD付与" with lore "&7少量〜中量のお金をゲット"
+    set {define::GACHA_PRIZE_ICON::GACHA_EXP} to bottle o' enchanting named "&b&lEXP付与" with lore "&7少量〜中量のEXPをゲット"
     set {define::GACHA_PRIZE_ICON::GACHA_HEAD_ZOMBIE} to zombie head item named "&d&lゾンビの被り物" with lore "&7モブの頭をゲット！"
     set {define::GACHA_PRIZE_ICON::GACHA_HEAD_CREEPER} to creeper head item named "&d&lクリーパーの被り物" with lore "&7モブの頭をゲット！"
     set {define::GACHA_PRIZE_ICON::GACHA_HEAD_SKELETON} to skeleton skull item named "&d&lスケルトンの被り物" with lore "&7モブの頭をゲット！"
-    set {define::GACHA_PRIZE_ICON::GACHA_HEAD_WITHER} to wither skeleton skull item named "&d&lウィーザースケルトンの被り物" with lore "&7モブの頭をゲット！"
+    set {define::GACHA_PRIZE_ICON::GACHA_HEAD_WITHER} to wither skeleton skull item named "&d&lウィザースケルトンの被り物" with lore "&7モブの頭をゲット！"
     set {define::GACHA_PRIZE_ICON::GACHA_HEAD_PIGLIN} to piglin head item named "&d&lピグリンの被り物" with lore "&7モブの頭をゲット！"
 
     #DEVELOPMENT_MODE用のOverride
