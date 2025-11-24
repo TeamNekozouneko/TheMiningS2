@@ -237,21 +237,26 @@ function handleDefine():
     #NPCの定義（NPCs.sk）
     set {define::NPC::LEVELUP::NAME} to "&6&l修行屋のおじさん &7[クリック]"
     set {define::NPC::LEVELUP::SKIN} to "Tomato_dayo"
+    set {define::NPC::LEVELUP::TYPE} to player
     set {define::NPC::LEVELUP::LOCATION} to location(-101.5, 71, -23.5, world "world", -30, 0)
     set {define::NPC::SHOP::NAME} to "&a&l売店 &7[クリック]"
     set {define::NPC::SHOP::SKIN} to "nekokazokuL"
+    set {define::NPC::SHOP::TYPE} to player
     set {define::NPC::SHOP::LOCATION} to location(-93.5, 71, -17.5, world "world", 100, 0)
     set {define::NPC::SMELTING::NAME} to "&d製錬屋 &7[クリック]"
     set {define::NPC::SMELTING::SKIN} to "nekozouneko"
+    set {define::NPC::SMELTING::TYPE} to player
     set {define::NPC::SMELTING::LOCATION} to location(-124.5, 75, 8.5, world "world", -90, 0)
     set {define::NPC::QUEST_MASTER::NAME} to "&6依頼屋 &7[クリック]"
     set {define::NPC::QUEST_MASTER::SKIN} to "kik0423"
+    set {define::NPC::QUEST_MASTER::TYPE} to player
     set {define::NPC::QUEST_MASTER::LOCATION} to location(-146.5, 80.5, 23.5, world "world", -90, 0)
     set {define::NPC::YEAHN::NAME} to "&7クリックで話しかける"
     set {define::NPC::YEAHN::SKIN} to "Yeahn"
+    set {define::NPC::YEAHN::TYPE} to player
     set {define::NPC::YEAHN::LOCATION} to location(-142.5, 78.5, 5.5, world "world", -125, 0)
     set {define::NPC::GACHA_T::NAME} to "&f&l鉄ガチャ &7[クリック]"
-    set {define::NPC::GACHA_T::SKIN} to "GACHA_T"
+    set {define::NPC::GACHA_T::TYPE} to villager
     set {define::NPC::GACHA_T::LOCATION} to location(-101, 81, 10, world "world", 100, 0)
 
     #レベルアップのコスト計算（profile.sk）
@@ -493,11 +498,11 @@ function handleDefine():
     add "GACHA_HEAD_PIGLIN" to {define::GACHA_PRIZE_ID::0::*}
 
     #景品アイコン登録
-    set {define::GACHA_PRIZE_ICON::GACHA_HASTE_3M} to potion named "&6&l採掘速度上昇３分" with lore "&73分間、採掘速度が上昇！"
-    set {define::GACHA_PRIZE_ICON::GACHA_SPEED_3M} to potion named "&9&l移動速度上昇３分" with lore "&73分間、移動速度が上昇！"
-    set {define::GACHA_PRIZE_ICON::GACHA_JUMP_3M} to potion named "&a&l跳躍力上昇３分" with lore "&73分間、跳躍力が上昇！"
-    set {define::GACHA_PRIZE_ICON::GACHA_SLOW_1M} to potion named "&c&l移動速度低下１分" with lore "&71分間、移動速度が低下…"
-    set {define::GACHA_PRIZE_ICON::GACHA_FATIGUE_1M} to potion named "&c&l採掘速度低下１分" with lore "&71分間、採掘速度が低下…"
+    set {define::GACHA_PRIZE_ICON::GACHA_HASTE_3M} to potion with item flag hide additional tooltip named "&6&l採掘速度上昇３分" with lore "&73分間、採掘速度が上昇！"
+    set {define::GACHA_PRIZE_ICON::GACHA_SPEED_3M} to potion with item flag hide additional tooltip named "&9&l移動速度上昇３分" with lore "&73分間、移動速度が上昇！"
+    set {define::GACHA_PRIZE_ICON::GACHA_JUMP_3M} to potion with item flag hide additional tooltip named "&a&l跳躍力上昇３分" with lore "&73分間、跳躍力が上昇！"
+    set {define::GACHA_PRIZE_ICON::GACHA_SLOW_1M} to potion with item flag hide additional tooltip named "&c&l移動速度低下１分" with lore "&71分間、移動速度が低下…"
+    set {define::GACHA_PRIZE_ICON::GACHA_FATIGUE_1M} to potion with item flag hide additional tooltip named "&c&l採掘速度低下１分" with lore "&71分間、採掘速度が低下…"
     set {define::GACHA_PRIZE_ICON::GACHA_GOLD} to gold ingot named "&e&lGOLD付与" with lore "&7少量〜中量のお金をゲット"
     set {define::GACHA_PRIZE_ICON::GACHA_EXP} to bottle o' enchanting named "&b&lEXP付与" with lore "&7少量〜中量のEXPをゲット"
     set {define::GACHA_PRIZE_ICON::GACHA_HEAD_ZOMBIE} to zombie head item named "&d&lゾンビの被り物" with lore "&7モブの頭をゲット！"

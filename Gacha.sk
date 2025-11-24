@@ -73,16 +73,14 @@ local function gachaSelection(player: player, gachaID: text):
         gachaGrant({_player}, "0", {_itemID})
 
 #景品の付与に関する処理
-local function gachaGrant(player: offline player, gachaID: text, itemID: text):
+local function gachaGrant(player: offline player, gachaID: text, itemID: text):    
     set {_prize} to getItemData("%{_itemID}%")
     if {_prize} is set:
         if giveSafe({_player}, {_prize}) is true:
             send getDefine("LANG::PICKUP_STORED") to {_player}
             playSound(getObjects({_player}), "Error")
 
-    set {_name} to getDefine("GACHA_PRIZE_ICON::%{_itemID}%")
-
-    else if {_gachaID} is "0":
+    if {_gachaID} is "0":
         apply haste 1 to {_player} for 180 seconds if {_itemID} is "GACHA_HASTE_3M"
         apply speed 1 to {_player} for 180 seconds if {_itemID} is "GACHA_SPEED_3M"
         apply jump 2 to {_player} for 180 seconds if {_itemID} is "GACHA_JUMP_3M"
@@ -98,7 +96,6 @@ local function gachaGrant(player: offline player, gachaID: text, itemID: text):
             set {_n} to {_n} * 100
             profileExpIncrease({_player}, {_n}, "GACHA_USE")
             set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), "&b&l%{_n}%&b&lEXP付与")
-        else:
-            set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), name of {_name})
+        set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), name of getDefine("GACHA_PRIZE_ICON::%{_itemID}%")) if {_text} is not set
 
-    send {_text} to {_player} if {_gachaID} is "0"
+    send {_text} to {_player}
