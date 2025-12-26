@@ -1,0 +1,101 @@
+#==================================================
+#| #Gacha.sk
+#| ガチャの実装・管理モジュール
+#|
+#| Nekozouneko Group Developer
+#==================================================
+
+Options:
+    MAIN_TITLE_NAME_0: "&f&l鉄ガチャ &8&l》 &0何が出るかな？"
+
+    ITEM_ICON_0: iron ingot named "&aアイテムを選出中・・・" with lore "&7演出をスキップする場合" and "&7この画面を閉じてください。"
+
+    ITEM_BARRIER: barrier named "&7 "
+    ITEM_NETHERSTAR: nether star
+
+#GUIクリック時の処理
+function onInventoryClickGachaHandle(player: player):: boolean:
+    return true if name of {_player}'s current inventory is {@MAIN_TITLE_NAME_0}
+
+#NPCクリック時の処理
+function gachaGuiHandle(player: player, gachaID: text):
+    if {_gachaID} is "0":
+        playSound(getObjects({_player}), "Talk")
+        if profilePointGet({_player}) >= getDefine("GACHA_COST::0"):
+            profilePointDecrease({_player}, getDefine("GACHA_COST::0"), "GACHA_USE")
+            if {_player} is not sneaking:
+                gachaRoulette({_player}, "0")
+            else:
+                gachaSelection({_player}, "0")
+        else:
+            send getDefine("LANG::ERROR_GACHA_POINT_NOTHING") to {_player}
+
+#ガチャ演出処理
+local function gachaRoulette(player: player, gachaID: text):
+    if {_gachaID} is "0":
+        open chest inventory with 3 row named {@MAIN_TITLE_NAME_0} to {_player}
+        set slot (numbers from 0 and 8) of {_player}'s current inventory to {@ITEM_ICON_0}
+        set slot (numbers from 18 and 26) of {_player}'s current inventory to {@ITEM_BARRIER}
+        set slot 4 of {_player}'s current inventory to {@ITEM_NETHERSTAR} named "&e&l↓"
+        set slot 22 of {_player}'s current inventory to {@ITEM_NETHERSTAR} named "&e&l↑"
+
+        set {_n} to 50
+        loop 50 times:
+            set {_itemID} to random element out of getDefineList("GACHA_PRIZE_ID::0")
+            set {_list::%{_n}%} to {_itemID}
+            remove 1 from {_n}
+
+        set {_n} to 50
+        loop 41 times:
+            set {_slot} to 17
+            set {_index} to {_n}
+            loop 9 times:
+                set slot {_slot} of {_player}'s current inventory to getDefine("GACHA_PRIZE_ICON::%{_list::%{_index}%}%")
+                remove 1 from {_slot}
+                remove 1 from {_index}
+            remove 1 from {_n}
+            playSound(getObjects({_player}), "GachaRoulette")
+            wait 1 ticks if loop-number <= 36
+            wait 9 ticks if loop-number > 36
+            exit loop if name of {_player}'s current inventory is not {@MAIN_TITLE_NAME_0}
+
+        wait 1 seconds
+        playSound(getObjects({_player}), "GachaSelection")
+        close {_player}'s inventory
+        gachaGrant({_player}, "0", "%{_list::6}%")
+
+#演出スキップ時の処理
+local function gachaSelection(player: player, gachaID: text):
+    send getDefine("LANG::GACHA_SKIP") to {_player}
+
+    if {_gachaID} is "0":
+        set {_itemID} to random element out of getDefineList("GACHA_PRIZE_ID::0")
+        gachaGrant({_player}, "0", {_itemID})
+
+#景品の付与に関する処理
+local function gachaGrant(player: offline player, gachaID: text, itemID: text):    
+    set {_prize} to getItemData("%{_itemID}%")
+    if {_prize} is set:
+        if giveSafe({_player}, {_prize}) is true:
+            send getDefine("LANG::PICKUP_STORED") to {_player}
+            playSound(getObjects({_player}), "Error")
+
+    if {_gachaID} is "0":
+        apply haste 1 to {_player} for 180 seconds if {_itemID} is "GACHA_HASTE_3M"
+        apply speed 1 to {_player} for 180 seconds if {_itemID} is "GACHA_SPEED_3M"
+        apply jump 2 to {_player} for 180 seconds if {_itemID} is "GACHA_JUMP_3M"
+        apply slow 1 to {_player} for 60 seconds if {_itemID} is "GACHA_SLOW_1M"
+        apply mining fatigue 1 to {_player} for 60 seconds if {_itemID} is "GACHA_FATIGUE_1M"
+        if {_itemID} is "GACHA_GOLD":
+            set {_n} to random integer between 1 and 10
+            set {_n} to {_n} * 100
+            profileMoneyIncrease({_player}, {_n}, "GACHA_USE")
+            set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), "&e&l%{_n}%&e&lGOLD付与")
+        else if {_itemID} is "GACHA_EXP":
+            set {_n} to random integer between 1 and 10
+            set {_n} to {_n} * 100
+            profileExpIncrease({_player}, {_n}, "GACHA_USE")
+            set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), "&b&l%{_n}%&b&lEXP付与")
+        set {_text} to substitution(getDefine("LANG::GACHA_GET_0"), name of getDefine("GACHA_PRIZE_ICON::%{_itemID}%")) if {_text} is not set
+
+    send {_text} to {_player}
