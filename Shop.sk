@@ -8,16 +8,22 @@
 Options:
     MAIN_TITLE_NAME: "&6&l売店 &8売る/買うを選んでね"
     SELL_TITLE_NAME: "&6&l売店 &8売却するアイテムを入れてね"
+    EXCH_TITLE_NAME:  "&6&l売店 &8交換するアイテムを入れてね"
     BUY_TITLE_NAME: "&6&l売店 &8物を買う"
 
     #SHOP_MAIN
     MAIN_INFO_ICON: beacon named "&6売店&fとは？" with lore "&7ちょっとしたアイテムを" and "&7売ったり買ったりできる場所です。"
     MAIN_SELL_ICON: gold ingot named "&6売る" with lore "&7掘った鉱石などを" and "&7売ることができます。" and "&e> クリックして画面を開く"
+    MAIN_EXCH_ICON: sunflower named "&6交換する" with lore "&7掘った鉱石などを" and "&7ガチャポイントと交換できます。" and "&e> クリックして画面を開く"
     MAIN_BUY_ICON: barrier named "&6買う" with lore "&7ちょっとしたアイテムを" and "&7購入することができます。" and "&cx 現在は実装されていません"
 
     #SHOP_SELL
     SELL_UNAVAILABLE_ICON: barrier named "&cここにはアイテムを" with lore "&c入れられないよ！"
     SELL_INFO_ICON: beacon named "&aアイテムの売り方" with lore "&7売りたいアイテムを入れたら、" and "&7そのままインベントリーを閉じてね" and "&f売れないアイテムは返却されるよ！"
+
+    #SHOP_EXCH
+    EXCH_UNAVAILABLE_ICON: barrier named "&cここにはアイテムを" with lore "&c入れられないよ！"
+    EXCH_INFO_ICON: beacon named "&aアイテムの交換方法" with lore "&7交換したいアイテムを入れたら、" and "&7そのままインベントリーを閉じてね" and "&f交換できないアイテムは返却されるよ！"
 
 function shopGuiHandle(p: player):
     playSound(getObjects({_p}), "Talk")
@@ -33,8 +39,9 @@ local function openGui(p: player, guiType: string):
     if {_guiType} is "SHOP_MAIN":
         open chest inventory with 3 row named {@MAIN_TITLE_NAME} to {_p}
         set slot 4 of {_p}'s current inventory to {@MAIN_INFO_ICON}
-        set slot 12 of {_p}'s current inventory to {@MAIN_SELL_ICON}
-        set slot 14 of {_p}'s current inventory to {@MAIN_BUY_ICON}
+        set slot 11 of {_p}'s current inventory to {@MAIN_SELL_ICON}
+        set slot 13 of {_p}'s current inventory to {@MAIN_EXCH_ICON}
+        set slot 15 of {_p}'s current inventory to {@MAIN_BUY_ICON}
         
     #SHOP_SELL
     else if {_guiType} is "SHOP_SELL":
@@ -44,6 +51,14 @@ local function openGui(p: player, guiType: string):
             set slot 44+loop-number of {_p}'s current inventory to {@SELL_UNAVAILABLE_ICON}
         set slot 49 of {_p}'s current inventory to {@SELL_INFO_ICON}
 
+    #SHOP_EXCH
+    else if {_guiType} is "SHOP_EXCH":
+        playSound(getObjects({_p}), "Click")
+        open chest inventory with 6 row named {@EXCH_TITLE_NAME} to {_p}
+        loop 9 times:
+            set slot 44+loop-number of {_p}'s current inventory to {@EXCH_UNAVAILABLE_ICON}
+        set slot 49 of {_p}'s current inventory to {@EXCH_INFO_ICON}
+
 function onInventoryClickShopHandle(p: player, item: itemtype) :: boolean:
     set {_invName} to name of {_p}'s current inventory
 
@@ -51,6 +66,8 @@ function onInventoryClickShopHandle(p: player, item: itemtype) :: boolean:
     if {_invName} is {@MAIN_TITLE_NAME}:
         if {_item} is {@MAIN_SELL_ICON}:
             openGui({_p}, "SHOP_SELL")
+        if {_item} is {@MAIN_EXCH_ICON}:
+            openGui({_p}, "SHOP_EXCH")
         return true
 
     #SHOP_SELL
@@ -58,58 +75,108 @@ function onInventoryClickShopHandle(p: player, item: itemtype) :: boolean:
         return true if {_item} is {@SELL_INFO_ICON}
         return true if {_item} is {@SELL_UNAVAILABLE_ICON}
 
+    #SHOP_EXCH
+    else if {_invName} is {@EXCH_TITLE_NAME}:
+        return true if {_item} is {@EXCH_INFO_ICON}
+        return true if {_item} is {@EXCH_UNAVAILABLE_ICON}
+
     return false
 
 function onInventoryCloseShopHandle(p: player):
     #売却処理
     set {_invName} to name of {_p}'s current inventory
-    exit if {_invName} is not {@SELL_TITLE_NAME}
 
-    set {_totalAmount} to 0
-    set {_items::*} to all items in {_p}'s current inventory
-    loop {_items::*}:
-        continue if loop-value is {@SELL_UNAVAILABLE_ICON}
-        continue if loop-value is {@SELL_INFO_ICON}
+    if {_invName} is {@SELL_TITLE_NAME}:
+        set {_totalAmount} to 0
+        set {_items::*} to all items in {_p}'s current inventory
+        loop {_items::*}:
+            continue if loop-value is {@SELL_UNAVAILABLE_ICON}
+            continue if loop-value is {@SELL_INFO_ICON}
 
-        set {_unSellable} to false
-        set {_itemId} to getItemId(loop-value)
-        set {_price} to getDefine("SELL_PRICE::%{_itemId}%")
-        set {_amount} to item amount of loop-value
-        add {_amount} to {_totalAmount}
-        set {_unSellable} to true if {_itemId} is not set
-        set {_unSellable} to true if {_price} is not set
+            set {_unSellable} to false
+            set {_itemId} to getItemId(loop-value)
+            set {_price} to getDefine("SELL_PRICE::%{_itemId}%")
+            set {_amount} to item amount of loop-value
+            add {_amount} to {_totalAmount}
+            set {_unSellable} to true if {_itemId} is not set
+            set {_unSellable} to true if {_price} is not set
 
-        if {_unSellable} is true:
-            add loop-value to {_unSellableItems::*}
-            continue
+            if {_unSellable} is true:
+                add loop-value to {_unSellableItems::*}
+                continue
         
-        logInfo("SHOP_SELL", getSellLogParameters({_p}'s uuid, {_itemId}, {_amount}))
+            logInfo("SHOP_SELL", getSellLogParameters({_p}'s uuid, {_itemId}, {_amount}))
 
-        add {_amount}*{_price} to {_totalSellPrice}
-    if {_totalSellPrice} is not set:
-        playSound(getObjects({_p}), "Error")
-        send getDefine("LANG::ERROR_SHOP_SOLD_NOTHING") to {_p}
-    else:
-        playSound(getObjects({_p}), "ShopSold")
-        send substitution(getDefine("LANG::SUCCESS_SHOP_SOLD"), formatNumber({_totalSellPrice})) to {_p}
-        profileMoneyIncrease({_p}, {_totalSellPrice}, "SHOP_SELL")
+            add {_amount}*{_price} to {_totalSellPrice}
 
-        #クエスト SELL_ITEM_100
-        questTriggerIncreaseHandle({_p}, "SELL_ITEM_100", {_totalAmount})
-        #ガイド SELL_ITEM
-        guideTriggerIncreaseHandle({_p}, "SELL_ITEM")
-    
+        if {_totalSellPrice} is not set:
+            playSound(getObjects({_p}), "Error")
+            send getDefine("LANG::ERROR_SHOP_SOLD_NOTHING") to {_p}
+        else:
+            playSound(getObjects({_p}), "ShopSold")
+            send substitution(getDefine("LANG::SUCCESS_SHOP_SOLD"), formatNumber({_totalSellPrice})) to {_p}
+            profileMoneyIncrease({_p}, {_totalSellPrice}, "SHOP_SELL")
+
+            #クエスト SELL_ITEM_100
+            questTriggerIncreaseHandle({_p}, "SELL_ITEM_100", {_totalAmount})
+            #ガイド SELL_ITEM
+            guideTriggerIncreaseHandle({_p}, "SELL_ITEM")
+
     #売れなかったアイテムの処理
     set {_storedPickup} to false
     loop {_unSellableItems::*}:
         if giveSafe({_p}, loop-value) is true:
             set {_storedPickup} to true
+
+        #交換処理
+    if {_invName} is {@EXCH_TITLE_NAME}:
+        set {_totalAmount} to 0
+        set {_items::*} to all items in {_p}'s current inventory
+        loop {_items::*}:
+            continue if loop-value is {@EXCH_UNAVAILABLE_ICON}
+            continue if loop-value is {@EXCH_INFO_ICON}
+
+            set {_unExchangeable} to false
+            set {_itemId} to getItemId(loop-value)
+            set {_price} to getDefine("POINT_PRICE::%{_itemId}%")
+            set {_amount} to item amount of loop-value
+            add {_amount} to {_totalAmount}
+            set {_unExchangeable} to true if {_itemId} is not set
+            set {_unExchangeable} to true if {_price} is not set
+
+            if {_unExchangeable} is true:
+                add loop-value to {_unExchangeableItems::*}
+                continue
+        
+            logInfo("SHOP_EXCHANGE", getExchangeLogParameters({_p}'s uuid, {_itemId}, {_amount}))
+
+            add {_amount}*{_price} to {_totalExchangePrice}
+
+        if {_totalExchangePrice} is not set:
+            playSound(getObjects({_p}), "Error")
+            send getDefine("LANG::ERROR_SHOP_EXCH_NOTHING") to {_p}
+        else:
+            playSound(getObjects({_p}), "ShopSold")
+            send substitution(getDefine("LANG::SUCCESS_SHOP_EXCH"), formatNumber({_totalExchangePrice})) to {_p}
+            profilePointIncrease({_p}, {_totalExchangePrice}, "SHOP_EXCHANGE")
+    #売れなかったアイテムの処理
+    set {_storedPickup} to false
+    loop {_unExchangeableItems::*}:
+        if giveSafe({_p}, loop-value) is true:
+            set {_storedPickup} to true
+
     if {_storedPickup} is true:
         send getDefine("LANG::PICKUP_STORED") to {_p}
         playSound(getObjects({_p}), "Error")
 
 #Interface
 local function getSellLogParameters(uuid: string, itemId: string, amount: integer) :: objects:
+    add {_uuid} to {_res::*}
+    add {_itemId} to {_res::*}
+    add String({_amount}) to {_res::*}
+    return {_res::*}
+
+local function getExchangeLogParameters(uuid: string, itemId: string, amount: integer) :: objects:
     add {_uuid} to {_res::*}
     add {_itemId} to {_res::*}
     add String({_amount}) to {_res::*}

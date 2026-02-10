@@ -38,6 +38,9 @@ function handleDefine():
     set {define::LANG::SUCCESS_SHOP_SOLD} to "&6&l売店 &8» &aアイテムを売却しました。&f${}&fG&7を獲得しました。"
     set {define::LANG::ERROR_SHOP_SOLD_NOTHING} to "&6&l売店 &8» &c売れるアイテムがありませんでした。"
 
+    set {define::LANG::SUCCESS_SHOP_EXCH} to "&6&l売店 &8» &aアイテムを交換しました。&f${}&fpts&7を獲得しました。"
+    set {define::LANG::ERROR_SHOP_EXCH_NOTHING} to "&6&l売店 &8» &c交換できるアイテムがありませんでした。"
+
     set {define::LANG::SUCCESS_ENCHANTMENT} to "&6&lエンチャント &8» &aエンチャントしました！"
 
     set {define::LANG::ORES_REVIVE_1} to "&c&l鉱石復活 &4» &fまもなく鉱石が復活します..."
@@ -67,6 +70,10 @@ function handleDefine():
     set {define::LANG::PICKUP_SUCCESS_REMAIN} to "&f${}件&aのアイテムを回収しました。&7まだ&f${}件&7のアイテムが回収されていません。"
     set {define::LANG::PICKUP_ANNOUNCE} to "&4&l! &cピックアップに保管されたアイテムがあります！%nl%&6/pickupで回収しましょう！翌日になるとこのアイテムは受け取れなくなります！"
 
+    set {define::LANG::ERROR_GACHA_POINT_NOTHING} to "&f&l鉄ガチャ &8» &cポイントが足りません。(必要: 100pts)"
+    set {define::LANG::GACHA_SKIP} to "&f&l鉄ガチャ &8» &7演出がスキップされました。"
+    set {define::LANG::GACHA_GET_0} to "&f&l鉄ガチャ &8» ${} &aを引き当てた。"
+
     #Logs.sk
     set {define::LOGS_SAVE_PATH} to "themining.log"
 
@@ -81,6 +88,7 @@ function handleDefine():
     add "&b・&fEXP &b${}" to {define::SCOREBOARD_CONTENTS::*}
     add "&b・&f採掘数 &3${}" to {define::SCOREBOARD_CONTENTS::*}
     add "&b・&f所持金 &6${}&6G" to {define::SCOREBOARD_CONTENTS::*}
+    add "&b・&fポイント &d${}&dpts" to {define::SCOREBOARD_CONTENTS::*}
     add "" to {define::SCOREBOARD_CONTENTS::*}
     add "&8» &aSeason-2 公開！" to {define::SCOREBOARD_CONTENTS::*}
     add "&8» &7バグ・不具合の発見は" to {define::SCOREBOARD_CONTENTS::*}
@@ -106,11 +114,21 @@ function handleDefine():
     set {define::ITEMS::RAW_IRON} to raw iron named "&a鉄の原石" with lore "&6精錬NPCで焼けるよ！"
     set {define::ITEMS::IRON_INGOT} to iron ingot named "&a鉄インゴット"
     set {define::ITEMS::LAPIS_LAZULI} to lapis lazuli named "&aラピスラズリ" with lore "&6エンチャントに使えるよ！"
+    set {define::ITEMS::GACHA_HEAD_ZOMBIE} to zombie head item named "&d&lゾンビの被り物" with lore "&6ガチャの景品"
+    set {define::ITEMS::GACHA_HEAD_CREEPER} to creeper head item named "&d&lクリーパーの被り物" with lore "&6ガチャの景品"
+    set {define::ITEMS::GACHA_HEAD_SKELETON} to skeleton skull item named "&d&lスケルトンの被り物" with lore "&6ガチャの景品"
+    set {define::ITEMS::GACHA_HEAD_WITHER} to wither skeleton skull item named "&d&lウィザースケルトンの被り物" with lore "&6ガチャの景品"
+    set {define::ITEMS::GACHA_HEAD_PIGLIN} to piglin head item named "&d&lピグリンの被り物" with lore "&6ガチャの景品"
     set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::COBBLESTONE} to "COBBLESTONE"
     set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::COAL} to "COAL"
     set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::RAW_IRON} to "RAW_IRON"
     set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::IRON_INGOT} to "IRON_INGOT"
     set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::LAPIS_LAZULI} to "LAPIS_LAZULI"
+    set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::GACHA_HEAD_ZOMBIE} to "GACHA_HEAD_ZOMBIE"
+    set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::GACHA_HEAD_CREEPER} to "GACHA_HEAD_CREEPER"
+    set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::GACHA_HEAD_SKELETON} to "GACHA_HEAD_SKELETON"
+    set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::GACHA_HEAD_WITHER} to "GACHA_HEAD_WITHER"
+    set string tag "TheMining;ItemId" of custom nbt of {define::ITEMS::GACHA_HEAD_PIGLIN} to "GACHA_HEAD_PIGLIN"
 
     #ピッケルの定義（Items.sk）
     set {define::ITEMS::FIRST_PICKAXE} to unbreakable golden pickaxe of efficiency 1 named "&d初期ピッケル"
@@ -214,23 +232,32 @@ function handleDefine():
     add "SMELTING" to {define::NPCS::*}
     add "QUEST_MASTER" to {define::NPCS::*}
     add "YEAHN" to {define::NPCS::*}
+    add "GACHA_T" to {define::NPCS::*}
 
     #NPCの定義（NPCs.sk）
     set {define::NPC::LEVELUP::NAME} to "&6&l修行屋のおじさん &7[クリック]"
     set {define::NPC::LEVELUP::SKIN} to "Tomato_dayo"
+    set {define::NPC::LEVELUP::TYPE} to player
     set {define::NPC::LEVELUP::LOCATION} to location(-101.5, 71, -23.5, world "world", -30, 0)
     set {define::NPC::SHOP::NAME} to "&a&l売店 &7[クリック]"
     set {define::NPC::SHOP::SKIN} to "nekokazokuL"
+    set {define::NPC::SHOP::TYPE} to player
     set {define::NPC::SHOP::LOCATION} to location(-93.5, 71, -17.5, world "world", 100, 0)
     set {define::NPC::SMELTING::NAME} to "&d製錬屋 &7[クリック]"
     set {define::NPC::SMELTING::SKIN} to "nekozouneko"
+    set {define::NPC::SMELTING::TYPE} to player
     set {define::NPC::SMELTING::LOCATION} to location(-124.5, 75, 8.5, world "world", -90, 0)
     set {define::NPC::QUEST_MASTER::NAME} to "&6依頼屋 &7[クリック]"
     set {define::NPC::QUEST_MASTER::SKIN} to "kik0423"
+    set {define::NPC::QUEST_MASTER::TYPE} to player
     set {define::NPC::QUEST_MASTER::LOCATION} to location(-146.5, 80.5, 23.5, world "world", -90, 0)
     set {define::NPC::YEAHN::NAME} to "&7クリックで話しかける"
     set {define::NPC::YEAHN::SKIN} to "Yeahn"
+    set {define::NPC::YEAHN::TYPE} to player
     set {define::NPC::YEAHN::LOCATION} to location(-142.5, 78.5, 5.5, world "world", -125, 0)
+    set {define::NPC::GACHA_T::NAME} to "&f&l鉄ガチャ &7[クリック]"
+    set {define::NPC::GACHA_T::TYPE} to villager
+    set {define::NPC::GACHA_T::LOCATION} to location(-101, 81, 10, world "world", 100, 0)
 
     #レベルアップのコスト計算（profile.sk）
     set {define::LEVELUP_INITIAL_TERM} to 500 #初項
@@ -287,6 +314,12 @@ function handleDefine():
     set {define::SELL_PRICE::RAW_IRON} to 0.1
     set {define::SELL_PRICE::IRON_INGOT} to 1.5
     set {define::SELL_PRICE::LAPIS_LAZULI} to 1.5
+
+    #売店のガチャポイント交換レートの定義 (Shop.sk)
+    set {define::POINT_PRICE::COBBLESTONE} to 0.25
+    set {define::POINT_PRICE::COAL} to 0.5
+    set {define::POINT_PRICE::RAW_IRON} to 0.1
+    set {define::POINT_PRICE::LAPIS_LAZULI} to 1.5
 
     #製錬アイテムの紐付け（Smelting.sk）
     set {define::SMELTING_ITEM::RAW_IRON} to "IRON_INGOT"
@@ -440,6 +473,43 @@ function handleDefine():
     set {define::GUIDE_COMPLETE_TRIGGER::ORDER_QUEST} to 1
     set {define::GUIDE_COMPLETE_TRIGGER::COMPLETE_QUEST} to 1
     set {define::GUIDE_COMPLETE_TRIGGER::REWARD_QUEST} to 1
+
+    #GACHA-ID管理 (Gacha.sk)
+    set {define::GACHA_ID::0} to 0
+
+	#ガチャの名前登録 (Gacha.sk)
+    set {define::GACHA_NAME::0} to "&f&l鉄ガチャ"
+
+    #ガチャコスト登録 (Gacha.sk)
+    set {define::GACHA_COST::0} to 100
+
+    #PRIZE-ID管理 (Gacha.sk)
+    add "GACHA_HASTE_3M" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_SPEED_3M" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_JUMP_3M" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_SLOW_1M" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_FATIGUE_1M" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_GOLD" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_EXP" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_HEAD_ZOMBIE" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_HEAD_CREEPER" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_HEAD_SKELETON" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_HEAD_WITHER" to {define::GACHA_PRIZE_ID::0::*}
+    add "GACHA_HEAD_PIGLIN" to {define::GACHA_PRIZE_ID::0::*}
+
+    #景品アイコン登録
+    set {define::GACHA_PRIZE_ICON::GACHA_HASTE_3M} to potion with item flag hide additional tooltip named "&6&l採掘速度上昇３分" with lore "&73分間、採掘速度が上昇！"
+    set {define::GACHA_PRIZE_ICON::GACHA_SPEED_3M} to potion with item flag hide additional tooltip named "&9&l移動速度上昇３分" with lore "&73分間、移動速度が上昇！"
+    set {define::GACHA_PRIZE_ICON::GACHA_JUMP_3M} to potion with item flag hide additional tooltip named "&a&l跳躍力上昇３分" with lore "&73分間、跳躍力が上昇！"
+    set {define::GACHA_PRIZE_ICON::GACHA_SLOW_1M} to potion with item flag hide additional tooltip named "&c&l移動速度低下１分" with lore "&71分間、移動速度が低下…"
+    set {define::GACHA_PRIZE_ICON::GACHA_FATIGUE_1M} to potion with item flag hide additional tooltip named "&c&l採掘速度低下１分" with lore "&71分間、採掘速度が低下…"
+    set {define::GACHA_PRIZE_ICON::GACHA_GOLD} to gold ingot named "&e&lGOLD付与" with lore "&7少量〜中量のお金をゲット"
+    set {define::GACHA_PRIZE_ICON::GACHA_EXP} to bottle o' enchanting named "&b&lEXP付与" with lore "&7少量〜中量のEXPをゲット"
+    set {define::GACHA_PRIZE_ICON::GACHA_HEAD_ZOMBIE} to zombie head item named "&d&lゾンビの被り物" with lore "&7モブの頭をゲット！"
+    set {define::GACHA_PRIZE_ICON::GACHA_HEAD_CREEPER} to creeper head item named "&d&lクリーパーの被り物" with lore "&7モブの頭をゲット！"
+    set {define::GACHA_PRIZE_ICON::GACHA_HEAD_SKELETON} to skeleton skull item named "&d&lスケルトンの被り物" with lore "&7モブの頭をゲット！"
+    set {define::GACHA_PRIZE_ICON::GACHA_HEAD_WITHER} to wither skeleton skull item named "&d&lウィザースケルトンの被り物" with lore "&7モブの頭をゲット！"
+    set {define::GACHA_PRIZE_ICON::GACHA_HEAD_PIGLIN} to piglin head item named "&d&lピグリンの被り物" with lore "&7モブの頭をゲット！"
 
     #DEVELOPMENT_MODE用のOverride
     if getDefine("DEVELOPMENT_MODE") is true:

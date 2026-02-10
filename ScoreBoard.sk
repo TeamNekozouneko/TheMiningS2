@@ -14,6 +14,7 @@ function scoreboardUpdate(player: player):
     add String(profileExpGet({_player})) to {_args::*}
     add formatNumber(profileStatisticsGet({_player}, "mineQuantity")) to {_args::*}
     add formatNumber(profileMoneyGet({_player})) to {_args::*}
+    add formatNumber(profilePointGet({_player})) to {_args::*}
 
     #Update Scoreboard
     set title of {_player}'s scoreboard to getDefine("SCOREBOARD_TITLE")
@@ -22,6 +23,6 @@ function scoreboardUpdate(player: player):
     loop {_contents::*}:
         set {_content} to loop-value
         while {_content} contains "${}":
-            set {_content} to substitution({_content}, {_args::%{_argumentIndex}%})
+            set {_content} to substitution({_content}, String({_args::%{_argumentIndex}%}))
             add 1 to {_argumentIndex}
         set line (loop-index parsed as integer) of {_player}'s scoreboard to {_content}
