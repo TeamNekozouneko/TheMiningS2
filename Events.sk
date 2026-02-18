@@ -17,8 +17,7 @@ on load:
     portalConditionAsyncHandler()
     enchantmentGuiAsyncHandler()
     enchantmentAutoSellPendingApplyHandler()
-    smeltingSmeltOnGuiHandler()
-    smeltingSmeltOnBackGroundHandler()
+    smeltingProcessHandler()
     questAssignHandler()
     questResetAssignHandler()
     profileTabListNameHandler()
@@ -37,6 +36,8 @@ on first join:
     profileFirstJoinInit(player)
 
 on join:
+    smeltingMigrateData(player)
+    smeltingInit(player)
     profileJoinInit(player)
     profileSendJoinMessage(player)
     guideBossBarInit(player)

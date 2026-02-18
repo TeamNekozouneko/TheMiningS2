@@ -5,225 +5,603 @@
 #| Nekozouneko Group Developer
 #==================================================
 
-#{smelting.savedInputIndexes::%<UUID>%::*} 保管しているアイテムIDリスト
-#{smelting.savedInputItems::%<UUID>%::<ItemID>} アイテムIDごとの保管数
-#{smelting.savedOutputIndexes::%<UUID>%::*} 保管しているアイテムIDリスト
-#{smelting.savedOutputItems::%<UUID>%::<ItemID>} アイテムIDごとの保管数
+# データ構造
+#{smelting.rawIndexes::<UUID>::*}              製錬前アイテムのItemIDリスト
+#{smelting.rawItemsAmount::<UUID>::<ItemID>}   各ItemIDの数量（Integer型）
+#{smelting.coalAmount::<UUID>}                 石炭の総数（Integer型）
+#{smelting.smeltedIndexes::<UUID>::*}          製錬後アイテムのItemIDリスト
+#{smelting.smeltedItemsAmount::<UUID>::<ItemID>} 各ItemIDの数量（Integer型）
+#{smelting.expandLevel::<UUID>}                拡張レベル（1-6）
+#{smelting.isProcessing::<UUID>}               製錬処理中フラグ
+#{smelting.lastProcessTime::<UUID>}            最終処理時刻
+#{smelting.openGUI::<UUID>}                    開いているGUI種類（"main","raw","coal","smelted"）
+#{smelting.transitioning::<UUID>}              GUI遷移中フラグ
 
-Options:
-    MAIN_TITLE_NAME: "&d&l製錬 &8鉱石を焼く"
-    MAIN_BACKGROUND_ICON: gray stained glass pane named "&r"
+# ============================================================
+#  初期化・データ移行
+# ============================================================
 
-    MAIN_INPUT_INFO_ICON: Glowing(furnace named "&a製錬のやり方" with lore "&7この下に鉱石を入れると、" and "&7入れた鉱石を焼くことができます。" and "&eメニューを閉じても裏で焼いてくれるよ！" and "&r" and "&f現在の製錬スピード：&b1個/秒")
-    MAIN_OUTPUT_INFO_ICON: chest named "&a製錬後のアイテム" with lore "&7製錬されたアイテムは、" and "&7この下に焼かれて出てきます。"
+function smeltingInit(p: player):
+    set {_uuid} to uuid of {_p}
+    if {smelting.expandLevel::%{_uuid}%} is not set:
+        set {smelting.expandLevel::%{_uuid}%} to 1
+    if {smelting.coalAmount::%{_uuid}%} is not set:
+        set {smelting.coalAmount::%{_uuid}%} to 0
+    if {smelting.lastProcessTime::%{_uuid}%} is not set:
+        set {smelting.lastProcessTime::%{_uuid}%} to now
+
+function smeltingMigrateData(p: player):
+    set {_uuid} to uuid of {_p}
+    set {_totalItems} to 0
+
+    # 旧製錬前アイテムデータの移行
+    if {smelting.savedInputIndexes::%{_uuid}%::*} is set:
+        loop {smelting.savedInputIndexes::%{_uuid}%::*} where [input is set]:
+            set {_itemId} to loop-value
+            set {_amount} to {smelting.savedInputItems::%{_uuid}%::%{_itemId}%}
+            if {_amount} is set:
+                if {_amount} > 0:
+                    set {_stacks} to ceil({_amount} / 64)
+                    set {_remainder} to mod({_amount}, 64)
+                    if {_remainder} is 0:
+                        set {_remainder} to 64
+                    loop {_stacks} times:
+                        if loop-number-2 < {_stacks}:
+                            pickupAddItem({_p}, 64 of getItemData({_itemId}))
+                        else:
+                            pickupAddItem({_p}, {_remainder} of getItemData({_itemId}))
+                    add {_amount} to {_totalItems}
+        delete {smelting.savedInputIndexes::%{_uuid}%::*}
+        delete {smelting.savedInputItems::%{_uuid}%::*}
+
+    # 旧製錬後アイテムデータの移行
+    if {smelting.savedOutputIndexes::%{_uuid}%::*} is set:
+        loop {smelting.savedOutputIndexes::%{_uuid}%::*} where [input is set]:
+            set {_itemId} to loop-value
+            set {_amount} to {smelting.savedOutputItems::%{_uuid}%::%{_itemId}%}
+            if {_amount} is set:
+                if {_amount} > 0:
+                    set {_stacks} to ceil({_amount} / 64)
+                    set {_remainder} to mod({_amount}, 64)
+                    if {_remainder} is 0:
+                        set {_remainder} to 64
+                    loop {_stacks} times:
+                        if loop-number-2 < {_stacks}:
+                            pickupAddItem({_p}, 64 of getItemData({_itemId}))
+                        else:
+                            pickupAddItem({_p}, {_remainder} of getItemData({_itemId}))
+                    add {_amount} to {_totalItems}
+        delete {smelting.savedOutputIndexes::%{_uuid}%::*}
+        delete {smelting.savedOutputItems::%{_uuid}%::*}
+
+    # 移行があった場合、プレイヤーに通知
+    if {_totalItems} > 0:
+        send "&a製錬システムのアップデートにより、" to {_p}
+        send "&a製錬口に入っていた%{_totalItems}%個のアイテムを" to {_p}
+        send "&aピックアップに移動しました。" to {_p}
+        send "&e/pickup &aで回収してください。" to {_p}
+        set {_params::1} to {_uuid}
+        set {_params::2} to {_totalItems}
+        logInfo("SMELTING_DATA_MIGRATED", {_params::*})
+
+# ============================================================
+#  データ操作
+# ============================================================
+
+function smeltingAddRawItem(p: player, itemId: text, amount: integer):
+    set {_uuid} to uuid of {_p}
+    add {_itemId} to {smelting.rawIndexes::%{_uuid}%::*} if {smelting.rawIndexes::%{_uuid}%::*} doesn't contain {_itemId}
+    add {_amount} to {smelting.rawItemsAmount::%{_uuid}%::%{_itemId}%}
+
+function smeltingAddCoal(p: player, amount: integer):
+    add {_amount} to {smelting.coalAmount::%uuid of {_p}%}
+
+function smeltingConsumeCoal(p: player, amount: integer):
+    set {_uuid} to uuid of {_p}
+    remove {_amount} from {smelting.coalAmount::%{_uuid}%}
+    if {smelting.coalAmount::%{_uuid}%} < 0:
+        set {smelting.coalAmount::%{_uuid}%} to 0
+
+function smeltingGetRawItemsCount(p: player) :: integer:
+    set {_uuid} to uuid of {_p}
+    set {_total} to 0
+    loop {smelting.rawIndexes::%{_uuid}%::*} where [input is set]:
+        add ({smelting.rawItemsAmount::%{_uuid}%::%loop-value%} ? 0) to {_total}
+    return {_total}
+
+function smeltingGetCoalCount(p: player) :: integer:
+    return {smelting.coalAmount::%uuid of {_p}%} ? 0
+
+function smeltingGetSmeltedItemsCount(p: player) :: integer:
+    set {_uuid} to uuid of {_p}
+    set {_total} to 0
+    loop {smelting.smeltedIndexes::%{_uuid}%::*} where [input is set]:
+        add ({smelting.smeltedItemsAmount::%{_uuid}%::%loop-value%} ? 0) to {_total}
+    return {_total}
+
+function smeltingIsValidItem(item: itemtype, slotType: text) :: boolean:
+    return false if {_item} is air
+    set {_itemId} to getItemId({_item})
+    return false if {_itemId} is not set
+    if {_slotType} is "raw":
+        if getDefine("SMELTING_ITEM::%{_itemId}%") is set:
+            return true
+        return false
+    else if {_slotType} is "coal":
+        if {_itemId} is "COAL":
+            return true
+        return false
+    else if {_slotType} is "smelted":
+        set {_smeltableItems::*} to getDefineList("SMELTING_ITEM")
+        if {_smeltableItems::*} contains {_itemId}:
+            return true
+        return false
+    return false
+
+# ============================================================
+#  製錬速度・製錬可能判定
+# ============================================================
+
+function smeltingGetSpeed(p: player) :: number:
+    set {_uuid} to uuid of {_p}
+    if ({smelting.coalAmount::%{_uuid}%} ? 0) > 0:
+        return 0.5
+    return 1.0
+
+function smeltingCanProcess(p: player) :: boolean:
+    set {_uuid} to uuid of {_p}
+    # 詳細GUIが開いている場合は不可
+    set {_guiType} to {smelting.openGUI::%{_uuid}%}
+    if {_guiType} is "raw" or "coal" or "smelted":
+        return false
+    # 製錬前アイテムがない場合は不可
+    if {smelting.rawIndexes::%{_uuid}%::*} is not set:
+        return false
+    if size of {smelting.rawIndexes::%{_uuid}%::*} is 0:
+        return false
+    return true
+
+# 製錬後スロットにアイテムを追加できるかチェック
+local function smeltingCanAddSmelted(p: player, itemId: text) :: boolean:
+    set {_uuid} to uuid of {_p}
+    set {_currentAmount} to {smelting.smeltedItemsAmount::%{_uuid}%::%{_itemId}%} ? 0
+    # 既存スタックに余裕があるか
+    if {_currentAmount} > 0:
+        if mod({_currentAmount}, 64) is not 0:
+            return true
+    # 新しいスロットが必要 → 空きがあるか
+    set {_maxSlots} to ({smelting.expandLevel::%{_uuid}%} ? 1) * 9
+    set {_usedSlots} to 0
+    loop {smelting.smeltedIndexes::%{_uuid}%::*} where [input is set]:
+        set {_amt} to {smelting.smeltedItemsAmount::%{_uuid}%::%loop-value%} ? 0
+        add ceil({_amt} / 64) to {_usedSlots}
+    if {_usedSlots} < {_maxSlots}:
+        return true
+    return false
+
+# ============================================================
+#  製錬処理
+# ============================================================
+
+function smeltingProcess(p: player):
+    set {_uuid} to uuid of {_p}
+
+    # 製錬可能チェック
+    if smeltingCanProcess({_p}) is false:
+        set {smelting.isProcessing::%{_uuid}%} to false
+        stop
+
+    # 前回処理時刻の確認
+    if {smelting.lastProcessTime::%{_uuid}%} is not set:
+        set {smelting.lastProcessTime::%{_uuid}%} to now
+        stop
+
+    # 経過時間チェック
+    set {_speed} to smeltingGetSpeed({_p})
+    set {_elapsed} to difference between now and {smelting.lastProcessTime::%{_uuid}%}
+    if {_speed} is 0.5:
+        if {_elapsed} < 10 ticks:
+            stop
+    else:
+        if {_elapsed} < 1 second:
+            stop
+
+    # 最初の製錬前アイテムを取得
+    loop {smelting.rawIndexes::%{_uuid}%::*}:
+        set {_firstItemId} to loop-value
+        exit loop
+    if {_firstItemId} is not set:
+        set {smelting.isProcessing::%{_uuid}%} to false
+        stop
+
+    # 製錬後アイテムIDを取得
+    set {_smeltedItemId} to getDefine("SMELTING_ITEM::%{_firstItemId}%")
+    if {_smeltedItemId} is not set:
+        set {smelting.isProcessing::%{_uuid}%} to false
+        stop
+
+    # 製錬後スロットの空き確認
+    if smeltingCanAddSmelted({_p}, "%{_smeltedItemId}%") is false:
+        set {smelting.isProcessing::%{_uuid}%} to false
+        stop
+
+    # 製錬実行
+    set {smelting.isProcessing::%{_uuid}%} to true
+
+    # 製錬前アイテムを1個消費
+    remove 1 from {smelting.rawItemsAmount::%{_uuid}%::%{_firstItemId}%}
+    if ({smelting.rawItemsAmount::%{_uuid}%::%{_firstItemId}%} ? 0) <= 0:
+        remove {_firstItemId} from {smelting.rawIndexes::%{_uuid}%::*}
+        delete {smelting.rawItemsAmount::%{_uuid}%::%{_firstItemId}%}
+
+    # 製錬後アイテムに追加
+    add "%{_smeltedItemId}%" to {smelting.smeltedIndexes::%{_uuid}%::*} if {smelting.smeltedIndexes::%{_uuid}%::*} doesn't contain "%{_smeltedItemId}%"
+    add 1 to {smelting.smeltedItemsAmount::%{_uuid}%::%{_smeltedItemId}%}
+
+    # 石炭消費（高速の場合）
+    if {_speed} is 0.5:
+        smeltingConsumeCoal({_p}, 1)
+
+    # 処理時刻を更新
+    set {smelting.lastProcessTime::%{_uuid}%} to now
+
+# 定期処理ハンドラー（Events.sk on load から呼び出し）
+function smeltingProcessHandler():
+    run 0 ticks later repeating every 10 ticks:
+        loop all players:
+            smeltingProcess(loop-player)
+            set {_uuid} to uuid of loop-player
+            if {smelting.openGUI::%{_uuid}%} is "main":
+                smeltingUpdateMainGUI(loop-player)
+
+# ============================================================
+#  スロット拡張
+# ============================================================
+
+function smeltingGetExpandPrice(p: player) :: integer:
+    set {_level} to {smelting.expandLevel::%uuid of {_p}%} ? 1
+    if {_level} >= 6:
+        return 0
+    return 6000 * (2 ^ ({_level} - 1))
+
+function smeltingExpandSlot(p: player) :: boolean:
+    set {_uuid} to uuid of {_p}
+    set {_level} to {smelting.expandLevel::%{_uuid}%} ? 1
+    if {_level} >= 6:
+        return false
+    set {_price} to smeltingGetExpandPrice({_p})
+    if profileMoneyGet({_p}) < {_price}:
+        playSound(getObjects({_p}), "Error")
+        return false
+    profileMoneyDecrease({_p}, {_price}, "SMELTING_EXPAND_SLOT")
+    add 1 to {smelting.expandLevel::%{_uuid}%}
+    set {_params::1} to {_uuid}
+    set {_params::2} to {_level}
+    set {_params::3} to {smelting.expandLevel::%{_uuid}%}
+    logInfo("SMELTING_EXPAND_SLOT", {_params::*})
+    smeltingUpdateDetailGUI({_p})
+    playSound(getObjects({_p}), "Click")
+    return true
+
+# ============================================================
+#  メインGUI
+# ============================================================
 
 function smeltingGuiHandle(p: player):
-    openGui({_p}, "SMELTING_MAIN")
+    smeltingOpenMainGUI({_p})
 
-# enum guiType {
-#  SMELTING_MAIN
-# }
-local function openGui(p: player, guiType: string):
-    #SMELTING_MAIN
-    if {_guiType} is "SMELTING_MAIN":
-        playSound(getObjects({_p}), "Talk")
-        open chest inventory with 6 row named {@MAIN_TITLE_NAME} to {_p}
-        set {_backGroundSlots::*} to getBackGroundSlots()
-        loop {_backGroundSlots::*}:
-            set slot loop-value of {_p}'s current inventory to {@MAIN_BACKGROUND_ICON}
-        
-        set slot 4 of {_p}'s current inventory to {@MAIN_INPUT_INFO_ICON}
-        set slot 22 of {_p}'s current inventory to {@MAIN_OUTPUT_INFO_ICON}
+function smeltingOpenMainGUI(p: player):
+    set {_uuid} to uuid of {_p}
+    set {smelting.openGUI::%{_uuid}%} to "main"
+    playSound(getObjects({_p}), "Talk")
 
-        set {_inputSlots::*} to getInputInterfaceSlots()
-        set {_currentInputSlotIndex} to 0
-        loop {smelting.savedInputIndexes::%{_p}'s uuid%::*}:
-            set {_itemAmount} to {smelting.savedInputItems::%{_p}'s uuid%::%loop-value%}
-            set {_stack} to ceil({_itemAmount} / 64) #スタック数は個数を64で割った数を繰り上げた数
-            set {_remain} to mod({_itemAmount}, 64) #最終スタック目の余剰分（64で割り切れないとき）は64で割ったmodになる
-            loop {_stack} times:
-                add 1 to {_currentInputSlotIndex}
-                set slot {_inputSlots::%{_currentInputSlotIndex}%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
-            if {_remain} is not 0: #割り切れていない時は余剰分を反映させる
-                set slot {_inputSlots::%{_currentInputSlotIndex}%} of {_p}'s current inventory to {_remain} of getItemData(loop-value)
+    open chest inventory with 3 rows named "&d&l製錬 &8鉱石を焼く" to {_p}
 
-        set {_outputSlots::*} to getOutputInterfaceSlots()
-        set {_currentOutputSlotIndex} to 0
-        loop {smelting.savedOutputIndexes::%{_p}'s uuid%::*}:
-            set {_itemAmount} to {smelting.savedOutputItems::%{_p}'s uuid%::%loop-value%}
-            set {_stack} to ceil({_itemAmount} / 64) #スタック数は個数を64で割った数を繰り上げた数
-            set {_remain} to mod({_itemAmount}, 64) #最終スタック目の余剰分（64で割り切れないとき）は64で割ったmodになる
-            loop {_stack} times:
-                add 1 to {_currentOutputSlotIndex}
-                set slot {_outputSlots::%{_currentOutputSlotIndex}%} of {_p}'s current inventory to 64 of getItemData(loop-value-1)
-            if {_remain} is not 0: #割り切れていない時は余剰分を反映させる
-                set slot {_outputSlots::%{_currentOutputSlotIndex}%} of {_p}'s current inventory to {_remain} of getItemData(loop-value)
+    # 背景の灰色ガラスで埋める
+    loop 27 times:
+        set slot (loop-number - 1) of {_p}'s current inventory to gray stained glass pane named "&r"
+
+    # 製錬前アイテムアイコン（スロット13）
+    set {_inputIcon} to chest named "&a製錬前のアイテム" with lore "&7鉱石を入れると、" and "&7入れた鉱石を焼くことができます。" and "&eメニューを閉じても裏で焼いてくれるよ！" and "&r" and "&e>クリックして画面を開く"
+    set string tag "TheMining;ItemId" of custom nbt of {_inputIcon} to "SMELTING_GUI_RAW"
+    set slot 13 of {_p}'s current inventory to {_inputIcon}
+
+    # 石炭アイコン（スロット22）
+    set {_coalAmt} to {smelting.coalAmount::%{_uuid}%} ? 0
+    set {_hasCoal} to false
+    if {_coalAmt} > 0:
+        set {_hasCoal} to true
+    if {_hasCoal} is true:
+        set {_coalIcon} to blast furnace named "&a製錬スピード上昇" with lore "&7石炭を入れると、" and "&7製錬スピードが2倍になるよ！" and "&e>クリックして画面を開く" and "&r" and "&f現在の製錬スピード：&b0.5秒/個"
+    else:
+        set {_coalIcon} to furnace named "&a製錬スピード上昇" with lore "&7石炭を入れると、" and "&7製錬スピードが2倍になるよ！" and "&e>クリックして画面を開く" and "&r" and "&f現在の製錬スピード：&b1秒/個"
+    set string tag "TheMining;ItemId" of custom nbt of {_coalIcon} to "SMELTING_GUI_COAL"
+    set slot 22 of {_p}'s current inventory to {_coalIcon}
+
+    # 製錬後アイテムアイコン（スロット15）
+    set {_smeltedCount} to smeltingGetSmeltedItemsCount({_p})
+    set {_outputIcon} to chest named "&a製錬後のアイテム" with lore "&7製錬されたアイテムが入ってるよ！" and "&e>クリックして画面を開く" and "&r" and "&f現在のアイテム数：&b%{_smeltedCount}%個"
+    set string tag "TheMining;ItemId" of custom nbt of {_outputIcon} to "SMELTING_GUI_SMELTED"
+    set slot 15 of {_p}'s current inventory to {_outputIcon}
+
+    # 製錬中の炎表示（スロット14）
+    set {_isProcessing} to {smelting.isProcessing::%{_uuid}%} ? false
+    if {_isProcessing} is true:
+        if {_hasCoal} is true:
+            set slot 14 of {_p}'s current inventory to soul campfire named "&c&l製錬中"
+        else:
+            set slot 14 of {_p}'s current inventory to campfire named "&c&l製錬中"
+
+function smeltingUpdateMainGUI(p: player):
+    set {_uuid} to uuid of {_p}
+    set {_coalAmt} to {smelting.coalAmount::%{_uuid}%} ? 0
+    set {_hasCoal} to false
+    if {_coalAmt} > 0:
+        set {_hasCoal} to true
+    set {_isProcessing} to {smelting.isProcessing::%{_uuid}%} ? false
+
+    # 石炭アイコン更新（スロット22）
+    if {_hasCoal} is true:
+        set {_coalIcon} to blast furnace named "&a製錬スピード上昇" with lore "&7石炭を入れると、" and "&7製錬スピードが2倍になるよ！" and "&e>クリックして画面を開く" and "&r" and "&f現在の製錬スピード：&b0.5秒/個"
+    else:
+        set {_coalIcon} to furnace named "&a製錬スピード上昇" with lore "&7石炭を入れると、" and "&7製錬スピードが2倍になるよ！" and "&e>クリックして画面を開く" and "&r" and "&f現在の製錬スピード：&b1秒/個"
+    set string tag "TheMining;ItemId" of custom nbt of {_coalIcon} to "SMELTING_GUI_COAL"
+    set slot 22 of {_p}'s current inventory to {_coalIcon}
+
+    # 炎表示更新（スロット14）
+    if {_isProcessing} is true:
+        if {_hasCoal} is true:
+            set slot 14 of {_p}'s current inventory to soul campfire named "&c&l製錬中"
+        else:
+            set slot 14 of {_p}'s current inventory to campfire named "&c&l製錬中"
+    else:
+        set slot 14 of {_p}'s current inventory to gray stained glass pane named "&r"
+
+    # 製錬後アイテム数更新（スロット15）
+    set {_smeltedCount} to smeltingGetSmeltedItemsCount({_p})
+    set {_outputIcon} to chest named "&a製錬後のアイテム" with lore "&7製錬されたアイテムが入ってるよ！" and "&e>クリックして画面を開く" and "&r" and "&f現在のアイテム数：&b%{_smeltedCount}%個"
+    set string tag "TheMining;ItemId" of custom nbt of {_outputIcon} to "SMELTING_GUI_SMELTED"
+    set slot 15 of {_p}'s current inventory to {_outputIcon}
+
+# ============================================================
+#  詳細GUI
+# ============================================================
+
+function smeltingOpenDetailGUI(p: player, guiType: text):
+    set {_uuid} to uuid of {_p}
+
+    # 遷移フラグを設定（close eventでの誤処理を防止）
+    set {smelting.transitioning::%{_uuid}%} to true
+
+    # GUI状態を更新
+    set {smelting.openGUI::%{_uuid}%} to {_guiType}
+
+    # タイトルの決定
+    if {_guiType} is "raw":
+        set {_title} to "&d&l製錬 &8焼きたいアイテムを入れてね"
+    else if {_guiType} is "coal":
+        set {_title} to "&d&l製錬 &8石炭を入れてね"
+    else:
+        set {_title} to "&d&l製錬 &8製錬が終わったよ"
+
+    # GUIを開く
+    open chest inventory with 6 rows named {_title} to {_p}
+
+    set {_level} to {smelting.expandLevel::%{_uuid}%} ? 1
+    set {_maxSlot} to {_level} * 9
+
+    # 拡張購入行（最大レベル未満の場合）
+    if {_level} < 6:
+        set {_price} to smeltingGetExpandPrice({_p})
+        set {_playerMoney} to profileMoneyGet({_p})
+        if {_playerMoney} >= {_price}:
+            set {_chestIcon} to chest named "&a空きスロットの拡張" with lore "&7アイテムを入れられるスロットが" and "&79個増えるよ！" and "&e>クリックして購入" and "&r" and "&f価格：&6%{_price}%G"
+        else:
+            set {_chestIcon} to chest named "&a空きスロットの拡張" with lore "&7アイテムを入れられるスロットが" and "&79個増えるよ！" and "&e>クリックして購入" and "&r" and "&f価格：&6%{_price}%G" and "&cゴールドが足りません！"
+        set string tag "TheMining;ItemId" of custom nbt of {_chestIcon} to "SMELTING_GUI_EXPAND"
+        loop 9 times:
+            set slot ({_level} * 9 + (loop-number - 1)) of {_p}'s current inventory to {_chestIcon}
+
+    # ロック行（岩盤）
+    set {_bedrockStart} to ({_level} + 1) * 9
+    if {_level} >= 6:
+        set {_bedrockStart} to 54
+    if {_bedrockStart} < 54:
+        loop (54 - {_bedrockStart}) times:
+            set slot ({_bedrockStart} + (loop-number - 1)) of {_p}'s current inventory to bedrock named "&r"
+
+    # アイテムを配置
+    set {_slotIndex} to 0
+    set {_done} to false
+
+    if {_guiType} is "raw":
+        loop {smelting.rawIndexes::%{_uuid}%::*} where [input is set]:
+            exit loop if {_done} is true
+            set {_itemId} to loop-value
+            set {_amount} to {smelting.rawItemsAmount::%{_uuid}%::%{_itemId}%} ? 0
+            continue if {_amount} <= 0
+            set {_stacks} to ceil({_amount} / 64)
+            set {_remainder} to mod({_amount}, 64)
+            if {_remainder} is 0:
+                set {_remainder} to 64
+            loop {_stacks} times:
+                if {_slotIndex} >= {_maxSlot}:
+                    set {_done} to true
+                    exit loop
+                if loop-number-2 < {_stacks}:
+                    set slot {_slotIndex} of {_p}'s current inventory to 64 of getItemData({_itemId})
+                else:
+                    set slot {_slotIndex} of {_p}'s current inventory to {_remainder} of getItemData({_itemId})
+                add 1 to {_slotIndex}
+
+    else if {_guiType} is "coal":
+        set {_coalAmount} to {smelting.coalAmount::%{_uuid}%} ? 0
+        if {_coalAmount} > 0:
+            set {_stacks} to ceil({_coalAmount} / 64)
+            set {_remainder} to mod({_coalAmount}, 64)
+            if {_remainder} is 0:
+                set {_remainder} to 64
+            loop {_stacks} times:
+                exit loop if {_slotIndex} >= {_maxSlot}
+                if loop-number < {_stacks}:
+                    set slot {_slotIndex} of {_p}'s current inventory to 64 of getItemData("COAL")
+                else:
+                    set slot {_slotIndex} of {_p}'s current inventory to {_remainder} of getItemData("COAL")
+                add 1 to {_slotIndex}
+
+    else if {_guiType} is "smelted":
+        loop {smelting.smeltedIndexes::%{_uuid}%::*} where [input is set]:
+            exit loop if {_done} is true
+            set {_itemId} to loop-value
+            set {_amount} to {smelting.smeltedItemsAmount::%{_uuid}%::%{_itemId}%} ? 0
+            continue if {_amount} <= 0
+            set {_stacks} to ceil({_amount} / 64)
+            set {_remainder} to mod({_amount}, 64)
+            if {_remainder} is 0:
+                set {_remainder} to 64
+            loop {_stacks} times:
+                if {_slotIndex} >= {_maxSlot}:
+                    set {_done} to true
+                    exit loop
+                if loop-number-2 < {_stacks}:
+                    set slot {_slotIndex} of {_p}'s current inventory to 64 of getItemData({_itemId})
+                else:
+                    set slot {_slotIndex} of {_p}'s current inventory to {_remainder} of getItemData({_itemId})
+                add 1 to {_slotIndex}
+
+    playSound(getObjects({_p}), "Click")
+
+    # 遷移フラグをクリア
+    delete {smelting.transitioning::%{_uuid}%}
+
+function smeltingUpdateDetailGUI(p: player):
+    set {_uuid} to uuid of {_p}
+    set {_level} to {smelting.expandLevel::%{_uuid}%} ? 1
+
+    # 新しく開放された行をクリア（チェスト → 空きスロット）
+    set {_freedRow} to {_level} - 1
+    loop 9 times:
+        set slot ({_freedRow} * 9 + (loop-number - 1)) of {_p}'s current inventory to air
+
+    # 次の購入行をチェストアイコンに変更
+    if {_level} < 6:
+        set {_price} to smeltingGetExpandPrice({_p})
+        set {_playerMoney} to profileMoneyGet({_p})
+        if {_playerMoney} >= {_price}:
+            set {_chestIcon} to chest named "&a空きスロットの拡張" with lore "&7アイテムを入れられるスロットが" and "&79個増えるよ！" and "&e>クリックして購入" and "&r" and "&f価格：&6%{_price}%G"
+        else:
+            set {_chestIcon} to chest named "&a空きスロットの拡張" with lore "&7アイテムを入れられるスロットが" and "&79個増えるよ！" and "&e>クリックして購入" and "&r" and "&f価格：&6%{_price}%G" and "&cゴールドが足りません！"
+        set string tag "TheMining;ItemId" of custom nbt of {_chestIcon} to "SMELTING_GUI_EXPAND"
+        loop 9 times:
+            set slot ({_level} * 9 + (loop-number - 1)) of {_p}'s current inventory to {_chestIcon}
+
+# ============================================================
+#  イベントハンドラー
+# ============================================================
 
 function onInventoryClickSmeltingHandle(p: player, item: itemtype) :: boolean:
-    set {_invName} to name of {_p}'s current inventory
-    #SMELTING_MAIN
-    if {_invName} is {@MAIN_TITLE_NAME}:
-        return true if {_item} is {@MAIN_BACKGROUND_ICON}
-        return true if {_item} is {@MAIN_INPUT_INFO_ICON}
-        return true if {_item} is {@MAIN_OUTPUT_INFO_ICON}
+    set {_uuid} to uuid of {_p}
+    set {_guiType} to {smelting.openGUI::%{_uuid}%}
+
+    # 製錬GUIが開いていない場合はスキップ
+    if {_guiType} is not set:
+        return false
+
+    # メインGUI: すべてのクリックをキャンセルし、アイコンクリック時にのみ詳細GUIを開く
+    if {_guiType} is "main":
+        set {_clickedId} to getItemId({_item})
+        if {_clickedId} is "SMELTING_GUI_RAW":
+            smeltingOpenDetailGUI({_p}, "raw")
+        else if {_clickedId} is "SMELTING_GUI_COAL":
+            smeltingOpenDetailGUI({_p}, "coal")
+        else if {_clickedId} is "SMELTING_GUI_SMELTED":
+            smeltingOpenDetailGUI({_p}, "smelted")
+        return true
+
+    # 詳細GUI
+    if {_guiType} is "raw" or "coal" or "smelted":
+        # 拡張購入チェストのクリック
+        set {_clickedId} to getItemId({_item})
+        if {_clickedId} is "SMELTING_GUI_EXPAND":
+            smeltingExpandSlot({_p})
+            return true
+
+        # 岩盤のクリック = 無効化
+        if {_item} is bedrock:
+            return true
+
+        # 灰色ガラスのクリック = 無効化
+        if {_item} is gray stained glass pane:
+            return true
+
+        # その他のアイテムは操作を許可（プレイヤーがアイテムを配置・取得可能）
+        return false
 
     return false
 
-function smeltingSmeltOnGuiHandler():
-    set {_outputSlots::*} to getOutputInterfaceSlots()
-    run 0 ticks later repeating every second:
-        loop all players where [name of input's current inventory is {@MAIN_TITLE_NAME}]:
-            #製錬候補の算出
-            set {_baseSlot} to 10
-            loop 7 times:
-                set {_slot} to {_baseSlot}+(loop-number)-1
-                set {_item} to slot {_slot} of loop-player's current inventory
-                set {_itemId} to getItemId({_item})
-                set {_smelledItem} to getDefine("SMELTING_ITEM::%{_itemId}%")
-                exit 1 loop if {_smelledItem} is set
-            continue if {_smelledItem} is not set
-
-            #条件確認
-            #{_isSmeltable} = 製錬後アイテムスロットの空き、もしくは重ねることで精錬できる条件かどうか
-            #{_stackableSlot} = 同じアイテムが製錬後アイテムスロットに存在していて、追加で重ねることができるスロット番号
-            #{_availableSlot} = 製錬後アイテムスロットの空きスロット番号
-            set {_isSmeltable} to false
-            clear {_stackableSlot}
-            clear {_availableSlot}
-            loop {_outputSlots::*}:
-                set {_item} to slot (loop-value-2) of loop-player's current inventory
-                set {_itemId} to getItemId({_item})
-
-                if {_itemId} is {_smelledItem}:
-                    if item amount of {_item} < 64:
-                        set {_stackableSlot} to loop-value-2 if {_stackableSlot} is not set
-                        set {_isSmeltable} to true
-                
-                if {_item} is air:
-                    set {_availableSlot} to loop-value-2 if {_availableSlot} is not set
-                    set {_isSmeltable} to true
-            
-            continue if {_isSmeltable} is false
-
-            #製錬処理
-            remove 1 from item amount of (slot {_slot} of loop-player's current inventory)
-            if {_stackableSlot} is set:
-                add 1 to item amount of (slot {_stackableSlot} of loop-player's current inventory)
-            else:
-                set slot {_availableSlot} of loop-player's current inventory to getItemData({_smelledItem})
-
-            playSound(getObjects(loop-player), "Smelting")
-
-function smeltingSmeltOnBackGroundHandler():
-    run 0 ticks later repeating every second:
-        loop all players:
-            clear {_smelledItem}
-            #製錬候補の算出
-            loop {smelting.savedInputIndexes::%loop-player's uuid%::*}:
-                #精錬済みの入力スロットの削除処理
-                if {smelting.savedInputItems::%loop-player's uuid%::%loop-value-2%} <= 0:
-                    remove loop-value-2 from {smelting.savedInputIndexes::%loop-player's uuid%::*}
-                    clear {smelting.savedInputItems::%loop-player's uuid%::%loop-value-2%}
-                    continue
-
-                set {_itemId} to loop-value-2
-                set {_smelledItem} to getDefine("SMELTING_ITEM::%{_itemId}%")
-                exit 1 loop if {_smelledItem} is set
-            continue if {_smelledItem} is not set
-            #製錬処理
-            remove 1 from {smelting.savedInputItems::%loop-player's uuid%::%{_itemId}%} 
-            add 1 to {smelting.savedOutputItems::%loop-player's uuid%::%{_smelledItem}%} 
-            add {_smelledItem} to {smelting.savedOutputIndexes::%loop-player's uuid%::*} if {smelting.savedOutputIndexes::%loop-player's uuid%::*} doesn't contain {_smelledItem}
-
 function onInventoryCloseSmeltingHandle(p: player):
-    exit if name of {_p}'s current inventory is not {@MAIN_TITLE_NAME}
+    set {_uuid} to uuid of {_p}
 
-    #入力スロットの精錬できないアイテムを返却
-    set {_inputSlots::*} to getInputInterfaceSlots()
-    loop {_inputSlots::*}:
-        set {_slotItem} to slot (loop-value) of {_p}'s current inventory
-        set {_slotItemId} to getItemId({_slotItem})
-        if getDefine("SMELTING_ITEM::%{_slotItemId}%") is not set:
-            if giveSafe({_p}, {_slotItem}) is true:
-                set {_storedPickup} to true
-            clear slot (loop-value) of {_p}'s current inventory
+    # 遷移中は処理をスキップ（メインGUI→詳細GUIへの遷移時）
+    if {smelting.transitioning::%{_uuid}%} is set:
+        stop
 
-    #出力スロットの精錬してできないアイテムを返却
-    set {_outputSlots::*} to getOutputInterfaceSlots()
-    set {_smeltableItems::*} to getDefineList("SMELTING_ITEM")
-    loop {_outputSlots::*}:
-        set {_slotItem} to slot (loop-value) of {_p}'s current inventory
-        set {_slotItemId} to getItemId({_slotItem})
-        if {_smeltableItems::*} doesn't contain {_slotItemId}:
-            if giveSafe({_p}, {_slotItem}) is true:
-                set {_storedPickup} to true
-            clear slot (loop-value) of {_p}'s current inventory
+    set {_guiType} to {smelting.openGUI::%{_uuid}%}
 
-    clear {smelting.savedInputIndexes::%{_p}'s uuid%::*}
-    clear {smelting.savedInputItems::%{_p}'s uuid%::*}    
-    clear {smelting.savedOutputIndexes::%{_p}'s uuid%::*}
-    clear {smelting.savedOutputItems::%{_p}'s uuid%::*}    
+    # 製錬GUIが開いていない場合はスキップ
+    if {_guiType} is not set:
+        stop
 
-    set {_inputSlots::*} to getInputInterfaceSlots()
-    loop {_inputSlots::*}:
-        set {_item} to slot loop-value of {_p}'s current inventory
-        continue if {_item} is air
-        set {_itemId} to getItemId({_item})
-        continue if {_itemId} is not set
+    # メインGUIの閉じ処理（特別な処理不要）
+    if {_guiType} is "main":
+        delete {smelting.openGUI::%{_uuid}%}
+        stop
 
-        add {_itemId} to {smelting.savedInputIndexes::%{_p}'s uuid%::*} if {smelting.savedInputIndexes::%{_p}'s uuid%::*} doesn't contain {_itemId}
-        add item amount of {_item} to {smelting.savedInputItems::%{_p}'s uuid%::%{_itemId}%}
-    set {_outputSlots::*} to getOutputInterfaceSlots()
-    loop {_outputSlots::*}:
-        set {_item} to slot loop-value of {_p}'s current inventory
-        continue if {_item} is air
-        set {_itemId} to getItemId({_item})
-        continue if {_itemId} is not set
+    # 詳細GUIの閉じ処理
+    if {_guiType} is "raw" or "coal" or "smelted":
+        set {_level} to {smelting.expandLevel::%{_uuid}%} ? 1
+        set {_maxSlot} to {_level} * 9
+        set {_storedPickup} to false
 
-        add {_itemId} to {smelting.savedOutputIndexes::%{_p}'s uuid%::*} if {smelting.savedOutputIndexes::%{_p}'s uuid%::*} doesn't contain {_itemId}
-        add item amount of {_item} to {smelting.savedOutputItems::%{_p}'s uuid%::%{_itemId}%}
+        # 既存データをクリア
+        if {_guiType} is "raw":
+            delete {smelting.rawIndexes::%{_uuid}%::*}
+            delete {smelting.rawItemsAmount::%{_uuid}%::*}
+        else if {_guiType} is "coal":
+            set {smelting.coalAmount::%{_uuid}%} to 0
+        else if {_guiType} is "smelted":
+            delete {smelting.smeltedIndexes::%{_uuid}%::*}
+            delete {smelting.smeltedItemsAmount::%{_uuid}%::*}
 
-    if {_storedPickup} is true:
-        send getDefine("LANG::PICKUP_STORED") to {_p}
-        playSound(getObjects({_p}), "Error")
+        # GUIのアイテムを読み取って保存
+        loop {_maxSlot} times:
+            set {_slot} to (loop-number) - 1
+            set {_item} to slot {_slot} of {_p}'s current inventory
+            continue if {_item} is air
 
-local function getBackGroundSlots() :: objects:
-    loop 6*9 times:
-        add (loop-number)-1 to {_slots::*}
-    remove 4 from {_slots::*}
-    remove 22 from {_slots::*}
+            set {_itemId} to getItemId({_item})
+            set {_amount} to item amount of {_item}
 
-    remove getInputInterfaceSlots() from {_slots::*}
-    remove getOutputInterfaceSlots() from {_slots::*}
-
-    return {_slots::*}
-
-local function getInputInterfaceSlots() :: objects:
-    set {_baseSlot} to 10
-    loop 7 times:
-        add {_baseSlot}+(loop-number)-1 to {_slots::*}
-    return {_slots::*}
-
-local function getOutputInterfaceSlots() :: objects:
-    set {_baseSlot} to 28
-    loop 7 times:
-        add {_baseSlot}+(loop-number)-1 to {_slots::*}
-    set {_baseSlot} to 37
-    loop 7 times:
-        add {_baseSlot}+(loop-number)-1 to {_slots::*}
-    return {_slots::*}
-
-local function getStackedItem(items: objects) :: objects:
-    while size of {_items::*} > 0:
-        set {_first} to first element of {_items::*}
-        set {_amount} to size of {_items::*} where [input is {_first}]
-
-        #スタックした時の使用スロット数は{_amount}を64で割った余り+1になる
-        loop mod({_amount}, 64)+1 times:
-            if {_amount} > 64:
-                add 64 of {_first} to {_results::*}
+            # アイテムの有効性チェック
+            if smeltingIsValidItem({_item}, {_guiType}) is true:
+                if {_guiType} is "raw":
+                    smeltingAddRawItem({_p}, {_itemId}, {_amount})
+                else if {_guiType} is "coal":
+                    smeltingAddCoal({_p}, {_amount})
+                else if {_guiType} is "smelted":
+                    add {_itemId} to {smelting.smeltedIndexes::%{_uuid}%::*} if {smelting.smeltedIndexes::%{_uuid}%::*} doesn't contain {_itemId}
+                    add {_amount} to {smelting.smeltedItemsAmount::%{_uuid}%::%{_itemId}%}
             else:
-                add {_amount} of {_first} to {_results::*}
-            remove 64 from {_amount}
-        remove all {_first} from {_items::*}
-    return {_results::*}
+                # 無効なアイテムをプレイヤーに返却
+                if giveSafe({_p}, {_item}) is true:
+                    set {_storedPickup} to true
+
+        # 製錬処理時刻をリセット
+        set {smelting.lastProcessTime::%{_uuid}%} to now
+
+        if {_storedPickup} is true:
+            send getDefine("LANG::PICKUP_STORED") to {_p}
+            playSound(getObjects({_p}), "Error")
+
+    # GUI状態をクリア
+    delete {smelting.openGUI::%{_uuid}%}
